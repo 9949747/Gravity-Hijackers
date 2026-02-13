@@ -10,7 +10,6 @@ var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	#if is_on_floor():
 		#world_gravity = 0
 
-
 @onready var Player = preload("res://scenes/player.tscn")
 #@onready var Player = $Player
 var tracked = false
@@ -59,6 +58,7 @@ func _on_multiplayer_spawner_spawned(node):
 
 
 func _ready() -> void:
+	Global.worldNode = self
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
