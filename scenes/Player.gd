@@ -6,7 +6,7 @@ signal health_changed(health_value)
 @onready var anim_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
-@onready var ammo_display = $Camera3D/AmmoDisplay
+
 
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
@@ -18,8 +18,6 @@ var Crouchstate : bool = false
 var health = 3
 var ammo_count = 15
 
-#var player_gravity = 20.0
-
 var reloading = false
 
 var SPEED = 5.5
@@ -27,7 +25,7 @@ const JUMP_VELOCITY = 10.0
 const LOOK_SPEED = 5 # Adjust as needed for controller comfort
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var player_gravity = 20.0
+var player_gravity = 20
 
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
