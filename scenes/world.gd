@@ -4,7 +4,9 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var hud = $CanvasLayer/HUD
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
+@onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var radio_visible = false
 
 #func grav_shift():
 	#if is_on_floor():
@@ -88,3 +90,12 @@ func remove_player(peer_id):
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
+
+func radio_enable(delta): 
+	if Input.is_action_just_pressed("radio_toggle"):
+		if radio_visible == false:
+			radio.show
+			var radio_visible = true
+		else:
+			radio.hide
+			var radio_visible = false
