@@ -16,19 +16,19 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Gravity Hijackers"
 config/tags=PackedStringArray("multiplayer")
-run/main_scene="res://scenes/Audric's Test Stuff/testWorld.tscn"
+run/main_scene="uid://c8oqxmm2w2wvv"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://el1jrwdua5i0"
 
 [autoload]
 
 Global="*uid://7r4ojokijiyj"
-GUI="*uid://c2do32wxxnnsd"
+GuiAutoload="*uid://c2do32wxxnnsd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/mode=3
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="viewport"
 window/handheld/orientation=1
 
