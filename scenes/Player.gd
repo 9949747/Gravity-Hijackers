@@ -35,8 +35,8 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	
-	Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
-	Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
+	# Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
+	# Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
