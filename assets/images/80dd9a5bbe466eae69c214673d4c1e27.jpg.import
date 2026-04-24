@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hw6t2smt1vv3"
-path="res://.godot/imported/Rough Metal Sep texture (1 of 1) seamless.jpg-02dd867ffc9eed748cdc451ff35c1bf2.ctex"
+uid="uid://dnmwo2rknwnse"
+path="res://.godot/imported/80dd9a5bbe466eae69c214673d4c1e27.jpg-c65bdf2189454a1a077aad753d97763d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Rough Metal Sep texture (1 of 1) seamless.jpg"
-dest_files=["res://.godot/imported/Rough Metal Sep texture (1 of 1) seamless.jpg-02dd867ffc9eed748cdc451ff35c1bf2.ctex"]
+source_file="res://assets/images/80dd9a5bbe466eae69c214673d4c1e27.jpg"
+dest_files=["res://.godot/imported/80dd9a5bbe466eae69c214673d4c1e27.jpg-c65bdf2189454a1a077aad753d97763d.ctex"]
 
 [params]
 
