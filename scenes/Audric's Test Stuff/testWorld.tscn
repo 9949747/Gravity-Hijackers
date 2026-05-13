@@ -141,6 +141,25 @@ theme_override_font_sizes/font_size = 40
 text = "15 / 15"
 vertical_alignment = 1
 
+[node name="Team1" type="Label" parent="CanvasLayer/HUD" unique_id=1465997867]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 30
+text = "Team 1: null players"
+
+[node name="Team2" type="Label" parent="CanvasLayer/HUD" unique_id=1019232658]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 30
+text = "Team 2: null players"
+horizontal_alignment = 2
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1971673780]
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")

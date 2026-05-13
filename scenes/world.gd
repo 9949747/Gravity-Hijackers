@@ -1,5 +1,8 @@
 extends Node
 # Ough.,,
+
+signal update_teams_info
+
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var hud = $CanvasLayer/HUD
@@ -95,21 +98,21 @@ func add_player(peer_id):
 		print("team 2 has less players than team 1. adding player to team 2")
 		player.add_to_group("Team2")
 	print("player joined. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
+	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
+	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
 	if not player:
 		return
-	
 	player.queue_free()
 	await get_tree().create_timer(0.1).timeout # breifly pause thread so print statement below returns accurate info
 	print("player left. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
+	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
+	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
-
-
-
 
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")

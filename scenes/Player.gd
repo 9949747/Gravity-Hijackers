@@ -35,8 +35,8 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	
-	# Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
-	# Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
+	#Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
+	#Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
@@ -62,7 +62,7 @@ func _unhandled_input(event):
 		if raycast.is_colliding():
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
-			print("ray hit ", hit_obj.name, " at ", hit_coords)
+			#print("ray hit ", hit_obj.name, " at ", hit_coords)
 			
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
@@ -80,11 +80,11 @@ func _unhandled_input(event):
 			var new_damage_billboard = damage_billboard.instantiate()
 			Global.worldNode.add_child(new_damage_billboard)
 			new_damage_billboard.position = Vector3(hit_coords)
-			print(new_damage_billboard.position, new_damage_billboard.get_parent())
+			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				print("hit")
+				#print("hit")
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
 
 func _physics_process(delta):
@@ -162,6 +162,9 @@ func receive_damage():
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
+
+func update_team_data():
+	pass
 
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
