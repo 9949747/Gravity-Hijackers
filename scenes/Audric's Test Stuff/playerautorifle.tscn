@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://xcjrjq5cbn7y"]
+[gd_scene format=3 uid="uid://bsk8r72vxmpki"]
 
-[ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://scenes/Player.gd" id="1_2v3wm"]
-[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://models/Pistol.fbx" id="2_dqkch"]
-[ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
-[ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://ckbf5f7076ddi" path="res://playerautorifle.gd" id="1_6otph"]
+[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://models/Pistol.fbx" id="2_byh5c"]
+[ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_tno0c"]
+[ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_ml6fp"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -27,7 +27,7 @@ transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0.960784, 0.670588, 1)
-albedo_texture = ExtResource("3_27dhu")
+albedo_texture = ExtResource("3_tno0c")
 billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
@@ -259,7 +259,8 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=820130408 groups=["Player"]]
-script = ExtResource("1_2v3wm")
+collision_layer = 2
+script = ExtResource("1_6otph")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -276,7 +277,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
-[node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
+[node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_byh5c")]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000002, 0.5, -0.25, -0.5)
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
@@ -289,6 +290,15 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
+[node name="AmmoDisplay" type="Label" parent="Camera3D" unique_id=1773512377]
+offset_left = 64.0
+offset_top = 568.0
+offset_right = 160.0
+offset_bottom = 610.0
+theme_override_font_sizes/font_size = 30
+text = "30 / 30"
+metadata/_edit_use_anchors_ = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
 autoplay = &"idle"
@@ -298,20 +308,7 @@ playback_default_blend_time = 0.05
 replication_config = SubResource("SceneReplicationConfig_hn37q")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1619676891]
-stream = ExtResource("4_dqkch")
+stream = ExtResource("4_ml6fp")
 volume_db = -20.0
-
-[node name="radio" type="Control" parent="." unique_id=619869948]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="radio" unique_id=1475415235]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "hi"
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

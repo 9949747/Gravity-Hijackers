@@ -8,17 +8,10 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 #@onready var current_gravity = default_gravity
-@onready var gravity_multiplier = 2
+@onready var gravity_multiplier = 1.0
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
 @onready var hit_marker = preload("res://scenes/HitMarker.tscn")
 @onready var camera_3d: Camera3D = $Camera3D
-@onready var speed_pickup_scene = preload("res://scenes/speed_pickup.tscn")
-
-
-@onready var speed_pickup_multiplier = 1
-
-@export var X_mouse_sensitivity = 0.01
-@export var Y_mouse_sensitivity = 0.01
 
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
@@ -39,14 +32,9 @@ func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready():
-	#var speed_pickup_scene_instantiated = speed_pickup_scene.instantiate()
-	#add_child(speed_pickup_scene_instantiated)
-	#speed_pickup_scene_instantiated.speed_pickup_pickedup = 2
-	#speed_pickup_instantiated.speed_pickup_pickedup = true
-	#speed_pickup_scene.speed_pickup_pickedup.connect(speed_pickup_multiplier)
-	#speed_pickup_pickedup.connect
 	if not is_multiplayer_authority(): return
 	
+	Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
@@ -58,8 +46,8 @@ func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
 	if event is InputEventMouseMotion:
-		rotate_y(-event.relative.x * X_mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * Y_mouse_sensitivity)
+		rotate_y(-event.relative.x * .005)
+		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
@@ -107,16 +95,16 @@ func _physics_process(delta):
 	# Handle Jump.
 	if Input.is_action_just_pressed("player_jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-												  
+
 	if Input.is_action_pressed("player_sprint"):
-		SPEED = 8 * speed_pickup_multiplier
+		SPEED = 8
 	else:
 		SPEED = 5.5
 
 	if Input.is_action_just_pressed("player_crouch"):
 		print("crouch")
 		crouch()
-		
+
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -151,9 +139,7 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-	_on_fov_updated(Save.game_data.FOV)
-	_X_on_mouse_sens_updated(X_mouse_sensitivity)
-	_Y_on_mouse_sens_updated(Y_mouse_sensitivity)
+
 
 @rpc("call_local")
 func play_shoot_effects():
@@ -197,14 +183,3 @@ func crouch():
 			anim_player.play("Crouch", -1, CROUCH_SPEED)
 			Crouchstate = true
 	
-
-func _on_fov_updated(value):
-	if not is_multiplayer_authority(): return
-	#print(Save.game_data.FOV)
-	camera.fov = value
-
-func _X_on_mouse_sens_updated(value):
-	X_mouse_sensitivity = value
-
-func _Y_on_mouse_sens_updated(value):
-	Y_mouse_sensitivity = value

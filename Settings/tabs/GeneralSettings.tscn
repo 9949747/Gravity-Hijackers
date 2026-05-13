@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dia6e8liro8v"]
 
+[ext_resource type="Script" uid="uid://biihoulbvmco1" path="res://Settings/tabs/Scripts/general_settings.gd" id="1_gybta"]
+
 [node name="Control" type="Control" unique_id=887529520]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +9,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_gybta")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=212681061]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1402582745]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 32
+text = "PLACEHOLDER TEXT"
+horizontal_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1091909245]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 128

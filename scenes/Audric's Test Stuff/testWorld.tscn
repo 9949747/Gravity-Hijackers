@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_hbot1"]
 [ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://scenes/enemy.tscn" id="3_nule3"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_7nwna"]
+[ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_t8p5d"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_myy55")
@@ -90,6 +91,10 @@ layout_mode = 2
 placeholder_text = "Enter Address to Join Here"
 alignment = 1
 
+[node name="Button" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1303317660]
+layout_mode = 2
+text = "Settings"
+
 [node name="HUD" type="Control" parent="CanvasLayer" unique_id=24447867]
 visible = false
 layout_mode = 3
@@ -101,11 +106,11 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1182405279]
-layout_mode = 1
-offset_left = 640.0
-offset_top = 360.0
-offset_right = 1152.0
-offset_bottom = 872.0
+layout_mode = 0
+offset_left = 960.0
+offset_top = 540.0
+offset_right = 1472.0
+offset_bottom = 1052.0
 scale = Vector2(0.03, 0.03)
 pivot_offset = Vector2(-8, -8)
 texture = ExtResource("3_hbot1")
@@ -117,7 +122,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 1013.0
-offset_top = 660.0
+offset_top = 999.0
 offset_right = -24.5
 offset_bottom = -24.5
 grow_horizontal = 2
@@ -155,10 +160,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66
 stream = ExtResource("6_7nwna")
 volume_db = -10.0
 
-[node name="Gravityshift Power-up" parent="." unique_id=1348873759]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7278047, 0.5523484, 5.87885)
+[node name="Node3D" parent="." unique_id=82090874 instance=ExtResource("7_t8p5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

@@ -118,3 +118,8 @@ func radio_enable(delta):
 		else:
 			radio.hide
 			var radio_visible = false
+
+
+
+func _on_button_pressed():
+	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
