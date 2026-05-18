@@ -110,8 +110,9 @@ func remove_player(peer_id):
 func update_health_bar(health_value):
 	health_bar.value = health_value
 
-func radio_enable(delta): 
-	if Input.is_action_just_pressed("radio_toggle"):
+func radio_enable(event: InputEvent) -> void:
+	print("1")
+	if event.is_action_just_pressed("radio_toggle"):
 		if radio_visible == false:
 			radio.show
 			var radio_visible = true
