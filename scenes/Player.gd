@@ -37,10 +37,16 @@ func _ready():
 	
 	#Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
 	#Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
+	Global.worldNode.update_teams_info.connect(upd_teams)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
-	
+
+func upd_teams():
+	Global.worldNode.hud.get_node("Team1").text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
+	Global.worldNode.hud.get_node("Team2").text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
+	print("recieved" + str(get_tree().get_node_count_in_group("Team1")))
+
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 

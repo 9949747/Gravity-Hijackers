@@ -1,7 +1,7 @@
 extends Node
 # Ough.,,
 
-signal update_teams_info
+signal update_teams_info()
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
@@ -100,6 +100,7 @@ func add_player(peer_id):
 	print("player joined. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
 	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
+	update_teams_info.emit()
 
 func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
@@ -110,6 +111,7 @@ func remove_player(peer_id):
 	print("player left. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
 	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
+	update_teams_info.emit()
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
