@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ht4wfbc77fyi"]
 
 [ext_resource type="Script" uid="uid://kse10uc4w75k" path="res://playersniper.gd" id="1_tmyfb"]
-[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://models/Pistol.fbx" id="2_kvfqg"]
+[ext_resource type="PackedScene" uid="uid://bd222fvf28nl8" path="res://lesniper.tscn" id="2_tmyfb"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_2u6ah"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_syldl"]
 
@@ -277,11 +277,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
-[node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_kvfqg")]
-transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000002, 0.5, -0.25, -0.5)
+[node name="Node3D" parent="Camera3D" unique_id=63481432 instance=ExtResource("2_tmyfb")]
+transform = Transform3D(0.003964946, 0, 0.36997876, 0, 0.37, 0, -0.36997876, 0, 0.003964946, 0.109078586, -0.7633509, -2.2938428)
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Node3D" unique_id=215553547]
+transform = Transform3D(0.99998456, 0, 0.005689754, 0, 1.0000017, 0, -0.005689747, 0, 0.99998564, 9.111153, 1.6207974, 0.32280982)
 emitting = false
 amount = 1
 lifetime = 0.25

@@ -6,8 +6,7 @@ extends Node
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 
 
-@onready var Player = preload("res://scenes/Audric's Test Stuff/playerautorifle.tscn")
-#@onready var Player = $Player
+@onready var Player = preload("res://scenes/Audric's Test Stuff/playersniper.tscn")
 var tracked = false
 var player
 
@@ -54,7 +53,7 @@ func upnp_setup():
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
+	Global.worldNode = self
 
 func _physics_process(delta):
 	if tracked:
