@@ -37,15 +37,8 @@ func _ready():
 	
 	#Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
 	#Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
-	Global.worldNode.update_teams_info.connect(upd_teams)
-	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
-
-func upd_teams():
-	Global.worldNode.hud.get_node("Team1").text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
-	Global.worldNode.hud.get_node("Team2").text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
-	print("recieved" + str(get_tree().get_node_count_in_group("Team1")))
 
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -69,7 +62,6 @@ func _unhandled_input(event):
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
 			#print("ray hit ", hit_obj.name, " at ", hit_coords)
-			
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
 				return
@@ -169,9 +161,6 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
 
-func update_team_data():
-	pass
-
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
@@ -193,7 +182,6 @@ func crouch():
 		if Input.is_action_just_pressed("player_crouch"):
 			anim_player.play("Crouch", -1, CROUCH_SPEED)
 			Crouchstate = true
-	
 
 func _on_fov_updated(value):
 	if not is_multiplayer_authority(): return
