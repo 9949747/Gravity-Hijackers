@@ -30,6 +30,7 @@ var Crouchstate : bool = false
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 
 @onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@export var team = 0 # 0 by default
 
 var health = 3
 var ammo_count = 15
@@ -85,6 +86,7 @@ func _unhandled_input(event):
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
 				return
 			
+			print(hit_obj.get_groups())
 			# instance new client side hitmarker gui
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
@@ -101,7 +103,7 @@ func _unhandled_input(event):
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				#print("hit")
+				print("player is in team " + str(hit_obj.team))
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
 
 func _physics_process(delta):
@@ -158,9 +160,9 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-	_on_fov_updated(Save.game_data.FOV)
-	_X_on_mouse_sens_updated(Save.X_Mouse_sens_Multi)
-	_Y_on_mouse_sens_updated(Save.Y_Mouse_sens_Multi)
+	#_on_fov_updated(Save.game_data.FOV)
+	#_X_on_mouse_sens_updated(Save.X_Mouse_sens_Multi)
+	#_Y_on_mouse_sens_updated(Save.Y_Mouse_sens_Multi)
 
 @rpc("call_local")
 func play_shoot_effects():

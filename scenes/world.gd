@@ -87,14 +87,18 @@ func add_player(peer_id):
 		var randSelect = randi_range(1, 2)
 		if randSelect == 1:
 			player.add_to_group("Team1")
+			player.team = 1
 		else:
 			player.add_to_group("Team2")
+			player.team = 2
 	elif len(get_tree().get_nodes_in_group("Team1")) < len(get_tree().get_nodes_in_group("Team2")):
 		print("team 1 has less players than team 2. adding player to team 1")
 		player.add_to_group("Team1")
+		player.team = 1
 	else: # team 2 has less players than team 1 if this stage is reached
 		print("team 2 has less players than team 1. adding player to team 2")
 		player.add_to_group("Team2")
+		player.team = 2
 	print("player joined. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
 	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
