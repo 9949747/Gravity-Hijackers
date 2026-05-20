@@ -8,11 +8,22 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 #@onready var current_gravity = default_gravity
-@onready var gravity_multiplier = 1.0
+@onready var gravity_multiplier = 2
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
 @onready var hit_marker = preload("res://scenes/HitMarker.tscn")
 @onready var camera_3d: Camera3D = $Camera3D
-@export var mouse_sensitivity = .1
+@onready var speed_pickup_scene = preload("res://scenes/speed_pickup.tscn")
+@onready var speed_pickup_scene_instantiated = speed_pickup_scene.instantiate()
+@onready var player_scene = preload("res://scenes/player.tscn")
+@onready var player_scene_instantiated = player_scene.instantiate()
+
+
+
+
+@onready var speed_pickup_multiplier = 1
+
+@export var X_mouse_sensitivity = 0.01
+@export var Y_mouse_sensitivity = 0.01
 
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
@@ -33,22 +44,30 @@ func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready():
+	#add_child(speed_pickup_scene_instantiated)
+	#speed_pickup_scene.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
+	#speed_pickup_instantiated.speed_pickup_pickedup = true
+	
 	if not is_multiplayer_authority(): return
 	
-	#Save.connect("fov_updated", Callable(self, "_on_fov_updated"))
-	#Save.connect("mouse_sens_updated", Callable(self, "mouse_sens_updated"))
+	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+func _on_speed_pickup_pickedup():
+	pass
+
+
+
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
 	if event is InputEventMouseMotion:
-		rotate_y(-event.relative.x * .005)
-		camera.rotate_x(-event.relative.y * .005)
+		rotate_y(-event.relative.x * X_mouse_sensitivity)
+		camera.rotate_x(-event.relative.y * Y_mouse_sensitivity)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
@@ -97,7 +116,7 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_pressed("player_sprint"):
-		SPEED = 8
+		SPEED = 8 * speed_pickup_multiplier
 	else:
 		SPEED = 5.5
 
@@ -139,7 +158,9 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-
+	_on_fov_updated(Save.game_data.FOV)
+	_X_on_mouse_sens_updated(Save.X_Mouse_sens_Multi)
+	_Y_on_mouse_sens_updated(Save.Y_Mouse_sens_Multi)
 
 @rpc("call_local")
 func play_shoot_effects():
@@ -185,8 +206,11 @@ func crouch():
 
 func _on_fov_updated(value):
 	if not is_multiplayer_authority(): return
-	
+	#print(Save.game_data.FOV)
 	camera.fov = value
 
-func _on_mouse_sens_updated(value):
-	mouse_sensitivity = value
+func _X_on_mouse_sens_updated(value):
+	X_mouse_sensitivity = value
+
+func _Y_on_mouse_sens_updated(value):
+	Y_mouse_sensitivity = value
