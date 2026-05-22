@@ -6,7 +6,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ymapv"]
 albedo_texture = ExtResource("1_n17nb")
 
-[node name="Node3D" type="Node3D" unique_id=63481432]
+[node name="lesniper" type="Node3D" unique_id=63481432]
 
 [node name="Utr130SniperGun3dModels(5)" type="MeshInstance3D" parent="." unique_id=1999371713]
 transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -1.6044441, 0, 0.37136316)
