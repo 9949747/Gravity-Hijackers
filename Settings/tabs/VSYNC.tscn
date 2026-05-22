@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dp35ngjy32gfk"]
+
+[ext_resource type="PackedScene" uid="uid://dia6e8liro8v" path="res://Settings/tabs/GeneralSettings.tscn" id="1_b1q06"]
+
+[node name="Control" unique_id=887529520 instance=ExtResource("1_b1q06")]
+
+[node name="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="0" unique_id=1402582745]
+text = "VSYNC: Disabled"
+
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="2" unique_id=1673446160]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 4
+
+[connection signal="toggled" from="HBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]

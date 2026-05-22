@@ -212,7 +212,9 @@ func _on_fov_updated(value):
 	camera.fov = value
 
 func _X_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
 	X_mouse_sensitivity = value
 
 func _Y_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
 	Y_mouse_sensitivity = value

@@ -29,7 +29,7 @@ func _enter_tree():
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	ammo_display.text = "30 / 30"
+	ammo_display.text = "10 / 10"
 	
 	
 	
@@ -151,11 +151,11 @@ func upd_ammo(num: int, reload: bool = false):
 		Global.worldNode.hud.get_node("Crosshair").hide()
 		await get_tree().create_timer(1).timeout
 		Global.worldNode.hud.get_node("Crosshair").show()
-		ammo_count = 30
+		ammo_count = 10
 		reloading = false
 	else:
 		ammo_count += num
-	ammo_display.text = "%d / 30" % ammo_count
+	ammo_display.text = "%d / 10" % ammo_count
 
 func crouch():
 	if Crouchstate == true:
