@@ -5,7 +5,18 @@ const SAVEFILE = "user://Settings.save"
 @onready var X_Mouse_sens_Multi = 0.01
 @onready var Y_Mouse_sens_Multi = 0.01
 @onready var Vsync_mode
-@onready var game_data = {}
+@onready var game_data = {
+	"Window_mode": "Fullscreen",
+	"Vsync_on": false,
+	"Display_fps": false,
+	"Max_fps": 0,
+	"Master_vol": 10,
+	"Music_vol": 10,
+	"SFX_vol": 10,
+	"FOV": 70,
+	"X_Mouse_sens_Multi": .01,
+	"Y_Mouse_sens_Multi": .01,
+}
 
 func _ready():
 	load_data()
