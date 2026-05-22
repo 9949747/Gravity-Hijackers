@@ -2,8 +2,7 @@ extends Node
 
 const SAVEFILE = "user://Settings.save"
 
-@onready var X_Mouse_sens_Multi = 0.01
-@onready var Y_Mouse_sens_Multi = 0.01
+
 @onready var Vsync_mode
 @onready var game_data = {
 	"Window_mode": "Fullscreen",
@@ -42,9 +41,6 @@ func load_data():
 	game_data = file.get_var()
 	file.close()
 
-func _physics_process(delta: float) -> void:
-	X_Mouse_sens_Multi = game_data[X_Mouse_sens_Multi]
-	Y_Mouse_sens_Multi = game_data[Y_Mouse_sens_Multi]
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
