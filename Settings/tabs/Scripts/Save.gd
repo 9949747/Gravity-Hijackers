@@ -43,8 +43,8 @@ func load_data():
 	file.close()
 
 func _physics_process(delta: float) -> void:
-	X_Mouse_sens_Multi = game_data.X_Mouse_sens_Multi
-	Y_Mouse_sens_Multi = game_data.Y_Mouse_sens_Multi
+	X_Mouse_sens_Multi = game_data[X_Mouse_sens_Multi]
+	Y_Mouse_sens_Multi = game_data[Y_Mouse_sens_Multi]
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
