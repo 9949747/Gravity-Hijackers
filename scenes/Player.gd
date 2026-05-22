@@ -195,6 +195,7 @@ func upd_ammo(num: int, reload: bool = false):
 		ammo_count += num
 	ammo_display.text = "%d / 15" % ammo_count
 
+
 func crouch():
 	if Crouchstate == true:
 		if Input.is_action_just_pressed("player_crouch"):

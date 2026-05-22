@@ -1,12 +1,11 @@
 extends Node
 
-const SAVEFILE = "user://Settings.save"
-
+const SAVEFILE = "user://SAVEFILE.save"
+var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
 
 @onready var Vsync_mode
-@onready var game_data = {
+var game_data = {
 	"Window_mode": "Fullscreen",
-	"Resolution": "1920x1080",
 	"Vsync_on": false,
 	"Display_fps": false,
 	"Max_fps": 0,
@@ -19,6 +18,7 @@ const SAVEFILE = "user://Settings.save"
 }
 
 func _ready():
+	#print("READY")
 	load_data()
 
 func load_data():
@@ -37,13 +37,17 @@ func load_data():
 			"Y_Mouse_sens_Multi": .01,
 		}
 		save_data()
-	FileAccess.open(SAVEFILE, FileAccess.READ)
+	#print(Save.game_data)
+	#FileAccess.open(SAVEFILE, FileAccess.READ)
+	if file.get_var() == null:
+		file.store_var(game_data)
 	game_data = file.get_var()
 	file.close()
 
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
+	#print(file)
 	file.open(SAVEFILE, file.WRITE)
 	file.store_var(game_data)
 	file.close()
@@ -61,13 +65,12 @@ func update_fov(value):
 	save_data()
 
 func X_update_mouse_sens(value):
-	X_Mouse_sens_Multi = value
-	game_data.X_Mouse_sens_Multi = value
+	print(Save.game_data)
+	Save.game_data.X_Mouse_sens_Multi = value
 	print(game_data.X_Mouse_sens_Multi)
 	save_data()
 
 func Y_update_mouse_sens(value):
-	Y_Mouse_sens_Multi = value
 	game_data.Y_Mouse_sens_Multi = value
 	print(game_data.Y_Mouse_sens_Multi)
 	save_data()
