@@ -21,6 +21,7 @@ func _ready():
 	#print("READY")
 	load_data()
 
+
 func load_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.READ)
 	if not FileAccess.file_exists(SAVEFILE):

@@ -6,11 +6,13 @@ signal health_changed(health_value)
 @onready var anim_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/lesniper/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
-@onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
+@onready var damage_billboard = preload("res://scenes/Audric's Test Stuff/damage_indicatorsniper.tscn")
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 @onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@onready var shoot_timer = $ShootTimer
+
 
 var health = 3
 var ammo_count = 10
@@ -144,7 +146,6 @@ func receive_damage():
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
-
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
