@@ -160,7 +160,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66
 stream = ExtResource("6_7nwna")
 volume_db = -10.0
 
-[node name="Node3D" parent="." unique_id=82090874 instance=ExtResource("7_t8p5d")]
+[node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_t8p5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
+
+[node name="Speed_Pickup" parent="." unique_id=1682309210 instance=ExtResource("7_t8p5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]

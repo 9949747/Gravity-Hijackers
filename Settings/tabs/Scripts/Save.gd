@@ -6,6 +6,7 @@ var game_data = {}
 func _ready():
 	load_data()
 
+
 func load_data():
 	if not FileAccess.file_exists(SAVEFILE):
 		game_data = {
