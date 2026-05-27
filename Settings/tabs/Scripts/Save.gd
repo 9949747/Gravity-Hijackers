@@ -1,54 +1,52 @@
 extends Node
 
 const SAVEFILE = "user://SAVEFILE.save"
-var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
-
-@onready var Vsync_mode
-var game_data = {
-	"Window_mode": "Fullscreen",
-	"Vsync_on": false,
-	"Display_fps": false,
-	"Max_fps": 0,
-	"Master_vol": 10,
-	"Music_vol": 10,
-	"SFX_vol": 10,
-	"FOV": 70,
-	"X_Mouse_sens_Multi": .01,
-	"Y_Mouse_sens_Multi": .01,
-}
+var game_data = {}
 
 func _ready():
-	#print("READY")
 	load_data()
 
 func load_data():
-	var file = FileAccess.open(SAVEFILE, FileAccess.READ)
 	if not FileAccess.file_exists(SAVEFILE):
 		game_data = {
-			"Window_mode": "Fullscreen",
+			"Resolution": false,
+			"Window_mode": false,
 			"Vsync_on": false,
-			"Display_fps": false,
-			"Max_fps": 0,
-			"Master_vol": 10,
-			"Music_vol": 10,
-			"SFX_vol": 10,
-			"FOV": 70,
-			"X_Mouse_sens_Multi": .01,
-			"Y_Mouse_sens_Multi": .01,
+			"master_volume": 10,
+			"SFX_volume": 10,
+			"Music_volume": 10,
+			"FOV": 75,
+			"X_Mouse_sens_Multi": 0.05,
+			"Y_Mouse_sens_Multi": 0.05,
 		}
-		save_data()
-	#print(Save.game_data)
-	#FileAccess.open(SAVEFILE, FileAccess.READ)
-	if file.get_var() == null:
+		var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
 		file.store_var(game_data)
-	game_data = file.get_var()
-	file.close()
-
+		print(game_data)
+		file.close()
+	else:
+		var file = FileAccess.open(SAVEFILE, FileAccess.READ)
+		game_data = file.get_var()
+		file.close()
+		
+		if game_data == null:
+			print("Save file corrupted or empty, creating new data")
+			game_data = {
+			"Resolution": false,
+			"Window_mode": false,
+			"Vsync_on": false,
+			"master_volume": 10,
+			"SFX_volume": 10,
+			"Music_volume": 10,
+			"FOV": 75,
+			"X_Mouse_sens_Multi": 0.05,
+			"Y_Mouse_sens_Multi": 0.05,
+			}
+			var new_file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
+			new_file.store_var(game_data)
+			new_file.close()
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
-	#print(file)
-	file.open(SAVEFILE, file.WRITE)
 	file.store_var(game_data)
 	file.close()
 	
@@ -60,8 +58,9 @@ func toggle_vsync(value):
 		DisplayServer.VSyncMode.VSYNC_DISABLED
 
 func update_fov(value):
-	game_data.FOV = value
-	print(game_data.FOV)
+	print(game_data["FOV"])
+	game_data["FOV"] = value
+	print(game_data["FOV"])
 	save_data()
 
 func X_update_mouse_sens(value):
