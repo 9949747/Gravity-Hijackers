@@ -136,8 +136,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_ujyws")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cmecq")
-max_value = 3.0
-value = 3.0
+max_value = 10.0
+value = 10.0
 show_percentage = false
 
 [node name="AmmoDisplay" type="Label" parent="CanvasLayer/HUD" unique_id=615191762]

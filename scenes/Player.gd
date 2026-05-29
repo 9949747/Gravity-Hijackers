@@ -32,8 +32,9 @@ var Crouchstate : bool = false
 @onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
 @export var team = 0 # 0 by default
 
-var health = 3
+var health = 10 # note: health prog bar max val must be updated when health is changed
 var ammo_count = 15
+var bullet_damage = 2
 
 var reloading = false
 
@@ -81,6 +82,8 @@ func _unhandled_input(event):
 		if raycast.is_colliding():
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
+			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
 			#print("ray hit ", hit_obj.name, " at ", hit_coords)
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
@@ -99,12 +102,13 @@ func _unhandled_input(event):
 			var new_damage_billboard = damage_billboard.instantiate()
 			Global.worldNode.add_child(new_damage_billboard)
 			new_damage_billboard.position = Vector3(hit_coords)
+			new_damage_billboard.get_node("Label3D").text = str(-bullet_damage*2) if headshot else str(-bullet_damage)
 			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
 				print("player is in team " + str(hit_obj.team))
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
+				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot) # pass bool as arg for headshot
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
@@ -173,10 +177,10 @@ func play_shoot_effects():
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func receive_damage():
-	health -= 1
+func receive_damage(headshot: bool):
+	health -= bullet_damage*2 if headshot else bullet_damage
 	if health <= 0:
-		health = 3
+		health = 10
 		position = Vector3.ZERO
 	health_changed.emit(health)
 

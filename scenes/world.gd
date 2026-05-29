@@ -22,6 +22,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 func _ready() -> void:
 	$AudioStreamPlayer.play()
 	Global.worldNode = self
+	print(Save.game_data)
 
 func _on_host_button_pressed():
 	main_menu.hide()

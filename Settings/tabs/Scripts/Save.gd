@@ -5,12 +5,17 @@ const SAVEFILE = "user://Settings.save"
 @onready var X_Mouse_sens_Multi = 0.01
 @onready var Y_Mouse_sens_Multi = 0.01
 @onready var Vsync_mode
-@onready var game_data = {}
+@onready var game_data = {
+	"var1": 1,
+	"var2": 2,
+	"var3": 3
+}
 
 func _ready():
-	load_data()
-	X_Mouse_sens_Multi = game_data.X_Mouse_sens_Multi
-	Y_Mouse_sens_Multi = game_data.Y_Mouse_sens_Multi
+	pass
+	#load_data()
+	#X_Mouse_sens_Multi = game_data.X_Mouse_sens_Multi
+	#Y_Mouse_sens_Multi = game_data.Y_Mouse_sens_Multi
 
 func load_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.READ)
@@ -29,7 +34,7 @@ func load_data():
 		}
 		save_data()
 	FileAccess.open(SAVEFILE, FileAccess.READ)
-	game_data = file.get_var()
+	#game_data = file.get_var()
 	file.close()
 
 func save_data():
