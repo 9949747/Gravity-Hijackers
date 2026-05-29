@@ -59,26 +59,26 @@ func toggle_vsync(value):
 		DisplayServer.VSyncMode.VSYNC_DISABLED
 
 func update_fov(value):
-	print(game_data["FOV"])
+	#print(game_data["FOV"])
 	game_data["FOV"] = value
-	print(game_data["FOV"])
+	#print(game_data["FOV"])
 	save_data()
 
 func X_update_mouse_sens(value):
-	print(Save.game_data)
-	Save.game_data.X_Mouse_sens_Multi = value
-	print(game_data.X_Mouse_sens_Multi)
+	#print(game_data["X_Mouse_sens_Multi"])
+	game_data["X_Mouse_sens_Multi"] = value
+	#print(game_data["X_Mouse_sens_Multi"])
 	save_data()
 
 func Y_update_mouse_sens(value):
-	game_data.Y_Mouse_sens_Multi = value
-	print(game_data.Y_Mouse_sens_Multi)
+	game_data["Y_Mouse_sens_Multi"] = value
+	#print(game_data["Y_Mouse_sens_Multi"])
 	save_data()
 
 func Update_Vsync():
-	print(game_data.Vsync_on)
+	print(game_data["Vsync_on"])
 	save_data()
-	if game_data.Vsync_on == true:
+	if game_data["Vsync_on"] == true:
 		toggle_vsync(1)
-	elif game_data.Vsync_on == false:
+	elif game_data["Vsync_on"] == false:
 		toggle_vsync(0)
