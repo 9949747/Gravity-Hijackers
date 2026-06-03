@@ -100,9 +100,15 @@ func _unhandled_input(event):
 			new_hit_marker.scale = Vector2(0.5, 0.5)
 			# instance new damage count billboard gui where ray collides
 			var new_damage_billboard = damage_billboard.instantiate()
+			var billboard_label = new_damage_billboard.get_node("Label3D") 
 			Global.worldNode.add_child(new_damage_billboard)
 			new_damage_billboard.position = Vector3(hit_coords)
-			new_damage_billboard.get_node("Label3D").text = str(-bullet_damage*2) if headshot else str(-bullet_damage)
+			if headshot:
+				billboard_label.text = str(-bullet_damage*2)
+				billboard_label.modulate = Color("e10006")
+				billboard_label.outline_modulate = Color("400000")
+			else: 
+				billboard_label.text = str(-bullet_damage)
 			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
 			
 			# damage player only (enemy has no receive damage method)
