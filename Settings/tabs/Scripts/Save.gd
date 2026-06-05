@@ -5,12 +5,12 @@ var game_data = {}
 
 func _ready():
 	load_data()
-
+	get_window().set_size(game_data["Resolution"])
 
 func load_data():
 	if not FileAccess.file_exists(SAVEFILE):
 		game_data = {
-			"Resolution": false,
+			"Resolution": Vector2i(1920, 1080),
 			"Window_mode": false,
 			"Vsync_on": false,
 			"master_volume": 10,
@@ -32,7 +32,7 @@ func load_data():
 		if game_data == null:
 			print("Save file corrupted or empty, creating new data")
 			game_data = {
-			"Resolution": false,
+			"Resolution": "1920x1080",
 			"Window_mode": false,
 			"Vsync_on": false,
 			"master_volume": 10,

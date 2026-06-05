@@ -36,6 +36,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 32
-text = "Exit"
+text = "Return"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

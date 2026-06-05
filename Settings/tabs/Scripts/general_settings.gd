@@ -3,7 +3,15 @@ extends Control
 var Vsync_disabled = "Vsync: Disabled"
 var Vsync_enabled = "Vsync: Enabled"
 @onready var label: Label = $HBoxContainer/Label
-@onready var Vsync = 0
+@onready var Vsync = Save.game_data["Vsync_on"]
+@onready var check_button: CheckButton = $HBoxContainer/CheckButton
+
+func _onready():
+	if Save.game_data.Vsync_on == false:
+		label.text = Vsync_disabled
+	elif Save.game_data.Vsync_on == true:
+		label.text = Vsync_enabled
+	
 
 func _onVsyncBtn_toggled(button_pressed):
 	Save.toggle_vsync(button_pressed)
