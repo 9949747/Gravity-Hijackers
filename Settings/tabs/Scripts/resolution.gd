@@ -35,6 +35,6 @@ func update_button_values():
 func _on_option_button_item_selected(index):
 	var key = resolutions_option_button.get_item_text(index)
 	get_window().set_size(resolutions[key])
-	Save.game_data["Resolution"] = key
+	Save.game_data["Resolution"] = get_window().size
 	print(Save.game_data["Resolution"])
 	Save.save_data()

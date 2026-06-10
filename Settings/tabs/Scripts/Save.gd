@@ -6,7 +6,7 @@ var game_data = {}
 func _ready():
 	load_data()
 	print(game_data["Resolution"])
-	#get_window().set_size(Vector2i(game_data["Resolution"]))
+	get_window().set_size(game_data["Resolution"] as Vector2i)
 
 func load_data():
 	if not FileAccess.file_exists(SAVEFILE):
