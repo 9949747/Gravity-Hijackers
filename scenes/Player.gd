@@ -157,8 +157,8 @@ func _physics_process(delta):
 	move_and_slide()
 
 	_on_fov_updated(Save.game_data.FOV)
-	_X_on_mouse_sens_updated(Save.X_Mouse_sens_Multi)
-	_Y_on_mouse_sens_updated(Save.Y_Mouse_sens_Multi)
+	_X_on_mouse_sens_updated(Save.game_data["X_Mouse_sens_Multi"])
+	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
 
 @rpc("call_local")
 func play_shoot_effects():
@@ -191,6 +191,7 @@ func upd_ammo(num: int, reload: bool = false):
 	else:
 		ammo_count += num
 	ammo_display.text = "%d / 15" % ammo_count
+
 
 func crouch():
 	if Crouchstate == true:

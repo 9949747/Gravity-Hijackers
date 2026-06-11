@@ -32,6 +32,10 @@ func set_action_name():
 			label.text = "Sprint"
 		"player_crouch":
 			label.text = "Crouch"
+		"reload":
+			label.text = "Reload"
+		"quit":
+			label.text = "Quit"
 
 
 func set_text_for_input() -> void:

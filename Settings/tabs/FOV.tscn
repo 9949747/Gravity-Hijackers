@@ -26,7 +26,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 128
 
-[node name="Label2" type="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="4" unique_id=333473114]
+[node name="FOV_Value" type="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="4" unique_id=333473114]
 layout_mode = 2
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 32

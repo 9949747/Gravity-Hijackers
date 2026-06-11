@@ -249,5 +249,13 @@ action_name = "player_sprint"
 layout_mode = 2
 action_name = "player_crouch"
 
+[node name="Hotkeys9" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=226552547 instance=ExtResource("2_hc7o7")]
+layout_mode = 2
+action_name = "reload"
+
+[node name="Hotkeys10" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=829451642 instance=ExtResource("2_hc7o7")]
+layout_mode = 2
+action_name = "quit"
+
 [node name="HSeparator" type="HSeparator" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1761921690]
 layout_mode = 2
