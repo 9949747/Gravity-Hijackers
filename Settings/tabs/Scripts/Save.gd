@@ -5,8 +5,22 @@ var game_data = {}
 
 func _ready():
 	load_data()
-	print(game_data["Resolution"])
-	print(game_data["Window_mode"])
+	#print(game_data["Resolution"])
+	#print(game_data["Window_mode"])
+	if game_data["Window_mode"] == "Fullscreen":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+	elif game_data["Window_mode"] == "Windowed":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+	elif game_data["Window_mode"] == "Borderless Fullscreen":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+	elif game_data["Window_mode"] == "Borderless Window":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+	else:
+		pass
 	get_window().set_size(game_data["Resolution"] as Vector2i)
 
 func load_data():
@@ -34,8 +48,8 @@ func load_data():
 		if game_data == null:
 			print("Save file corrupted or empty, creating new data")
 			game_data = {
-			"Resolution": "1920x1080",
-			"Window_mode": false,
+			"Resolution": Vector2i(1920, 1080),
+			"Window_mode": "Fullscreen",
 			"Vsync_on": false,
 			"master_volume": 10,
 			"SFX_volume": 10,
@@ -59,6 +73,7 @@ func toggle_vsync(value):
 		DisplayServer.VSyncMode.VSYNC_ADAPTIVE
 	elif value == 0:
 		DisplayServer.VSyncMode.VSYNC_DISABLED
+	save_data()
 
 func update_fov(value):
 	#print(game_data["FOV"])
@@ -79,8 +94,8 @@ func Y_update_mouse_sens(value):
 
 func Update_Vsync():
 	print(game_data["Vsync_on"])
-	save_data()
 	if game_data["Vsync_on"] == true:
 		toggle_vsync(1)
 	elif game_data["Vsync_on"] == false:
 		toggle_vsync(0)
+	save_data()
