@@ -6,13 +6,14 @@ var game_data = {}
 func _ready():
 	load_data()
 	print(game_data["Resolution"])
+	print(game_data["Window_mode"])
 	get_window().set_size(game_data["Resolution"] as Vector2i)
 
 func load_data():
 	if not FileAccess.file_exists(SAVEFILE):
 		game_data = {
 			"Resolution": Vector2i(1920, 1080),
-			"Window_mode": false,
+			"Window_mode": "Fullscreen",
 			"Vsync_on": false,
 			"master_volume": 10,
 			"SFX_volume": 10,
