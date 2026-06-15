@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c427j")
+bus_name = null
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=435170846]
 layout_mode = 1
@@ -27,7 +28,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 step = 1.163
-value = 0.86
+value = 1.163
 
 [node name="VSeparator2" type="VSeparator" parent="HBoxContainer" unique_id=1620220594]
 layout_mode = 2

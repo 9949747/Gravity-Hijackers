@@ -35,6 +35,16 @@ func load_data():
 			"FOV": 75,
 			"X_Mouse_sens_Multi": 0.05,
 			"Y_Mouse_sens_Multi": 0.05,
+			"shoot": MOUSE_BUTTON_LEFT,
+			"left": "A",
+			"right": "D",
+			"up": "W",
+			"down": "S",
+			"player_jump": "Space",
+			"player_sprint": "Shift",
+			"player_crouch": "Ctrl",
+			"reload": "R",
+			"quit": "Esc",
 		}
 		var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
 		file.store_var(game_data)
