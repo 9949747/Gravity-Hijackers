@@ -18,6 +18,10 @@ var resolutions = {
 
 func _ready() -> void:
 	add_resolutions()
+	#if Save.game_data.has("Resolution"):
+		#var saved_resolution = Save.game_data["Resolution"]
+		#if resolutions.has(saved_resolution):
+			#get_window().set_size(resolutions[saved_resolution])
 
 func add_resolutions():
 	for r in resolutions:
@@ -31,4 +35,6 @@ func update_button_values():
 func _on_option_button_item_selected(index):
 	var key = resolutions_option_button.get_item_text(index)
 	get_window().set_size(resolutions[key])
-	
+	Save.game_data["Resolution"] = get_window().size
+	print(Save.game_data["Resolution"])
+	Save.save_data()

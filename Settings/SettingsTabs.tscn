@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://eg82xoewjyis" path="res://Settings/tabs/Keybinds.tscn" id="2_hc7o7"]
 [ext_resource type="PackedScene" uid="uid://cfda3ad86yy2n" path="res://Settings/tabs/resolution.tscn" id="2_u0o3y"]
 [ext_resource type="PackedScene" uid="uid://duoosh1dbprsf" path="res://Settings/tabs/YSensitivititty.tscn" id="3_qk7bu"]
+[ext_resource type="PackedScene" uid="uid://dp35ngjy32gfk" path="res://Settings/tabs/VSYNC.tscn" id="4_6vmaa"]
 
 [node name="Control" type="Control" unique_id=1574484243]
 layout_mode = 3
@@ -62,13 +63,13 @@ layout_mode = 2
 [node name="Control" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=887529520 instance=ExtResource("1_qesc6")]
 custom_minimum_size = Vector2(1000, 50)
 layout_mode = 2
-tooltip_text = "The N word"
+tooltip_text = "Ryan Sucks"
 
 [node name="HSeparator2" type="HSeparator" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1425076044]
 layout_mode = 2
 
 [node name="Control2" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1519781035 instance=ExtResource("2_262lw")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(1500, 50)
 layout_mode = 2
 
 [node name="HSeparator3" type="HSeparator" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=874790990]
@@ -76,6 +77,15 @@ layout_mode = 2
 
 [node name="Control3" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1879247105 instance=ExtResource("3_qk7bu")]
 custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HSeparator4" type="HSeparator" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1079613005]
+layout_mode = 2
+
+[node name="Control4" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=931239079 instance=ExtResource("4_6vmaa")]
+layout_mode = 2
+
+[node name="HSeparator5" type="HSeparator" parent="TabContainer/General/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1900305547]
 layout_mode = 2
 
 [node name="Video" type="TabBar" parent="TabContainer" unique_id=1244973507]
@@ -238,6 +248,14 @@ action_name = "player_sprint"
 [node name="Hotkeys8" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=112879319 instance=ExtResource("2_hc7o7")]
 layout_mode = 2
 action_name = "player_crouch"
+
+[node name="Hotkeys9" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=226552547 instance=ExtResource("2_hc7o7")]
+layout_mode = 2
+action_name = "reload"
+
+[node name="Hotkeys10" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=829451642 instance=ExtResource("2_hc7o7")]
+layout_mode = 2
+action_name = "quit"
 
 [node name="HSeparator" type="HSeparator" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1761921690]
 layout_mode = 2

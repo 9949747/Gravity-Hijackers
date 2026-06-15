@@ -6,11 +6,13 @@ signal health_changed(health_value)
 @onready var anim_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/lesniper/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
-@onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
+@onready var damage_billboard = preload("res://scenes/Audric's Test Stuff/damage_indicatorsniper.tscn")
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 @onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@onready var shoot_timer = $ShootTimer
+
 
 var health = 3
 var ammo_count = 10
@@ -29,7 +31,7 @@ func _enter_tree():
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	ammo_display.text = "30 / 30"
+	ammo_display.text = "10 / 10"
 	
 	
 	
@@ -144,18 +146,17 @@ func receive_damage():
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
-
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
 		Global.worldNode.hud.get_node("Crosshair").hide()
 		await get_tree().create_timer(1).timeout
 		Global.worldNode.hud.get_node("Crosshair").show()
-		ammo_count = 30
+		ammo_count = 10
 		reloading = false
 	else:
 		ammo_count += num
-	ammo_display.text = "%d / 30" % ammo_count
+	ammo_display.text = "%d / 10" % ammo_count
 
 func crouch():
 	if Crouchstate == true:

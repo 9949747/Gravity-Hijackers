@@ -13,11 +13,11 @@ signal health_changed(health_value)
 @onready var hit_marker = preload("res://scenes/HitMarker.tscn")
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var speed_pickup_scene = preload("res://scenes/speed_pickup.tscn")
-@onready var speed_pickup_scene_instantiated = speed_pickup_scene.instantiate()
+@onready var speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
 @onready var player_scene = preload("res://scenes/player.tscn")
 @onready var player_scene_instantiated = player_scene.instantiate()
-
-
+@onready var world_scene = preload("res://scenes/environment.tscn")
+@onready var world_scene_instantiated = world_scene.instantiate()
 
 
 @onready var speed_pickup_multiplier = 1
@@ -44,10 +44,7 @@ func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready():
-	#add_child(speed_pickup_scene_instantiated)
-	#speed_pickup_scene.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
-	#speed_pickup_instantiated.speed_pickup_pickedup = true
-	
+	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
 	if not is_multiplayer_authority(): return
 	
 	
@@ -57,10 +54,9 @@ func _ready():
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func _on_speed_pickup_pickedup():
-	pass
-
-
+func _on_speed_pickup_pickedup(value):
+	print("SPEED_PICKUP")
+	speed_pickup_multiplier = value
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -106,6 +102,7 @@ func _unhandled_input(event):
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
 
 func _physics_process(delta):
+	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
 	if not is_multiplayer_authority(): return
 	
 	# Add the gravity.
@@ -119,7 +116,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("player_sprint"):
 		SPEED = 8 * speed_pickup_multiplier
 	else:
-		SPEED = 5.5
+		SPEED = 5.5 * speed_pickup_multiplier
 
 	if Input.is_action_just_pressed("player_crouch"):
 		print("crouch")
@@ -160,8 +157,8 @@ func _physics_process(delta):
 	move_and_slide()
 
 	_on_fov_updated(Save.game_data.FOV)
-	_X_on_mouse_sens_updated(Save.X_Mouse_sens_Multi)
-	_Y_on_mouse_sens_updated(Save.Y_Mouse_sens_Multi)
+	_X_on_mouse_sens_updated(Save.game_data["X_Mouse_sens_Multi"])
+	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
 
 @rpc("call_local")
 func play_shoot_effects():
@@ -195,6 +192,7 @@ func upd_ammo(num: int, reload: bool = false):
 		ammo_count += num
 	ammo_display.text = "%d / 15" % ammo_count
 
+
 func crouch():
 	if Crouchstate == true:
 		if Input.is_action_just_pressed("player_crouch"):
@@ -212,7 +210,9 @@ func _on_fov_updated(value):
 	camera.fov = value
 
 func _X_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
 	X_mouse_sensitivity = value
 
 func _Y_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
 	Y_mouse_sensitivity = value
