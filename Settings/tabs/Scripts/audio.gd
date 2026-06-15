@@ -26,3 +26,13 @@ func set_slider_value():
 func _on_value_changed(value: float):
 	AudioServer.set_bus_volume_db(bus_index,linear_to_db(value))
 	set_num_label_text()
+	if bus_index == 0:
+		Save.game_data["Master_volume"] = value
+	elif bus_index == 1:
+		Save.game_data["Music_volume"] = value
+	elif  bus_index == 2:
+		Save.game_data["SFX_volume"] = value
+	else:
+		pass
+	Save.save_data()
+	print(Save.game_data)
