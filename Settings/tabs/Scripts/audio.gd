@@ -44,4 +44,4 @@ func _on_value_changed(value: float):
 	else:
 		pass
 	Save.save_data()
-	print(Save.game_data)
+	#print(Save.game_data)

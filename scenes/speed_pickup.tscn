@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://qyiiwlpw3rdb"]
 
-[ext_resource type="Script" uid="uid://dlfniyj02ipls" path="res://scenes/speed_pickup.gd" id="1_dob6p"]
+[ext_resource type="Script" uid="uid://dlfniyj02ipls" path="res://Scripts/speed_pickup.gd" id="1_dob6p"]
 [ext_resource type="Texture2D" uid="uid://rtvb8rgvifn7" path="res://assets/images/SpeedPickup.jpeg" id="1_phx13"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w2cq6"]

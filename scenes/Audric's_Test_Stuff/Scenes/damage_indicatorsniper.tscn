@@ -1,16 +1,16 @@
-[gd_scene format=3 uid="uid://ck2fsl57otb8u"]
+[gd_scene format=3 uid="uid://bvv7k8q2oxyji"]
 
-[ext_resource type="Script" uid="uid://gpq5ukvjsgl5" path="res://Scripts/damage_indicator.gd" id="1_rmmwi"]
+[ext_resource type="Script" uid="uid://bfvnemlynm00l" path="res://scenes/Audric's_Test_Stuff/Scripts/damage_indicatorsniper.gd" id="1_cgml3"]
 
-[node name="DamageIndicator" type="Node3D" unique_id=533372896]
-script = ExtResource("1_rmmwi")
+[node name="DamageIndicatorsniper" type="Node3D" unique_id=533372896]
+script = ExtResource("1_cgml3")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=535019161]
 billboard = 1
 no_depth_test = true
 modulate = Color(0.88413775, 0, 0.024182815, 1)
 outline_modulate = Color(0.25, 0, 0, 1)
-text = "-1"
+text = "-10"
 font_size = 100
 outline_size = 45
 
