@@ -77,6 +77,7 @@ func _on_button_toggled(button_pressed):
 				if i.action_name != self.action_name:
 					i.button.toggle_mode = false
 					i.set_process_unhandled_key_input(false)
+					Save()
 	else:
 		# Enable toggling again when button is not pressed
 		for i in get_tree().get_nodes_in_group("hotkey_button"):
@@ -98,3 +99,26 @@ func rebind_action_key(event) -> void:
 	set_process_unhandled_key_input(false)
 	set_text_for_input()
 	set_action_name()
+
+func Save():
+	match action_name:
+		"shoot":
+			pass
+		"left":
+			label.text = "Move Left"
+		"right":
+			label.text = "Move Right"
+		"up":
+			label.text = "Move forward"
+		"down":
+			label.text = "Move backwards"
+		"player_jump":
+			label.text = "Jump"
+		"player_sprint":
+			label.text = "Sprint"
+		"player_crouch":
+			label.text = "Crouch"
+		"reload":
+			label.text = "Reload"
+		"quit":
+				label.text = "Quit"
