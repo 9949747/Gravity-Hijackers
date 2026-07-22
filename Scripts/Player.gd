@@ -34,10 +34,12 @@ var Crouchstate : bool = false
 @onready var world_scene_instantiated = world_scene.instantiate()
 
 #Stats
-var health = 3
+var health = 10
 var ammo_count = 15
+var bullet_damage = 2
 var SPEED = 5.5
 const JUMP_VELOCITY = 10.0
+@export var team: int
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -83,7 +85,8 @@ func _unhandled_input(event):
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
 			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+			print("raycast col pos ", hit_coords, " hit obj pos ", hit_obj.position, " relative coords ", relative_hit_coords)
+			var headshot = true if relative_hit_coords.y >= 0.4 else false # above 1.4 is roughly where the player's head is
 			#print("ray hit ", hit_obj.name, " at ", hit_coords)
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
