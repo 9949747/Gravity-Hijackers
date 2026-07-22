@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bc5urmyohnj05"
-path="res://.godot/imported/UTARFor1ZIP.fbx-66346b0182b95e2723539e9710cc6398.scn"
+path="res://.godot/imported/UTARFor1ZIP.fbx-b4906412dc62c732022028a7ad9e9c60.scn"
 
 [deps]
 
-source_file="res://scenes/Audric's Test Stuff/UTARFor1ZIP.fbx"
-dest_files=["res://.godot/imported/UTARFor1ZIP.fbx-66346b0182b95e2723539e9710cc6398.scn"]
+source_file="res://scenes/Audric's_Test_Stuff/Scenes/UTARFor1ZIP.fbx"
+dest_files=["res://.godot/imported/UTARFor1ZIP.fbx-b4906412dc62c732022028a7ad9e9c60.scn"]
 
 [params]
 
