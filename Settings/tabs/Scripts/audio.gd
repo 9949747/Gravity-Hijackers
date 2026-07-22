@@ -11,13 +11,22 @@ var bus_index : int = 100
 func _ready():
 	Master_slider.value_changed.connect(_on_value_changed)
 	get_bus_by_index()
+	set_slider_value()
 
 
 func set_num_label_text() -> void:
-	Master_volume_num.text = str(Master_slider.value * 100)
+	Master_volume_num.text = str(Master_slider.value)
 
 func get_bus_by_index() -> void:
 	bus_index = AudioServer.get_bus_index(bus_name)
+	if bus_index == 0:
+		AudioServer.set_bus_volume_db(bus_index,linear_to_db(Save.game_data["Master_volume"]))
+	elif bus_index == 1:
+		AudioServer.set_bus_volume_db(bus_index,linear_to_db(Save.game_data["Music_volume"]))
+	elif  bus_index == 2:
+		AudioServer.set_bus_volume_db(bus_index,linear_to_db(Save.game_data["SFX_volume"]))
+	else:
+		pass
 
 func set_slider_value():
 	Master_slider.value = db_to_linear(AudioServer.get_bus_volume_db(bus_index))
@@ -26,3 +35,13 @@ func set_slider_value():
 func _on_value_changed(value: float):
 	AudioServer.set_bus_volume_db(bus_index,linear_to_db(value))
 	set_num_label_text()
+	if bus_index == 0:
+		Save.game_data["Master_volume"] = value
+	elif bus_index == 1:
+		Save.game_data["Music_volume"] = value
+	elif  bus_index == 2:
+		Save.game_data["SFX_volume"] = value
+	else:
+		pass
+	Save.save_data()
+	#print(Save.game_data)

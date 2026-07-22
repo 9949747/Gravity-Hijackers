@@ -5,7 +5,7 @@ extends Node
 @onready var hud = $CanvasLayer/HUD
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-
+#var default_gravity_3d
 #func grav_shift():
 	#if is_on_floor():
 		#world_gravity = 0
@@ -44,19 +44,19 @@ func _on_join_button_pressed():
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_health_bar)
-#func upnp_setup():("physics/3d/default_gravity")
-#var default_gravity_3d
-#	var upnp = UPNP.new()
-	
-#	var discover_result = upnp.discover()
-#	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Discover Failed! Error %s" % discover_result)
 
-#	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), "UPNP Invalid Gateway!")
-
-#	var map_result = upnp.add_port_mapping(PORT)
-#	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Port Mapping Failed! Error %s" % map_result)
+func upnp_setup():
+	var upnp = UPNP.new()
 	
-#	print("Success! Join Address: %s" % upnp.query_external_address())
+	var discover_result = upnp.discover()
+	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Discover Failed! Error %s" % discover_result)
+
+	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), "UPNP Invalid Gateway!")
+
+	var map_result = upnp.add_port_mapping(PORT)
+	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Port Mapping Failed! Error %s" % map_result)
+	
+	print("Success! Join Address: %s" % upnp.query_external_address())
 
 func _physics_process(delta):
 	if tracked and player:

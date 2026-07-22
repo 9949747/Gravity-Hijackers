@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ht4wfbc77fyi"]
 
-[ext_resource type="Script" uid="uid://kse10uc4w75k" path="res://scenes/Audric's Test Stuff/playersniper.gd" id="1_tmyfb"]
-[ext_resource type="PackedScene" uid="uid://bd222fvf28nl8" path="res://lesniper.tscn" id="2_tmyfb"]
+[ext_resource type="Script" uid="uid://kse10uc4w75k" path="res://scenes/Audric's_Test_Stuff/Scripts/playersniper.gd" id="1_tmyfb"]
+[ext_resource type="PackedScene" uid="uid://bd222fvf28nl8" path="res://scenes/Audric's_Test_Stuff/Scenes/lesniper.tscn" id="2_tmyfb"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_2u6ah"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_syldl"]
 

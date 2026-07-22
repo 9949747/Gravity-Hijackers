@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bednvlg3b8ul2"
-path.s3tc="res://.godot/imported/UTR 130 Sniper Gun 3d models texture.bmp-b396017cbc3daf285bc47ff4f98468bd.s3tc.ctex"
+uid="uid://twtk8qmp6byy"
+path.s3tc="res://.godot/imported/Skybox2.jpg-f32fa21ca401be43e01bcc6fb91e4859.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://scenes/Audric's Test Stuff/UTR 130 Sniper Gun 3d models texture.bmp"
-dest_files=["res://.godot/imported/UTR 130 Sniper Gun 3d models texture.bmp-b396017cbc3daf285bc47ff4f98468bd.s3tc.ctex"]
+source_file="res://assets/images/Skybox2.jpg"
+dest_files=["res://.godot/imported/Skybox2.jpg-f32fa21ca401be43e01bcc6fb91e4859.s3tc.ctex"]
 
 [params]
 

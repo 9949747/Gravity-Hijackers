@@ -3,13 +3,12 @@ extends Control
 var Vsync_disabled = "Vsync: Disabled"
 var Vsync_enabled = "Vsync: Enabled"
 @onready var label: Label = $HBoxContainer/Label
-@onready var Vsync = Save.game_data["Vsync_on"]
 @onready var check_button: CheckButton = $HBoxContainer/CheckButton
 
-func _onready():
-	if Save.game_data.Vsync_on == false:
+func _ready():
+	if Save.game_data["Vsync_on"] == false:
 		label.text = Vsync_disabled
-	elif Save.game_data.Vsync_on == true:
+	elif Save.game_data["Vsync_on"] == true:
 		label.text = Vsync_enabled
 	
 
@@ -23,11 +22,11 @@ func _on_Y_MouseSens_value_changed(value):
 	Save.Y_update_mouse_sens(value)
 
 func _on_check_button_toggled(toggled_on: bool):
-	if Save.game_data.Vsync_on == false:
-		Save.game_data.Vsync_on = true
+	if Save.game_data["Vsync_on"] == false:
+		Save.game_data["Vsync_on"] = true
 		Save.Update_Vsync()
 		label.text = Vsync_enabled
-	elif Save.game_data.Vsync_on == true:
-		Save.game_data.Vsync_on = false
+	elif Save.game_data["Vsync_on"] == true:
+		Save.game_data["Vsync_on"] = false
 		Save.Update_Vsync()
 		label.text = Vsync_disabled
