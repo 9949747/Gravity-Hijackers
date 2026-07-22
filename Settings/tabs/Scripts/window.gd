@@ -23,12 +23,19 @@ func on_window_mode_selected(index : int):
 		0: #Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+			Save.game_data["Window_mode"] = "Fullscreen"
 		1: #Window Mode
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+			get_window().set_size(Save.game_data["Resolution"] as Vector2i)
+			Save.game_data["Window_mode"] = "Windowed"
 		2: #Borderless Window
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+			get_window().set_size(Save.game_data["Resolution"] as Vector2i)
+			Save.game_data["Window_mode"] = "Borderless Window"
 		3: #Borderless Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+			Save.game_data["Window_mode"] = "Borderless Fullscreen"
+	Save.save_data()

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b4n510qb3x7sf"]
 
-[ext_resource type="Script" uid="uid://q34dclaelnu4" path="res://scenes/hit_marker.gd" id="1_dx77d"]
+[ext_resource type="Script" uid="uid://q34dclaelnu4" path="res://Scripts/hit_marker.gd" id="1_dx77d"]
 
 [node name="HitMarker" type="Control" unique_id=525775285]
 layout_mode = 3

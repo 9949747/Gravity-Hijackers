@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ck2fsl57otb8u"]
 
-[ext_resource type="Script" uid="uid://gpq5ukvjsgl5" path="res://scenes/damage_indicator.gd" id="1_rmmwi"]
+[ext_resource type="Script" uid="uid://gpq5ukvjsgl5" path="res://Scripts/damage_indicator.gd" id="1_rmmwi"]
 
 [node name="DamageIndicator" type="Node3D" unique_id=533372896]
 script = ExtResource("1_rmmwi")

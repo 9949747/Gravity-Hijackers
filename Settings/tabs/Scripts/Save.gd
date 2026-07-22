@@ -1,45 +1,82 @@
 extends Node
 
-const SAVEFILE = "user://Settings.save"
-
-@onready var X_Mouse_sens_Multi = 0.01
-@onready var Y_Mouse_sens_Multi = 0.01
-@onready var Vsync_mode
-@onready var game_data = {
-	"var1": 1,
-	"var2": 2,
-	"var3": 3
+const SAVEFILE = "user://SAVEFILE.save"
+const DEFAULT_GAME_DATA = {
+	"Resolution": Vector2i(1920, 1080),
+	"Window_mode": "Fullscreen",
+	"Vsync_on": false,
+	"Master_volume": 10,
+	"SFX_volume": 10,
+	"Music_volume": 10,
+	"FOV": 75,
+	"X_Mouse_sens_Multi": 0.05,
+	"Y_Mouse_sens_Multi": 0.05,
+	"shoot": MOUSE_BUTTON_LEFT,
+	"left": "A",
+	"right": "D",
+	"up": "W",
+	"down": "S",
+	"player_jump": "Space",
+	"player_sprint": "Shift",
+	"player_crouch": "Ctrl",
+	"reload": "R",
+	"quit": "Esc",
 }
+var game_data = DEFAULT_GAME_DATA.duplicate(true)
 
 func _ready():
-	pass
-	#load_data()
-	#X_Mouse_sens_Multi = game_data.X_Mouse_sens_Multi
-	#Y_Mouse_sens_Multi = game_data.Y_Mouse_sens_Multi
+	#print(game_data)
+	load_data()
+	#print(game_data["Resolution"])
+	#print(game_data["Window_mode"])
+	Set_Window()
+	get_window().set_size(game_data["Resolution"] as Vector2i)
 
 func load_data():
-	var file = FileAccess.open(SAVEFILE, FileAccess.READ)
 	if not FileAccess.file_exists(SAVEFILE):
 		game_data = {
+			"Resolution": Vector2i(1920, 1080),
 			"Window_mode": "Fullscreen",
 			"Vsync_on": false,
-			"Display_fps": false,
-			"Max_fps": 0,
-			"Master_vol": 10,
-			"Music_vol": 10,
-			"SFX_vol": 10,
-			"FOV": 70,
-			"X_Mouse_sens_Multi": .01,
-			"Y_Mouse_sens_Multi": .01,
+			"Master_volume": 10,
+			"SFX_volume": 10,
+			"Music_volume": 10,
+			"FOV": 75,
+			"X_Mouse_sens_Multi": 0.05,
+			"Y_Mouse_sens_Multi": 0.05,
+			"shoot": MOUSE_BUTTON_LEFT,
+			"left": "A",
+			"right": "D",
+			"up": "W",
+			"down": "S",
+			"player_jump": "Space",
+			"player_sprint": "Shift",
+			"player_crouch": "Ctrl",
+			"reload": "R",
+			"quit": "Esc",
 		}
-		save_data()
-	FileAccess.open(SAVEFILE, FileAccess.READ)
-	#game_data = file.get_var()
-	file.close()
+		var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
+		file.store_var(game_data)
+		#print(game_data)
+		file.close()
+	else:
+		var file = FileAccess.open(SAVEFILE, FileAccess.READ)
+		var loaded_data = file.get_var()
+		file.close()
+
+		if loaded_data == null or typeof(loaded_data) != TYPE_DICTIONARY:
+			print("Save file corrupted or empty, creating new data")
+			game_data = DEFAULT_GAME_DATA.duplicate(true)
+			var new_file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
+			new_file.store_var(game_data)
+			new_file.close()
+		else:
+			game_data = DEFAULT_GAME_DATA.duplicate(true)
+			for key in loaded_data.keys():
+				game_data[key] = loaded_data[key]
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
-	file.open(SAVEFILE, file.WRITE)
 	file.store_var(game_data)
 	file.close()
 	
@@ -49,28 +86,45 @@ func toggle_vsync(value):
 		DisplayServer.VSyncMode.VSYNC_ADAPTIVE
 	elif value == 0:
 		DisplayServer.VSyncMode.VSYNC_DISABLED
+	save_data()
 
 func update_fov(value):
-	game_data.FOV = value
-	print(game_data.FOV)
+	#print(game_data["FOV"])
+	game_data["FOV"] = value
+	#print(game_data["FOV"])
 	save_data()
 
 func X_update_mouse_sens(value):
-	X_Mouse_sens_Multi = value
-	game_data.X_Mouse_sens_Multi = value
-	print(game_data.X_Mouse_sens_Multi)
+	#print(game_data["X_Mouse_sens_Multi"])
+	game_data["X_Mouse_sens_Multi"] = value
+	#print(game_data["X_Mouse_sens_Multi"])
 	save_data()
 
 func Y_update_mouse_sens(value):
-	Y_Mouse_sens_Multi = value
-	game_data.Y_Mouse_sens_Multi = value
-	print(game_data.Y_Mouse_sens_Multi)
+	game_data["Y_Mouse_sens_Multi"] = value
+	#print(game_data["Y_Mouse_sens_Multi"])
 	save_data()
 
 func Update_Vsync():
-	print(game_data.Vsync_on)
-	save_data()
-	if game_data.Vsync_on == true:
+	print(game_data["Vsync_on"])
+	if game_data["Vsync_on"] == true:
 		toggle_vsync(1)
-	elif game_data.Vsync_on == false:
+	elif game_data["Vsync_on"] == false:
 		toggle_vsync(0)
+	save_data()
+
+func Set_Window():
+	if game_data["Window_mode"] == "Fullscreen":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+	elif game_data["Window_mode"] == "Windowed":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,false)
+	elif game_data["Window_mode"] == "Borderless Fullscreen":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+	elif game_data["Window_mode"] == "Borderless Window":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
+	else:
+		pass

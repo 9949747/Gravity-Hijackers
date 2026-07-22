@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bsk8r72vxmpki"]
 
-[ext_resource type="Script" uid="uid://ckbf5f7076ddi" path="res://playerautorifle.gd" id="1_6otph"]
-[ext_resource type="PackedScene" uid="uid://bc5urmyohnj05" path="res://scenes/Audric's Test Stuff/UTARFor1ZIP.fbx" id="2_2x6ia"]
+[ext_resource type="Script" uid="uid://ckbf5f7076ddi" path="res://scenes/Audric's_Test_Stuff/Scripts/playerautorifle.gd" id="1_6otph"]
+[ext_resource type="PackedScene" uid="uid://bc5urmyohnj05" path="res://scenes/Audric's_Test_Stuff/Scenes/UTARFor1ZIP.fbx" id="2_2x6ia"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_tno0c"]
-[ext_resource type="AudioStream" uid="uid://2ad7ms0fhawu" path="res://scenes/Audric's Test Stuff/audiomass-output.mp3" id="4_a588t"]
+[ext_resource type="AudioStream" uid="uid://2ad7ms0fhawu" path="res://scenes/Audric's_Test_Stuff/Sounds/audiomass-output.mp3" id="4_a588t"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
