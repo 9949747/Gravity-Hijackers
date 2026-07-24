@@ -89,6 +89,7 @@ func add_player(peer_id):
 		if randSelect == 1:
 			player.add_to_group("Team1")
 			player.team = 1
+			player.mesh.material.albedo_color = Color(1, 0, 0)
 		else:
 			player.add_to_group("Team2")
 			player.team = 2
