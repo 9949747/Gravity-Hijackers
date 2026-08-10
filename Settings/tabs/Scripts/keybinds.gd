@@ -14,7 +14,7 @@ func _ready():
 	button.focus_mode = Control.FOCUS_NONE
 	set_action_name()
 	set_text_for_input()
-	
+	Load()
 
 func set_action_name():
 	label.text = "Unassigned"
@@ -120,25 +120,35 @@ func rebind_action_key(event) -> void:
 	set_text_for_input()
 	set_action_name()
 	
-	var Keybind_assign = event
-	print(Keybind_assign)
+	var Keybind_assign = event.keycode
+	#print(Keybind_assign)
+	var Key_text = OS.get_keycode_string(Keybind_assign)
+	print(Key_text)
 	if action_name == "shoot":
-		Save.game_data["shoot"] = event
+		Save.game_data["shoot"] = Key_text
 	elif action_name == "up":
-		Save.game_data["up"] = event
+		Save.game_data["up"] = Key_text
 	elif action_name == "down":
-		Save.game_data["down"] = event
+		Save.game_data["down"] = Key_text
 	elif action_name == "left":
-		Save.game_data["left"] = event
+		Save.game_data["left"] = Key_text
 	elif action_name == "right":
-		Save.game_data["right"] = event
+		Save.game_data["right"] = Key_text
 	elif action_name == "player_sprint":
-		Save.game_data["player_sprint"] = event
+		Save.game_data["player_sprint"] = Key_text
 	elif action_name == "player_crouch":
-		Save.game_data["player_crouch"] = event
+		Save.game_data["player_crouch"] = Key_text
 	elif action_name == "player_jump":
-		Save.game_data["player_jump"] = event
+		Save.game_data["player_jump"] = Key_text
 	if action_name == "reload":
-		Save.game_data["reload"] = event
+		Save.game_data["reload"] = Key_text
 	if action_name == "quit":
-		Save.game_data["quit"] = event
+		Save.game_data["quit"] = Key_text
+	Save.save_data()
+
+func Load():
+	InputMap.action_erase_events(action_name)
+	#var New_bind = InputEventKey.new()
+	#print(New_bind)
+	#New_bind.physical_keycode = Save.game_data[action_name]
+	InputMap.action_add_event(action_name, Save.game_data[action_name])
