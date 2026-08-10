@@ -302,4 +302,17 @@ stream = ExtResource("4_dqkch")
 volume_db = -20.0
 bus = &"SFX"
 
+[node name="radio" type="Control" parent="." unique_id=619869948]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="radio" unique_id=1475415235]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "hi"
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
