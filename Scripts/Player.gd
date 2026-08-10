@@ -1,67 +1,72 @@
 extends CharacterBody3D
 
+#Signals:
 signal health_changed(health_value)
-#testing pull request
+
+#Assets
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
-@onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-#@onready var current_gravity = default_gravity
-@onready var gravity_multiplier = 2
+@onready var camera_3d: Camera3D = $Camera3D
+
+#Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
 @onready var hit_marker = preload("res://scenes/HitMarker.tscn")
-@onready var camera_3d: Camera3D = $Camera3D
-@onready var speed_pickup_scene = preload("res://scenes/speed_pickup.tscn")
-@onready var speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
 @onready var player_scene = preload("res://scenes/player.tscn")
-@onready var player_scene_instantiated = player_scene.instantiate()
 @onready var world_scene = preload("res://scenes/environment.tscn")
-@onready var world_scene_instantiated = world_scene.instantiate()
+@onready var speed_pickup_scene = preload("res://scenes/speed_pickup.tscn")
 
-
+#Pickups
+@onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+@onready var speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
+#@onready var current_gravity = default_gravity
+@onready var gravity_multiplier = 2
 @onready var speed_pickup_multiplier = 1
 
-@export var X_mouse_sensitivity = 0.01
-@export var Y_mouse_sensitivity = 0.01
-
+#Animation
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+#Instantiation
+@onready var player_scene_instantiated = player_scene.instantiate()
+@onready var world_scene_instantiated = world_scene.instantiate()
 
+#Stats
 var health = 3
 var ammo_count = 15
-
-var reloading = false
-
 var SPEED = 5.5
 const JUMP_VELOCITY = 10.0
-const LOOK_SPEED = 5 # Adjust as needed for controller comfort
 
-func _enter_tree():
+#MISC
+@export var X_mouse_sensitivity = 0.01
+@export var Y_mouse_sensitivity = 0.01
+@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+var reloading = false
+const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
+
+
+func _enter_tree(): #Starts the game, gives multiplayer authority for your controls
 	set_multiplayer_authority(str(name).to_int())
 
-func _ready():
-	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
+
+func _ready(): #Plays on first entering the game
+	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
 	
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
 	
-func _exit_tree() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func _on_speed_pickup_pickedup(value):
-	print("SPEED_PICKUP")
-	speed_pickup_multiplier = value
+func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion: #Allows you to move mouse in game
 		rotate_y(-event.relative.x * X_mouse_sensitivity)
 		camera.rotate_x(-event.relative.y * Y_mouse_sensitivity)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
@@ -69,6 +74,7 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
 		upd_ammo(0, true) # call reload update
 	
+	#ALL SHOOTING STUFF, IT WORKS, DO NOT CHANGE IT UNLESS RHYS
 	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and ammo_count > 0:
 		upd_ammo(-1)
 		play_shoot_effects.rpc()
@@ -101,8 +107,8 @@ func _unhandled_input(event):
 				print("hit")
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
 
-func _physics_process(delta):
-	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
+func _physics_process(delta): #Occurs every delta frame
+	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
 	# Add the gravity.
@@ -124,6 +130,9 @@ func _physics_process(delta):
 		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
+	#MOVEMENT AND CONTROLS
+	move_and_slide()
+	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
@@ -133,10 +142,24 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
-	# --- New: Handle Camera Look (Right Stick) ---
-	# Get the controller stick input (Horizontal and Vertical)
-	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	
+	#JUMPING AND GRAVITY
+	if not is_on_floor():
+		velocity.y -= default_gravity * gravity_multiplier * delta
+	if Input.is_action_just_pressed("player_jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	#SPRINTING AND CROUCHING
+	if Input.is_action_pressed("player_sprint"):
+		SPEED = 8 * speed_pickup_multiplier
+	else:
+		SPEED = 5.5 * speed_pickup_multiplier
+	if Input.is_action_just_pressed("player_crouch"):
+		#print("crouch")
+		crouch()
+
+	# THIS WAS DONE AT THE TEMPLATE AND CHARLES  IS TOO SCARED TO REMOVE IT
+	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
 	if look_dir != Vector2.ZERO:
 		# Rotate Player (Yaw) - Horizontal movement of the stick
 		rotate_y(-look_dir.x * LOOK_SPEED * delta)
@@ -147,19 +170,35 @@ func _physics_process(delta):
 		# Clamp camera pitch rotation (same as your mouse look code)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
-	if anim_player.current_animation == "shoot":
+	#Settings stuff
+	_on_fov_updated(Save.game_data["FOV"])
+	_X_on_mouse_sens_updated(Save.game_data["X_Mouse_sens_Multi"])
+	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
+	
+	#Shoot animation
+	if anim_player.current_animation == "shoot": 
 		pass
 	elif input_dir != Vector2.ZERO and is_on_floor():
 		anim_player.play("move")
 	else:
 		anim_player.play("idle")
 
-	move_and_slide()
+#ANIMATION FUNCTIONS
+func crouch():
+	if Crouchstate == true:
+		if Input.is_action_just_pressed("player_crouch"):
+			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
+			Crouchstate = false
+	elif Crouchstate == false:
+		if Input.is_action_just_pressed("player_crouch"):
+			anim_player.play("Crouch", -1, CROUCH_SPEED)
+			Crouchstate = true
 
-	_on_fov_updated(Save.game_data.FOV)
-	_X_on_mouse_sens_updated(Save.game_data["X_Mouse_sens_Multi"])
-	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "shoot":
+		anim_player.play("idle")
 
+#MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
 	anim_player.stop()
@@ -176,10 +215,19 @@ func receive_damage():
 		position = Vector3.ZERO
 	health_changed.emit(health)
 
-func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "shoot":
-		anim_player.play("idle")
+#SETTINGS FUNCTIONS
+func _on_fov_updated(value):
+	if not is_multiplayer_authority(): return
+	#print(Save.game_data["FOV"])
+	camera.fov = value
+func _X_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
+	X_mouse_sensitivity = value
+func _Y_on_mouse_sens_updated(value):
+	if not is_multiplayer_authority(): return
+	Y_mouse_sensitivity = value
 
+#MISCELLANEOUS
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
@@ -192,27 +240,6 @@ func upd_ammo(num: int, reload: bool = false):
 		ammo_count += num
 	ammo_display.text = "%d / 15" % ammo_count
 
-
-func crouch():
-	if Crouchstate == true:
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
-			Crouchstate = false
-	elif Crouchstate == false:
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, CROUCH_SPEED)
-			Crouchstate = true
-	
-
-func _on_fov_updated(value):
-	if not is_multiplayer_authority(): return
-	#print(Save.game_data.FOV)
-	camera.fov = value
-
-func _X_on_mouse_sens_updated(value):
-	if not is_multiplayer_authority(): return
-	X_mouse_sensitivity = value
-
-func _Y_on_mouse_sens_updated(value):
-	if not is_multiplayer_authority(): return
-	Y_mouse_sensitivity = value
+func _on_speed_pickup_pickedup(value):
+	print("SPEED_PICKUP")
+	speed_pickup_multiplier = value

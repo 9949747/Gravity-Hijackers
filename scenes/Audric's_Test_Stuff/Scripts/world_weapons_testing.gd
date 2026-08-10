@@ -6,7 +6,7 @@ extends Node
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 
 
-@onready var Player = preload("res://scenes/Audric's Test Stuff/playersniper.tscn")
+@onready var Player = preload("res://scenes/Audric's_Test_Stuff/Scenes/playersniper.tscn")
 var tracked = false
 var player
 
