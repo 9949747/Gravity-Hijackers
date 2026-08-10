@@ -111,6 +111,25 @@ func _physics_process(delta): #Occurs every delta frame
 	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y -= default_gravity * gravity_multiplier * delta
+
+	# Handle Jump.
+	if Input.is_action_just_pressed("player_jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+												  
+	if Input.is_action_pressed("player_sprint"):
+		SPEED = 8 * speed_pickup_multiplier
+	else:
+		SPEED = 5.5 * speed_pickup_multiplier
+
+	if Input.is_action_just_pressed("player_crouch"):
+		print("crouch")
+		crouch()
+		
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
 	#MOVEMENT AND CONTROLS
 	move_and_slide()
 	
