@@ -60,6 +60,7 @@ import/blender/enabled=false
 Player=""
 Team1=""
 Team2=""
+Crouching=""
 
 [input]
 

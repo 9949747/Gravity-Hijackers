@@ -11,7 +11,7 @@ const DEFAULT_GAME_DATA = {
 	"FOV": 75,
 	"X_Mouse_sens_Multi": 0.05,
 	"Y_Mouse_sens_Multi": 0.05,
-	"shoot": MOUSE_BUTTON_LEFT,
+	"shoot": "MOUSE_BUTTON_LEFT",
 	"left": "A",
 	"right": "D",
 	"up": "W",
@@ -22,11 +22,11 @@ const DEFAULT_GAME_DATA = {
 	"reload": "R",
 	"quit": "Esc",
 }
-var game_data = DEFAULT_GAME_DATA.duplicate(true)
+var game_data
 
 func _ready():
-	#print(game_data)
 	load_data()
+	print(game_data)
 	#print(game_data["Resolution"])
 	#print(game_data["Window_mode"])
 	Set_Window()
@@ -72,8 +72,9 @@ func load_data():
 			new_file.close()
 		else:
 			game_data = DEFAULT_GAME_DATA.duplicate(true)
-			for key in loaded_data.keys():
-				game_data[key] = loaded_data[key]
+			for key in DEFAULT_GAME_DATA.keys():
+				if loaded_data.has(key):
+					game_data[key] = loaded_data[key]
 
 func save_data():
 	var file = FileAccess.open(SAVEFILE, FileAccess.WRITE)
