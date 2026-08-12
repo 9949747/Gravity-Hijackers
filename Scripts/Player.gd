@@ -34,10 +34,12 @@ var Crouchstate : bool = false
 @onready var world_scene_instantiated = world_scene.instantiate()
 
 #Stats
-var health = 3
+var health = 10
 var ammo_count = 15
+var bullet_damage = 2
 var SPEED = 5.5
 const JUMP_VELOCITY = 10.0
+@export var team: int
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -82,12 +84,15 @@ func _unhandled_input(event):
 		if raycast.is_colliding():
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
-			print("ray hit ", hit_obj.name, " at ", hit_coords)
-			
+			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+			print("raycast col pos ", hit_coords, " hit obj pos ", hit_obj.position, " relative coords ", relative_hit_coords)
+			var headshot = true if relative_hit_coords.y >= 0.4 else false # above 1.4 is roughly where the player's head is
+			#print("ray hit ", hit_obj.name, " at ", hit_coords)
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
 				return
 			
+			print(hit_obj.get_groups())
 			# instance new client side hitmarker gui
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
@@ -98,14 +103,21 @@ func _unhandled_input(event):
 			new_hit_marker.scale = Vector2(0.5, 0.5)
 			# instance new damage count billboard gui where ray collides
 			var new_damage_billboard = damage_billboard.instantiate()
+			var billboard_label = new_damage_billboard.get_node("Label3D") 
 			Global.worldNode.add_child(new_damage_billboard)
 			new_damage_billboard.position = Vector3(hit_coords)
-			print(new_damage_billboard.position, new_damage_billboard.get_parent())
+			if headshot:
+				billboard_label.text = str(-bullet_damage*2)
+				billboard_label.modulate = Color("e10006")
+				billboard_label.outline_modulate = Color("400000")
+			else: 
+				billboard_label.text = str(-bullet_damage)
+			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				print("hit")
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority())
+				print("player is in team " + str(hit_obj.team))
+				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot) # pass bool as arg for headshot
 
 func _physics_process(delta): #Occurs every delta frame
 	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
@@ -217,10 +229,10 @@ func play_shoot_effects():
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func receive_damage():
-	health -= 1
+func receive_damage(headshot: bool):
+	health -= bullet_damage*2 if headshot else bullet_damage
 	if health <= 0:
-		health = 3
+		health = 10
 		position = Vector3.ZERO
 	health_changed.emit(health)
 

@@ -8,8 +8,8 @@ script = ExtResource("1_rmmwi")
 [node name="Label3D" type="Label3D" parent="." unique_id=535019161]
 billboard = 1
 no_depth_test = true
-modulate = Color(0.88413775, 0, 0.024182815, 1)
-outline_modulate = Color(0.25, 0, 0, 1)
+modulate = Color(0.81, 0.81, 0.81, 1)
+outline_modulate = Color(0.25, 0.25, 0.25, 1)
 text = "-1"
 font_size = 100
 outline_size = 45

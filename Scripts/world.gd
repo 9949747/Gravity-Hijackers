@@ -1,5 +1,6 @@
 extends Node
 # Ough.,,
+
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var hud = $CanvasLayer/HUD
@@ -22,6 +23,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 func _ready() -> void:
 	$AudioStreamPlayer.play()
 	Global.worldNode = self
+	print(Save.game_data)
 
 func _on_host_button_pressed():
 	main_menu.hide()
@@ -87,24 +89,32 @@ func add_player(peer_id):
 		var randSelect = randi_range(1, 2)
 		if randSelect == 1:
 			player.add_to_group("Team1")
+			player.team = 1
+			player.mesh.material.albedo_color = Color(1, 0, 0)
 		else:
 			player.add_to_group("Team2")
+			player.team = 2
 	elif len(get_tree().get_nodes_in_group("Team1")) < len(get_tree().get_nodes_in_group("Team2")):
 		print("team 1 has less players than team 2. adding player to team 1")
 		player.add_to_group("Team1")
+		player.team = 1
 	else: # team 2 has less players than team 1 if this stage is reached
 		print("team 2 has less players than team 1. adding player to team 2")
 		player.add_to_group("Team2")
+		player.team = 2
 	print("player joined. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
+	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
+	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
 	if not player:
 		return
-	
 	player.queue_free()
 	await get_tree().create_timer(0.1).timeout # breifly pause thread so print statement below returns accurate info
 	print("player left. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
+	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
+	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
