@@ -90,7 +90,7 @@ func add_player(peer_id):
 		if randSelect == 1:
 			player.add_to_group("Team1")
 			player.team = 1
-			player.mesh.material.albedo_color = Color(1, 0, 0)
+			# player.mesh.material.albedo_color = Color(1, 0, 0)
 		else:
 			player.add_to_group("Team2")
 			player.team = 2
@@ -122,12 +122,12 @@ func update_health_bar(health_value):
 func radio_enable(event: InputEvent) -> void:
 	print("1")
 	if event.is_action_just_pressed("radio_toggle"):
-		if radio_visible == false:
-			radio.show
-			var radio_visible = true
+		if radio.visible == false:
+			radio.show()
+			radio.visible = true
 		else:
-			radio.hide
-			var radio_visible = false
+			radio.hide()
+			radio.visible = false
 
 
 
