@@ -41,7 +41,6 @@ var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
 const JUMP_VELOCITY = 10.0
-@export var team: int
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -114,7 +113,6 @@ func _unhandled_input(event):
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				print("player is in team " + str(hit_obj.team))
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot) # pass bool as arg for headshot
 
 func _physics_process(delta): #Occurs every delta frame
@@ -220,7 +218,6 @@ func _on_animation_player_animation_finished(anim_name):
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
-	print($".".name)
 	anim_player.stop()
 	anim_player.play("shoot")
 	$AudioStreamPlayer3D.play()
@@ -235,10 +232,13 @@ func receive_damage(headshot: bool):
 		position = Vector3.ZERO
 	health_changed.emit(health)
 
-@rpc("call_local")
+@rpc("any_peer", "call_local")
 func assign_team(team: int):
-	var plr_mat = $MeshInstance3D.get_active_material(0)
-	plr_mat.albedo_color = Color(1, 0, 0)
+	print("mesh id is %s for player %s" % [$MeshInstance3D.get_instance_id(), self.name])
+	var plr_mat = $MeshInstance3D.get_active_material(0).duplicate()
+	plr_mat.albedo_color = Color(1, 0, 0) if team == 1 else Color(0, 0, 1)
+	$MeshInstance3D.set_surface_override_material(0, plr_mat)
+	add_to_group("Team%s" % team)
 
 #SETTINGS FUNCTIONS
 func _on_fov_updated(value):

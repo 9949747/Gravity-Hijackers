@@ -84,24 +84,11 @@ func add_player(peer_id):
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_health_bar)
 	
-	if len(get_tree().get_nodes_in_group("Team1")) == len(get_tree().get_nodes_in_group("Team2")):
-		print("teams are equal. assigning random team for new player")
-		var randSelect = randi_range(1, 2)
-		if randSelect == 1:
-			player.add_to_group("Team1")
-			player.team = 1
-			player.assign_team.rpc(1)
-		else:
-			player.add_to_group("Team2")
-			player.team = 2
-	elif len(get_tree().get_nodes_in_group("Team1")) < len(get_tree().get_nodes_in_group("Team2")):
-		print("team 1 has less players than team 2. adding player to team 1")
-		player.add_to_group("Team1")
-		player.team = 1
-	else: # team 2 has less players than team 1 if this stage is reached
-		print("team 2 has less players than team 1. adding player to team 2")
-		player.add_to_group("Team2")
-		player.team = 2
+	var group_counts = {get_tree().get_node_count_in_group("Team1"): 1, get_tree().get_node_count_in_group("Team2"): 2}
+	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))]
+	print("the current 'player' is: " + player.name)
+	player.assign_team.rpc(smallest_team)
+	
 	print("player joined. new teams = ", get_tree().get_nodes_in_group("Team1"), " ", get_tree().get_nodes_in_group("Team2"))
 	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
@@ -128,8 +115,6 @@ func radio_enable(event: InputEvent) -> void:
 		else:
 			radio.hide()
 			radio.visible = false
-
-
 
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
