@@ -91,7 +91,6 @@ func _unhandled_input(event):
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
 				return
 			
-			print(hit_obj.get_groups())
 			# instance new client side hitmarker gui
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
@@ -221,6 +220,7 @@ func _on_animation_player_animation_finished(anim_name):
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
+	print($".".name)
 	anim_player.stop()
 	anim_player.play("shoot")
 	$AudioStreamPlayer3D.play()
@@ -234,6 +234,11 @@ func receive_damage(headshot: bool):
 		health = 10
 		position = Vector3.ZERO
 	health_changed.emit(health)
+
+@rpc("call_local")
+func assign_team(team: int):
+	var plr_mat = $MeshInstance3D.get_active_material(0)
+	plr_mat.albedo_color = Color(1, 0, 0)
 
 #SETTINGS FUNCTIONS
 func _on_fov_updated(value):
