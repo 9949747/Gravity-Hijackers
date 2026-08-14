@@ -8,6 +8,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_anhm7")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_67y6s"]
@@ -53,7 +54,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 1.51306, 0), Vector3(0, 0.75, 0)]
+"values": [Vector3(0, 1.51306, 0), Vector3(0, 0.5, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -167,6 +168,70 @@ tracks/4/keys = {
 "values": [Vector3(0, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "Uncrouch"
+step = 60.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.5, 0), Vector3(0, 1.513, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:mesh:height")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 2.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:shape:height")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 2.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeshInstance3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.25, 0), Vector3(0, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.25, 0), Vector3(0, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_knepc"]
 resource_name = "idle"
 length = 3.0
@@ -216,6 +281,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_efeb8"]
 resource_name = "shoot"
 length = 0.4
+step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -245,6 +311,7 @@ tracks/1/keys = {
 _data = {
 &"Crouch": SubResource("Animation_qhqgy"),
 &"RESET": SubResource("Animation_jhgv2"),
+&"Uncrouch": SubResource("Animation_dqkch"),
 &"idle": SubResource("Animation_knepc"),
 &"move": SubResource("Animation_qcgne"),
 &"shoot": SubResource("Animation_efeb8")
@@ -281,7 +348,7 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
 [node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
-transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000002, 0.5, -0.25, -0.5)
+transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)

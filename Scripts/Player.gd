@@ -27,7 +27,7 @@ signal health_changed(health_value)
 
 #Crouching
 @export var ANIMATIONPLAYER : AnimationPlayer
-@export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
+@export var CROUCH_SPEED : float = 0
 @export var is_crouching: bool = false
 
 #Instantiation
@@ -147,18 +147,12 @@ func _physics_process(delta): #Occurs every delta frame
 		SPEED = 8 * speed_pickup_multiplier
 	else:
 		SPEED = 5.5 * speed_pickup_multiplier
+	
 	if Input.is_action_just_pressed("player_crouch"):
 		if !is_multiplayer_authority():
 			return
-		
-		if is_in_group("Crouching"):
-			remove_from_group("Crouching")
-			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
-		else:
-			add_to_group("Crouching")
-			anim_player.play("Crouch", -1, CROUCH_SPEED)
-			#print("crouch")
-		rpc_id(1, "server_set_crouch", is_crouching)
+		crouch.rpc()
+
 
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
@@ -187,10 +181,25 @@ func _physics_process(delta): #Occurs every delta frame
 		anim_player.play("idle")
 
 #ANIMATION FUNCTIONS
+@rpc("call_local")
+func crouch():
+	print(is_crouching)
+	print($".".name)
+	if is_crouching == true:
+		print("Crouch2")
+		anim_player.play("Uncrouch")
+		is_crouching = false
+
+	elif is_crouching == false:
+		print("Crouch1")
+		anim_player.play("Crouch")
+		is_crouching = true
+
+
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
-
+		
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
