@@ -9,6 +9,7 @@ signal health_changed(health_value)
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
+@onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -95,8 +96,8 @@ func _unhandled_input(event):
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
 			new_hit_marker.position = Vector2(
-				(get_viewport().size.x / 2) - (new_hit_marker.size.x / 2), 
-				(get_viewport().size.y / 2) - (new_hit_marker.size.y / 2)
+				crosshair.position.x - (new_hit_marker.size.x / 2), 
+				crosshair.position.y - (new_hit_marker.size.y / 2)
 			)
 			new_hit_marker.scale = Vector2(0.5, 0.5)
 			# instance new damage count billboard gui where ray collides
@@ -250,9 +251,9 @@ func _Y_on_mouse_sens_updated(value):
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
-		Global.worldNode.hud.get_node("Crosshair").hide()
+		crosshair.hide()
 		await get_tree().create_timer(1).timeout
-		Global.worldNode.hud.get_node("Crosshair").show()
+		crosshair.show()
 		ammo_count = 15
 		reloading = false
 	else:
