@@ -25,10 +25,11 @@ signal health_changed(health_value)
 @onready var gravity_multiplier = 2
 @onready var speed_pickup_multiplier = 1
 
-#Animation
+#Crouching
 var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
+@export var is_crouching: bool = false
 
 #Instantiation
 @onready var player_scene_instantiated = player_scene.instantiate()
@@ -53,15 +54,12 @@ const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove 
 func _enter_tree(): #Starts the game, gives multiplayer authority for your controls
 	set_multiplayer_authority(str(name).to_int())
 
-
 func _ready(): #Plays on first entering the game
 	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
-	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
-	
 
 func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

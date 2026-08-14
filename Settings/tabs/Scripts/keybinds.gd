@@ -13,8 +13,8 @@ func _ready():
 	set_process_input(false)
 	button.focus_mode = Control.FOCUS_NONE
 	set_action_name()
-	set_text_for_input()
 	Load()
+	set_text_for_input()
 
 func set_action_name():
 	label.text = "Unassigned"
@@ -120,35 +120,51 @@ func rebind_action_key(event) -> void:
 	set_text_for_input()
 	set_action_name()
 	
-	var Keybind_assign = event.keycode
-	#print(Keybind_assign)
-	var Key_text = OS.get_keycode_string(Keybind_assign)
-	print(Key_text)
-	if action_name == "shoot":
-		Save.game_data["shoot"] = Key_text
-	elif action_name == "up":
-		Save.game_data["up"] = Key_text
-	elif action_name == "down":
-		Save.game_data["down"] = Key_text
-	elif action_name == "left":
-		Save.game_data["left"] = Key_text
-	elif action_name == "right":
-		Save.game_data["right"] = Key_text
-	elif action_name == "player_sprint":
-		Save.game_data["player_sprint"] = Key_text
-	elif action_name == "player_crouch":
-		Save.game_data["player_crouch"] = Key_text
-	elif action_name == "player_jump":
-		Save.game_data["player_jump"] = Key_text
-	if action_name == "reload":
-		Save.game_data["reload"] = Key_text
-	if action_name == "quit":
-		Save.game_data["quit"] = Key_text
+	var bind_text = get_bind_string(event)
+	match action_name:
+		"shoot":
+			Save.game_data["shoot"] = bind_text
+		"up":
+			Save.game_data["up"] = bind_text
+		"down":
+			Save.game_data["down"] = bind_text
+		"left":
+			Save.game_data["left"] = bind_text
+		"right":
+			Save.game_data["right"] = bind_text
+		"player_sprint":
+			Save.game_data["player_sprint"] = bind_text
+		"player_crouch":
+			Save.game_data["player_crouch"] = bind_text
+		"player_jump":
+			Save.game_data["player_jump"] = bind_text
+		"reload":
+			Save.game_data["reload"] = bind_text
+		"quit":
+			Save.game_data["quit"] = bind_text
 	Save.save_data()
 
+func get_bind_string(event: InputEvent) -> String:
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				return "Mouse Left"
+			MOUSE_BUTTON_RIGHT:
+				return "Mouse Right"
+			MOUSE_BUTTON_MIDDLE:
+				return "Mouse Middle"
+			MOUSE_BUTTON_WHEEL_UP:
+				return "Wheel Up"
+			MOUSE_BUTTON_WHEEL_DOWN:
+				return "Wheel Down"
+			_:
+				return "Mouse " + str(event.button_index)
+	elif event is InputEventKey:
+		var key_text = OS.get_keycode_string(event.keycode)
+		if key_text == "" and event.physical_keycode != 0:
+			key_text = OS.get_keycode_string(event.physical_keycode)
+		return key_text
+	return "Unassigned"
+
 func Load():
-	InputMap.action_erase_events(action_name)
-	#var New_bind = InputEventKey.new()
-	#print(New_bind)
-	#New_bind.physical_keycode = Save.game_data[action_name]
-	InputMap.action_add_event(action_name, Save.game_data[action_name])
+	Save.load_saved_keybind(action_name)

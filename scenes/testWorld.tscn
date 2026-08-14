@@ -104,6 +104,7 @@ layout_mode = 2
 text = "Settings"
 
 [node name="HUD" type="Control" parent="CanvasLayer" unique_id=24447867]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
