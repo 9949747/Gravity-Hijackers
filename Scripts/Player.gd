@@ -25,7 +25,6 @@ signal health_changed(health_value)
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
-var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 @export var is_crouching: bool = false
@@ -121,23 +120,6 @@ func _physics_process(delta): #Occurs every delta frame
 	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y -= default_gravity * gravity_multiplier * delta
-
-	# Handle Jump.
-	if Input.is_action_just_pressed("player_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-												  
-	if Input.is_action_pressed("player_sprint"):
-		SPEED = 8 * speed_pickup_multiplier
-	else:
-		SPEED = 5.5 * speed_pickup_multiplier
-
-	if Input.is_action_just_pressed("player_crouch"):
-		print("crouch")
-		crouch()
-		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	#MOVEMENT AND CONTROLS
@@ -165,15 +147,18 @@ func _physics_process(delta): #Occurs every delta frame
 	else:
 		SPEED = 5.5 * speed_pickup_multiplier
 	if Input.is_action_just_pressed("player_crouch"):
-		if not is_multiplayer_authority():
+		if !is_multiplayer_authority():
 			return
+		
 		if is_in_group("Crouching"):
 			remove_from_group("Crouching")
-			crouch()
+			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
 		else:
 			add_to_group("Crouching")
-			crouch()
+			anim_player.play("Crouch", -1, CROUCH_SPEED)
 			#print("crouch")
+		rpc_id(1, "server_set_crouch", is_crouching)
+
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -201,18 +186,6 @@ func _physics_process(delta): #Occurs every delta frame
 		anim_player.play("idle")
 
 #ANIMATION FUNCTIONS
-func crouch():
-	if is_in_group("Crouching"):
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
-			Crouchstate = false
-
-	elif !is_in_group("Crouching"):
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, CROUCH_SPEED)
-			Crouchstate = true
-	rpc_id(1, "server_set_crouch", Crouchstate)
-
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
