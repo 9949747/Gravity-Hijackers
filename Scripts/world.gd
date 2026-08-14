@@ -123,11 +123,11 @@ func radio_enable(event: InputEvent) -> void:
 	print("1")
 	if event.is_action_just_pressed("radio_toggle"):
 		if radio.visible == false:
-			radio.show
-			var radio_visible = true
+			radio.show()
+			radio.visible = true
 		else:
-			radio.hide
-			var radio_visible = false
+			radio.hide()
+			radio.visible = false
 
 
 
