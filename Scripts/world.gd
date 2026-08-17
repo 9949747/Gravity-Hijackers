@@ -111,9 +111,9 @@ func filter_loaded_players(team1, team2): # reload teams for everyone upon new p
 	print("unloaded team 1 players: ", unloaded_team1_players, " unloaded team 2 players: ", unloaded_team2_players, " on client: ", multiplayer.get_unique_id())
 	
 	for ids in unloaded_team1_players:
-		apply_team(ids, 1)
+		apply_team(ids, "Team1")
 	for ids in unloaded_team2_players:
-		apply_team(ids, 2)
+		apply_team(ids, "Team2")
 
 func apply_team(plr_id, team): # keeps filter_loaded_players relatively dry and resolves host group conflict
 	var player_node = get_node(str(plr_id))
