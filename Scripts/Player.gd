@@ -83,9 +83,7 @@ func _unhandled_input(event):
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
 			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			print("raycast col pos ", hit_coords, " hit obj pos ", hit_obj.position, " relative coords ", relative_hit_coords)
 			var headshot = true if relative_hit_coords.y >= 0.4 else false # above 1.4 is roughly where the player's head is
-			#print("ray hit ", hit_obj.name, " at ", hit_coords)
 			# avoid nesting
 			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
 				return
@@ -234,7 +232,6 @@ func receive_damage(headshot: bool):
 
 @rpc("any_peer", "call_local")
 func assign_team(team: int):
-	print("mesh id is %s for player %s" % [$MeshInstance3D.get_instance_id(), self.name])
 	var plr_mat = $MeshInstance3D.get_active_material(0).duplicate()
 	plr_mat.albedo_color = Color(1, 0, 0) if team == 1 else Color(0, 0, 1)
 	$MeshInstance3D.set_surface_override_material(0, plr_mat)
