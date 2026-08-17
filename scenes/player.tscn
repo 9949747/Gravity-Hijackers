@@ -12,6 +12,7 @@ resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_anhm7")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_67y6s"]
+resource_local_to_scene = true
 
 [sub_resource type="Gradient" id="Gradient_cfnn0"]
 offsets = PackedFloat32Array(0, 0.141221, 1)
