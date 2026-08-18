@@ -84,8 +84,8 @@ func add_player(peer_id):
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_health_bar)
 	
-	var group_counts = {get_tree().get_node_count_in_group("Team1"): "Team1", get_tree().get_node_count_in_group("Team2"): "Team2"}
-	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))]
+	var group_counts = {get_tree().get_node_count_in_group("Team1"): "Team1", get_tree().get_node_count_in_group("Team2"): "Team2"} # team 2 will override team 1 when both are even since keys match
+	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))] if len(group_counts) > 1 else ["Team1", "Team2"].pick_random() # removes bias to one team when both teams are even
 	apply_team(peer_id, smallest_team) # host must skip straight to apply_team since they need to add the peer to their group so others can replicate
 	filter_loaded_players.rpc(get_tree().get_nodes_in_group("Team1").map(func(node): return node.name), get_tree().get_nodes_in_group("Team2").map(func(node): return node.name)) # converts nodes in each team to peer ids before sending rpc
 	
@@ -104,7 +104,7 @@ func remove_player(peer_id):
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 @rpc
-func filter_loaded_players(team1, team2): # reload teams for everyone upon new peer connecting, ignore peers who are already loaded
+func filter_loaded_players(team1, team2):
 	# filter out players who are already loaded locally (sorry for the lambda slop)
 	var unloaded_team1_players = team1.filter(func(id): return not get_tree().get_nodes_in_group("Team1").map(func(node): return node.name).has(id))
 	var unloaded_team2_players = team2.filter(func(id): return not get_tree().get_nodes_in_group("Team2").map(func(node): return node.name).has(id))
