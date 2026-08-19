@@ -183,15 +183,15 @@ func _physics_process(delta): #Occurs every delta frame
 #ANIMATION FUNCTIONS
 @rpc("call_local")
 func crouch():
-	print(is_crouching)
-	print($".".name)
+	#print(is_crouching)
+	#print($".".name)
 	if is_crouching == true:
-		print("Crouch2")
+		#print("Crouch2")
 		anim_player.play("Uncrouch")
 		is_crouching = false
 
 	elif is_crouching == false:
-		print("Crouch1")
+		#print("Crouch1")
 		anim_player.play("Crouch")
 		is_crouching = true
 
