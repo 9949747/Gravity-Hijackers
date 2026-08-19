@@ -41,7 +41,6 @@ var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
 const JUMP_VELOCITY = 10.0
-@export var team: int
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -84,14 +83,11 @@ func _unhandled_input(event):
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
 			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			print("raycast col pos ", hit_coords, " hit obj pos ", hit_obj.position, " relative coords ", relative_hit_coords)
-			var headshot = true if relative_hit_coords.y >= 0.4 else false # above 1.4 is roughly where the player's head is
-			#print("ray hit ", hit_obj.name, " at ", hit_coords)
-			# avoid nesting
-			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
+			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+			# avoid nesting, also prevents friendly fire
+			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy") or get_groups() == hit_obj.get_groups():
 				return
 			
-			print(hit_obj.get_groups())
 			# instance new client side hitmarker gui
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
@@ -115,7 +111,6 @@ func _unhandled_input(event):
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				print("player is in team " + str(hit_obj.team))
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot) # pass bool as arg for headshot
 
 func _physics_process(delta): #Occurs every delta frame
