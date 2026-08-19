@@ -58,9 +58,8 @@ import/blender/enabled=false
 [global_group]
 
 Player=""
-Team1=""
 Team2=""
-Crouching=""
+Team1=""
 
 [input]
 
