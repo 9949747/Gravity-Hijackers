@@ -84,8 +84,8 @@ func _unhandled_input(event):
 			var hit_coords = raycast.get_collision_point()
 			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
 			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
-			# avoid nesting
-			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
+			# avoid nesting, also prevents friendly fire
+			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy") or get_groups() == hit_obj.get_groups():
 				return
 			
 			# instance new client side hitmarker gui
