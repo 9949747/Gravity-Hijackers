@@ -188,6 +188,7 @@ func crouch():
 	elif is_crouching == false:
 		#print("Crouch1")
 		anim_player.play("Crouch")
+		camera.position.y = lerp(1.513, 0.5, 1)
 		is_crouching = true
 
 
