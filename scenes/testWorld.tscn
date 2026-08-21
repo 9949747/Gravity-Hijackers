@@ -46,7 +46,11 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Arr
 script = ExtResource("1_rucky")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1539882701]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+transform = Transform3D(-0.8660249, -0.433013, 0.25, 0, 0.5, 0.8660252, -0.5, 0.75, -0.4330125, 0, 0, 0)
+shadow_enabled = true
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=797478212]
+transform = Transform3D(-0.86602503, 0.43301284, 0.24999993, 0, 0.5, -0.8660252, -0.49999985, -0.7500001, -0.43301255, 0, 20, 0)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1137519621]
@@ -104,7 +108,6 @@ layout_mode = 2
 text = "Settings"
 
 [node name="HUD" type="Control" parent="CanvasLayer" unique_id=24447867]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -173,6 +176,90 @@ horizontal_alignment = 2
 [node name="MultiplayerTeamSynchronizer" type="MultiplayerSynchronizer" parent="CanvasLayer/HUD" unique_id=1647271312]
 replication_config = SubResource("SceneReplicationConfig_if785")
 
+[node name="GravitySlider" type="VScrollBar" parent="CanvasLayer/HUD" unique_id=1906908284]
+layout_mode = 0
+offset_left = 1824.0
+offset_top = 600.0
+offset_right = 1888.0
+offset_bottom = 960.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+min_value = 1.0
+max_value = 5.0
+step = 1.0
+page = 1.0
+value = 2.0
+rounded = true
+
+[node name="SliderLabels" type="Control" parent="CanvasLayer/HUD" unique_id=1221667892]
+anchors_preset = 0
+offset_top = 64.0
+offset_right = 40.0
+offset_bottom = 104.0
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/SliderLabels" unique_id=1649013543]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1688.0
+offset_top = 536.0
+offset_right = 1768.0
+offset_bottom = 626.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+theme_override_font_sizes/font_size = 30
+text = "-1x"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/HUD/SliderLabels" unique_id=729886199]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1688.0
+offset_top = 626.0
+offset_right = 1768.0
+offset_bottom = 716.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+theme_override_font_sizes/font_size = 30
+text = "-0.2x"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="CanvasLayer/HUD/SliderLabels" unique_id=134474255]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1688.0
+offset_top = 716.0
+offset_right = 1768.0
+offset_bottom = 806.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+theme_override_font_sizes/font_size = 30
+text = "0.2x"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="CanvasLayer/HUD/SliderLabels" unique_id=2111137657]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1688.0
+offset_top = 806.0
+offset_right = 1768.0
+offset_bottom = 896.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+theme_override_font_sizes/font_size = 30
+text = "1x"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1971673780]
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
@@ -185,6 +272,9 @@ navigation_mesh = SubResource("NavigationMesh_rmptm")
 
 [node name="Environment" parent="NavigationRegion3D" unique_id=332111882 instance=ExtResource("5_ftq4a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66145325)
+
+[node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, -0.372, 20.289, 0.661)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=658871929]
 stream = ExtResource("6_8b5ia")

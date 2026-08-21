@@ -10,6 +10,8 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
+@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -45,7 +47,6 @@ const JUMP_VELOCITY = 10.0
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
 
