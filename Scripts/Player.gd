@@ -170,6 +170,8 @@ func _physics_process(delta): #Occurs every delta frame
 	#Shoot animation
 	if anim_player.current_animation == "shoot": 
 		pass
+	elif anim_player.current_animation in ["Crouch", "Uncrouch"]:
+		pass
 	elif input_dir != Vector2.ZERO and is_on_floor():
 		anim_player.play("move")
 	else:
