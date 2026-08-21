@@ -47,7 +47,7 @@ orientation = 2
 resource_name = "Crouch"
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Camera3D:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
@@ -348,7 +348,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
-[node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
+[node name="Pistol" parent="Camera3D" unique_id="158055108" instance=ExtResource("2_dqkch")]
 transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
