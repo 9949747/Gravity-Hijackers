@@ -47,8 +47,7 @@ folder_colors={
 "res://assets/images/": "orange",
 "res://assets/sound/": "yellow",
 "res://models/": "green",
-"res://scenes/": "teal",
-"res://scenes/Audric's_Test_Stuff/": "blue"
+"res://scenes/": "teal"
 }
 
 [filesystem]
