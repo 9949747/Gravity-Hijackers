@@ -10,6 +10,8 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
+@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -21,8 +23,6 @@ signal health_changed(health_value)
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
-#@onready var current_gravity = default_gravity
-@onready var gravity_multiplier = 2
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
@@ -39,12 +39,13 @@ var health = 10
 var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
-const JUMP_VELOCITY = 10.0
+var JUMP_VELOCITY = 10
+var gravity_strengths = [3, 1.5, 0.75, 0.375]
+var gravity_direction = 1
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
 
@@ -66,9 +67,15 @@ func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
 	if event is InputEventMouseMotion: #Allows you to move mouse in game
-		rotate_y(-event.relative.x * X_mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * Y_mouse_sensitivity)
+		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
+		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+	
+	if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): # check if pressed so scrolls dont fire twice
+		grav_slider.value -= 1
+	
+	if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
+		grav_slider.value += 1
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
 		upd_ammo(0, true) # call reload update
@@ -129,13 +136,22 @@ func _physics_process(delta): #Occurs every delta frame
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
 	
 	#JUMPING AND GRAVITY
-	if not is_on_floor():
-		velocity.y -= default_gravity * gravity_multiplier * delta
-	if Input.is_action_just_pressed("player_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("flip_gravity"):
+		gravity_direction = -gravity_direction
+		# instant flip mechannics
+		#rotate_z(PI) # flip
+		#rotation.y = -rotation.y # correct flip reversal
+		#camera.rotation.x = -camera.rotation.x # correct flip reversal
+		#position -= Vector3(0, 2*gravity_direction, 0) # keep player pos after instant flip
+	rotation.z = lerp_angle(rotation.z, PI if gravity_direction == -1 else 0, 5*delta)
+	
+	if (not is_on_floor() and gravity_direction == 1) or (not is_on_ceiling() and gravity_direction == -1):
+		velocity.y -= default_gravity * gravity_direction * gravity_strengths[int(grav_slider.value)] * delta
+	
+	if Input.is_action_just_pressed("player_jump") and (is_on_floor() or is_on_ceiling()):
+		velocity.y = JUMP_VELOCITY if is_on_floor() else -JUMP_VELOCITY if is_on_ceiling() else int(velocity.y) # wrap velocity.y in int to get ternary warnings to pipe down
 
 	#SPRINTING AND CROUCHING
 	if Input.is_action_pressed("player_sprint"):
