@@ -59,6 +59,7 @@ import/blender/enabled=false
 Player=""
 Team2=""
 Team1=""
+speed_pickups=""
 
 [input]
 
