@@ -5,7 +5,7 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var hud = $CanvasLayer/HUD
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
-@onready var radio = $CanvasLayer/Radio
+# @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 #var default_gravity_3d
 #func grav_shift():
@@ -124,7 +124,7 @@ func apply_team(plr_id, team): # keeps filter_loaded_players relatively dry and 
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
-
+'''
 func radio_enable(event: InputEvent) -> void:
 	print("1")
 	if event.is_action_just_pressed("radio_toggle"):
@@ -134,6 +134,6 @@ func radio_enable(event: InputEvent) -> void:
 		else:
 			radio.hide()
 			radio.visible = false
-
+'''
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
