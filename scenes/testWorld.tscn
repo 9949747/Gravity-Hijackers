@@ -286,11 +286,11 @@ stream = ExtResource("6_8b5ia")
 volume_db = -10.0
 bus = &"Music"
 
-[node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
-
-[node name="Speed_Pickup" parent="." unique_id=1682309210 instance=ExtResource("7_dbplf")]
+[node name="Speed_Pickup" parent="." unique_id=1682309210 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
+
+[node name="Speed_Pickup2" parent="." unique_id=82090874 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
