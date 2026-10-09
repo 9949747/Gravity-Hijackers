@@ -98,9 +98,10 @@ text = "Main Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SinglePlayer" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1335163066]
+[node name="UsernameEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=2007818648]
 layout_mode = 2
-text = "Single Player"
+placeholder_text = "Enter username here"
+alignment = 1
 
 [node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1093809675]
 layout_mode = 2
@@ -120,6 +121,7 @@ layout_mode = 2
 text = "Settings"
 
 [node name="HUD" type="Control" parent="CanvasLayer" unique_id=24447867]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -281,6 +283,391 @@ theme_override_font_sizes/font_size = 25
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Leaderboard" type="Control" parent="CanvasLayer" unique_id=2101013539]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/Leaderboard" unique_id=1301874474]
+z_index = 1
+layout_mode = 0
+offset_left = 352.0
+offset_top = 216.0
+offset_right = 616.0
+offset_bottom = 279.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 40
+text = "Leaderboard"
+vertical_alignment = 1
+
+[node name="Background" type="Panel" parent="CanvasLayer/Leaderboard" unique_id=1959077214]
+modulate = Color(1, 1, 1, 0.8235294)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -624.0
+offset_top = -292.0
+offset_right = 624.0
+offset_bottom = 292.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RedTeam" type="Control" parent="CanvasLayer/Leaderboard" unique_id=1920519123]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 368.0
+offset_top = 288.0
+offset_right = -976.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TeamPanel" type="Control" parent="CanvasLayer/Leaderboard/RedTeam" unique_id=816687912]
+anchors_preset = 0
+offset_right = 576.0
+offset_bottom = 48.0
+
+[node name="TeamNameLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=148850798]
+z_index = 1
+layout_mode = 0
+offset_left = 8.0
+offset_right = 136.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "Red team"
+vertical_alignment = 1
+
+[node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1560723643]
+z_index = 1
+layout_mode = 0
+offset_left = 168.0
+offset_right = 256.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Deaths" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1982418214]
+z_index = 1
+layout_mode = 0
+offset_left = 264.0
+offset_right = 352.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KDR" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1533904008]
+z_index = 1
+layout_mode = 0
+offset_left = 376.0
+offset_right = 464.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Flags" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1787445037]
+z_index = 1
+layout_mode = 0
+offset_left = 488.0
+offset_right = 576.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1238698220]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 48.0
+color = Color(0.54901963, 0, 0, 1)
+
+[node name="LabelPanel" type="Control" parent="CanvasLayer/Leaderboard/RedTeam" unique_id=1545540656]
+anchors_preset = 0
+offset_top = 64.0
+offset_right = 576.0
+offset_bottom = 112.0
+
+[node name="KillsLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=900827316]
+z_index = 1
+layout_mode = 0
+offset_left = 184.0
+offset_right = 240.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Kills"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeathsLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=1269976533]
+z_index = 1
+layout_mode = 0
+offset_left = 264.0
+offset_right = 352.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Deaths"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KDRLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=1513240405]
+z_index = 1
+layout_mode = 0
+offset_left = 392.0
+offset_right = 448.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "KDR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FlagsLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=1181381861]
+z_index = 1
+layout_mode = 0
+offset_left = 496.0
+offset_right = 568.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Flags"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=15972154]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 48.0
+color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/LabelPanel" unique_id=87023729]
+z_index = 1
+layout_mode = 0
+offset_left = 8.0
+offset_right = 88.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Name"
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Leaderboard/RedTeam" unique_id=1204337389]
+layout_mode = 0
+offset_top = 120.0
+offset_right = 576.0
+offset_bottom = 512.0
+
+[node name="PlayerList" type="VBoxContainer" parent="CanvasLayer/Leaderboard/RedTeam/ScrollContainer" unique_id=583743049]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="BlueTeam" type="Control" parent="CanvasLayer/Leaderboard" unique_id=1272640840]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 976.0
+offset_top = 288.0
+offset_right = -368.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TeamPanel" type="Control" parent="CanvasLayer/Leaderboard/BlueTeam" unique_id=1917516420]
+anchors_preset = 0
+offset_right = 576.0
+offset_bottom = 48.0
+
+[node name="TeamNameLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=74285338]
+z_index = 1
+layout_mode = 0
+offset_left = 8.0
+offset_right = 136.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "Blue team"
+vertical_alignment = 1
+
+[node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=983952080]
+z_index = 1
+layout_mode = 0
+offset_left = 168.0
+offset_right = 256.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Deaths" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=1255543834]
+z_index = 1
+layout_mode = 0
+offset_left = 264.0
+offset_right = 352.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KDR" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=485590957]
+z_index = 1
+layout_mode = 0
+offset_left = 376.0
+offset_right = 464.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Flags" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=1606114974]
+z_index = 1
+layout_mode = 0
+offset_left = 488.0
+offset_right = 576.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=1206050348]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 48.0
+color = Color(0, 0, 0.54901963, 1)
+
+[node name="LabelPanel" type="Control" parent="CanvasLayer/Leaderboard/BlueTeam" unique_id=1345620471]
+anchors_preset = 0
+offset_top = 64.0
+offset_right = 576.0
+offset_bottom = 112.0
+
+[node name="KillsLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=350631941]
+z_index = 1
+layout_mode = 0
+offset_left = 184.0
+offset_right = 240.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Kills"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeathsLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=1687465145]
+z_index = 1
+layout_mode = 0
+offset_left = 264.0
+offset_right = 352.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Deaths"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KDRLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=176826997]
+z_index = 1
+layout_mode = 0
+offset_left = 392.0
+offset_right = 448.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "KDR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FlagsLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=1530393658]
+z_index = 1
+layout_mode = 0
+offset_left = 496.0
+offset_right = 568.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Flags"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=2123650933]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 48.0
+color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/LabelPanel" unique_id=2087499348]
+z_index = 1
+layout_mode = 0
+offset_left = 8.0
+offset_right = 88.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Name"
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Leaderboard/BlueTeam" unique_id=1681719829]
+layout_mode = 0
+offset_top = 120.0
+offset_right = 576.0
+offset_bottom = 512.0
+
+[node name="PlayerList" type="VBoxContainer" parent="CanvasLayer/Leaderboard/BlueTeam/ScrollContainer" unique_id=1402734202]
+layout_mode = 2
+theme_override_constants/separation = 50
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1971673780]
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
@@ -302,7 +689,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.2001
 [node name="Speed_Pickup2" parent="." unique_id=82090874 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
 
-[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

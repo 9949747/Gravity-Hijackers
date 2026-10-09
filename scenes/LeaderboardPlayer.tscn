@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://bxgwso7f0pk1s"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_o6ek5"]
+properties/0/path = NodePath("Username:text")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Kills:text")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Deaths:text")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("KDR:text")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("Flags:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+
+[node name="LeaderboardPlayer" type="Control" unique_id=860662665]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Username" type="Label" parent="." unique_id=963395907]
+z_index = 1
+custom_maximum_size = Vector2(160, 48)
+layout_mode = 0
+offset_left = 8.0
+offset_right = 168.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 15
+text = "Player One"
+vertical_alignment = 1
+autowrap_mode = 1
+max_lines_visible = 2
+
+[node name="Kills" type="Label" parent="." unique_id=1610538943]
+z_index = 1
+layout_mode = 0
+offset_left = 168.0
+offset_right = 256.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Deaths" type="Label" parent="." unique_id=345351560]
+z_index = 1
+layout_mode = 0
+offset_left = 264.0
+offset_right = 352.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KDR" type="Label" parent="." unique_id=898999290]
+z_index = 1
+layout_mode = 0
+offset_left = 376.0
+offset_right = 464.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Flags" type="Label" parent="." unique_id=675808082]
+z_index = 1
+layout_mode = 0
+offset_left = 488.0
+offset_right = 576.0
+offset_bottom = 48.0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Seperator" type="ColorRect" parent="." unique_id=3010168]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 576.0
+offset_bottom = 52.0
+color = Color(1, 1, 1, 0.39215687)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=299725091]
+replication_config = SubResource("SceneReplicationConfig_o6ek5")

@@ -14,6 +14,8 @@ signal health_changed(health_value)
 @onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 @onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
 @onready var grav_flip_timer = $GravFlipTimer
+@onready var leaderboard = Global.worldNode.leaderboard
+@onready var username_entry = Global.worldNode.username_entry.text
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -58,11 +60,14 @@ func _enter_tree(): #Starts the game, gives multiplayer authority for your contr
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready(): #Plays on first entering the game
-	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
+	#speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
+	
+	$UsernameLabel.text = username_entry
+	$UsernameLabel.hide() # local
 
 func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -70,16 +75,28 @@ func _exit_tree() -> void: #for when you leave the actual game for the main menu
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
-	if event is InputEventMouseMotion: #Allows you to move mouse in game
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: #Allows you to move mouse in game
 		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
 		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
-	if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): # check if pressed so scrolls dont fire twice
-		grav_slider.value -= 1
+	if Input.is_action_pressed("unlock_cursor"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
-		grav_slider.value += 1
+	if Input.is_action_just_pressed("toggle_leaderboard"):
+		if leaderboard.visible:
+			leaderboard.hide()
+		else:
+			leaderboard.show()
+		
+	if event.is_pressed() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: # check if pressed so scrolls dont fire twice. also prevent grav raising/lowering when scrolling in leaderboard
+		if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): 
+			grav_slider.value -= 1
+		
+		if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
+			grav_slider.value += 1
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
 		upd_ammo(0, true) # call reload update
@@ -148,11 +165,7 @@ func _physics_process(delta): #Occurs every delta frame
 	if Input.is_action_just_pressed("flip_gravity") and grav_flip_timer.time_left == 0:
 		gravity_direction = -gravity_direction
 		grav_flip_timer.start()
-		# instant flip mechannics
-		#rotate_z(PI) # flip
-		#rotation.y = -rotation.y # correct flip reversal
-		#camera.rotation.x = -camera.rotation.x # correct flip reversal
-		#position -= Vector3(0, 2*gravity_direction, 0) # keep player pos after instant flip
+	
 	rotation.z = lerp_angle(rotation.z, PI if gravity_direction == -1 else 0.0, 5*delta)
 	if grav_flip_timer.time_left == 0:
 		flip_cd_label.text = ""

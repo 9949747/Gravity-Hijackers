@@ -3,7 +3,11 @@ extends Node
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+@onready var username_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/UsernameEntry
 @onready var hud = $CanvasLayer/HUD
+@onready var leaderboard = $CanvasLayer/Leaderboard
+@onready var team1_playerlist = $CanvasLayer/Leaderboard/RedTeam.get_node("ScrollContainer/PlayerList")
+@onready var team2_playerlist = $CanvasLayer/Leaderboard/BlueTeam.get_node("ScrollContainer/PlayerList")
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -13,6 +17,7 @@ var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		#world_gravity = 0
 
 @onready var playerScene = preload("res://scenes/player.tscn")
+@onready var leaderboard_plr_scene = preload("res://scenes/LeaderboardPlayer.tscn")
 
 var tracked = false
 var player
@@ -26,6 +31,10 @@ func _ready() -> void:
 	print(Save.game_data)
 
 func _on_host_button_pressed():
+	if !username_entry.text:
+		username_entry.placeholder_text = "Enter a username before joining/hosting"
+		return
+	
 	main_menu.hide()
 	hud.show()
 	
@@ -38,6 +47,10 @@ func _on_host_button_pressed():
 	
 	#upnp_setup()
 func _on_join_button_pressed():
+	if !username_entry.text:
+		username_entry.placeholder_text = "Enter a username before joining/hosting"
+		return
+	
 	main_menu.hide()
 	hud.show()
 	
@@ -69,13 +82,6 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 
-func _on_single_player_button_pressed():
-	main_menu.hide()
-	hud.show()
-	#multiplayer.multiplayer_peer = enet_peer
-	add_player(multiplayer.get_unique_id())
-
-
 func add_player(peer_id):
 	player = playerScene.instantiate()
 	player.name = str(peer_id)
@@ -94,11 +100,13 @@ func add_player(peer_id):
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
 
 func remove_player(peer_id):
-	var player = get_node_or_null(str(peer_id))
-	if not player:
+	var exiting_player = get_node_or_null(str(peer_id))
+	var player_leaderboard_entry = leaderboard.get_node("RedTeam/ScrollContainer/PlayerList/%s" % peer_id) if get_node(peer_id).is_in_group("Team1") else leaderboard.get_node("BlueTeam/ScrollContainer/PlayerList/%s" % peer_id)
+	if not exiting_player:
 		return
 	
-	player.queue_free()
+	exiting_player.queue_free()
+	player_leaderboard_entry.queue_free()
 	await get_tree().create_timer(0.1).timeout # breifly pause thread so print statement below returns accurate info
 	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
 	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
@@ -121,9 +129,16 @@ func apply_team(plr_id, team): # keeps filter_loaded_players relatively dry and 
 	plr_mat.albedo_color = Color(1, 0, 0) if team == "Team1" else Color(0, 0, 1)
 	player_node.get_node("MeshInstance3D").set_surface_override_material(0, plr_mat)
 	player_node.add_to_group(team)
+	
+	var leaderboard_entry = leaderboard_plr_scene.instantiate()
+	$CanvasLayer/Leaderboard/RedTeam/ScrollContainer/PlayerList.add_child(leaderboard_entry) if team == "Team1" else $CanvasLayer/Leaderboard/BlueTeam/ScrollContainer/PlayerList.add_child(leaderboard_entry)
+	leaderboard_entry.name = str(plr_id)
+	await get_tree().create_timer(1).timeout # wait for plr to load before grabbing name. this is a lazy use of await - improve later.
+	leaderboard_entry.get_node("Username").text = get_node(str(plr_id)).get_node("UsernameLabel").text # let mpsync node replicate plr name
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
+
 '''
 func radio_enable(event: InputEvent) -> void:
 	print("1")
