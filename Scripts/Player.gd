@@ -1,7 +1,6 @@
 extends CharacterBody3D
 
-#Signals:
-signal health_changed(health_value)
+signal leaderboard_property_changed(peer_id)
 
 #Assets
 @onready var camera = $Camera3D
@@ -13,9 +12,9 @@ signal health_changed(health_value)
 @onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
 @onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 @onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
+@onready var health_bar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
 @onready var leaderboard = Global.worldNode.leaderboard
-@onready var username_entry = Global.worldNode.username_entry.text
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -27,7 +26,6 @@ signal health_changed(health_value)
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
-#get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
@@ -40,7 +38,6 @@ signal health_changed(health_value)
 @onready var world_scene_instantiated = world_scene.instantiate()
 
 #Stats
-var health = 10
 var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
@@ -48,6 +45,20 @@ var JUMP_VELOCITY = 10
 var gravity_strengths = [3, 1.5, 0.75, 0.375]
 var gravity_direction = 1
 var knockback_strength = 12
+const max_health = 20
+@export var health = max_health
+
+#Leaderboard Stats
+@export var username = "Default": # username is set in func _ready()
+	set(value): if username != value:
+		username = value
+		leaderboard_property_changed.emit(multiplayer.get_unique_id())
+@export var kills = 0:
+	set(value): 
+		kills = value
+		if is_multiplayer_authority(): # is_multiplayer_authority prevents all peers from making this player emit a signal
+			print("kills changed for %s" % multiplayer.get_unique_id())
+			leaderboard_property_changed.emit(multiplayer.get_unique_id())
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -66,8 +77,12 @@ func _ready(): #Plays on first entering the game
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
 	
-	$UsernameLabel.text = username_entry
+	username = Global.worldNode.username_entry.text
+	$UsernameLabel.text = username
 	$UsernameLabel.hide() # local
+	
+	health_bar.max_value = max_health
+	health_bar.value = max_health
 
 func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -106,40 +121,44 @@ func _unhandled_input(event):
 		upd_ammo(-1)
 		play_shoot_effects.rpc()
 		
-		if raycast.is_colliding():
-			var hit_obj = raycast.get_collider()
-			var hit_coords = raycast.get_collision_point()
-			var hit_direction = (hit_coords - raycast.global_position).normalized()
-			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
-			# avoid nesting, also prevents friendly fire
-			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy") or get_groups() == hit_obj.get_groups():
-				return
-			
-			# instance new client side hitmarker gui
-			var new_hit_marker = hit_marker.instantiate()
-			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
-			new_hit_marker.position = Vector2(
-				crosshair.position.x - (new_hit_marker.size.x / 2), 
-				crosshair.position.y - (new_hit_marker.size.y / 2)
-			)
-			new_hit_marker.scale = Vector2(0.5, 0.5)
-			# instance new damage count billboard gui where ray collides
-			var new_damage_billboard = damage_billboard.instantiate()
-			var billboard_label = new_damage_billboard.get_node("Label3D") 
-			Global.worldNode.add_child(new_damage_billboard)
-			new_damage_billboard.position = Vector3(hit_coords)
-			if headshot:
-				billboard_label.text = str(-bullet_damage*2)
-				billboard_label.modulate = Color("e10006")
-				billboard_label.outline_modulate = Color("400000")
-			else: 
-				billboard_label.text = str(-bullet_damage)
-			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
-			
-			# damage player only (enemy has no receive damage method)
-			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot, hit_direction) # pass bool as arg for headshot
+		if not raycast.is_colliding():
+			return
+		
+		var hit_obj = raycast.get_collider()
+		var hit_coords = raycast.get_collision_point()
+		var hit_direction = (hit_coords - raycast.global_position).normalized()
+		var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+		var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+		
+		# avoids nesting, also prevents friendly fire
+		if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
+			return
+		
+		# instance new clientside hitmarker gui
+		var new_hit_marker = hit_marker.instantiate()
+		Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
+		new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
+		new_hit_marker.scale = Vector2(0.5, 0.5)
+		
+		# instance new damage count billboard gui where ray collides
+		var new_damage_billboard = damage_billboard.instantiate()
+		var billboard_label = new_damage_billboard.get_node("Label3D") 
+		Global.worldNode.add_child(new_damage_billboard)
+		new_damage_billboard.position = Vector3(hit_coords)
+		if headshot:
+			billboard_label.text = str(-bullet_damage*2)
+			billboard_label.modulate = Color("e10006")
+			billboard_label.outline_modulate = Color("400000")
+		else: 
+			billboard_label.text = str(-bullet_damage)
+		
+		# damage player
+		if hit_obj in get_tree().get_nodes_in_group("Player"):
+			var damage = bullet_damage*2 if headshot else bullet_damage
+			if hit_obj.health - damage <= 0: 
+				kills += 1
+				print("kills increased")
+			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame
 	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
@@ -189,8 +208,6 @@ func _physics_process(delta): #Occurs every delta frame
 			return
 		crouch.rpc()
 
-
-
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
 	if look_dir != Vector2.ZERO:
@@ -233,6 +250,14 @@ func crouch():
 		anim_player.play("Crouch")
 		is_crouching = true
 
+@rpc("any_peer")
+func receive_damage(damage, from_peer_id, hit_direction):
+	velocity = hit_direction * knockback_strength
+	health -= damage
+	if health <= 0:
+		health = max_health
+		position = Vector3.ZERO
+	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
@@ -246,16 +271,6 @@ func play_shoot_effects():
 	$AudioStreamPlayer3D.play()
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
-
-@rpc("any_peer")
-func receive_damage(headshot: bool, hit_direction):
-	print(hit_direction * knockback_strength)
-	velocity = hit_direction * knockback_strength
-	health -= bullet_damage*2 if headshot else bullet_damage
-	if health <= 0:
-		health = 10
-		position = Vector3.ZERO
-	health_changed.emit(health)
 
 #SETTINGS FUNCTIONS
 func _on_fov_updated(value):

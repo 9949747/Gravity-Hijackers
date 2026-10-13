@@ -16,6 +16,9 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath("Flags:text")
 properties/4/spawn = true
 properties/4/replication_mode = 1
+properties/5/path = NodePath(".:accessibility_name")
+properties/5/spawn = true
+properties/5/replication_mode = 1
 
 [node name="LeaderboardPlayer" type="Control" unique_id=860662665]
 layout_mode = 3
@@ -35,7 +38,7 @@ offset_bottom = 48.0
 size_flags_vertical = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 15
-text = "Player One"
+text = "Default"
 vertical_alignment = 1
 autowrap_mode = 1
 max_lines_visible = 2
