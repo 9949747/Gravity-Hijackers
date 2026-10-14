@@ -7,10 +7,6 @@ extends Node
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-#var default_gravity_3d
-#func grav_shift():
-	#if is_on_floor():
-		#world_gravity = 0
 
 @onready var playerScene = preload("res://scenes/player.tscn")
 

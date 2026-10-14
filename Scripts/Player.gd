@@ -24,7 +24,8 @@ signal health_changed(health_value)
 
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-@onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+@onready var speed_pickups = get_tree().get_nodes_in_group("speed_pickups")
+#speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
 #get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
@@ -58,7 +59,9 @@ func _enter_tree(): #Starts the game, gives multiplayer authority for your contr
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready(): #Plays on first entering the game
-	speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
+	for pickup in speed_pickups:
+		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
+	#speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
@@ -125,7 +128,7 @@ func _unhandled_input(event):
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot, hit_direction) # pass bool as arg for headshot
 
 func _physics_process(delta): #Occurs every delta frame
-	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
+	#speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
 	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
