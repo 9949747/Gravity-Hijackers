@@ -9,7 +9,6 @@ var entry_list = {}
 func _ready() -> void:
 	get_tree().current_scene.player_added.connect(add_entry)
 	multiplayer.peer_disconnected.connect(remove_entry)
-	#leaderboard_property_changed.connect(update_entry)
 
 func add_entry(peer_id):
 	await get_tree().create_timer(1).timeout # temporary solution
@@ -24,7 +23,6 @@ func add_entry(peer_id):
 		blue_team_playerlist.add_child(leaderboard_entry)
 	
 	entry_list[peer_id] = leaderboard_entry
-	player.leaderboard_property_changed.connect(update_entry) # not connecting currently. maybe try calling directly from player.gd
 	
 	leaderboard_entry.get_node("Username").text = player.username
 	leaderboard_entry.get_node("Kills").text = str(player.kills)
@@ -34,6 +32,7 @@ func remove_entry(peer_id):
 		entry_list[peer_id].queue_free()
 		entry_list.erase(peer_id)
 
+@rpc("any_peer")
 func update_entry(peer_id):
 	print("updating entry for %s" % peer_id)
 	var player = get_tree().current_scene.get_node_or_null(str(peer_id))

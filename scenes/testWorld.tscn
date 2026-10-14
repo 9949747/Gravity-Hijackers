@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scripts/world.gd" id="1_rucky"]
 [ext_resource type="Texture2D" uid="uid://c4dk7vc0tehju" path="res://assets/images/Skybox1.jpg" id="2_0ddhe"]
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_lwfgy"]
-[ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://scenes/leaderboard.gd" id="4_rucky"]
+[ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://Scripts/leaderboard.gd" id="4_rucky"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]

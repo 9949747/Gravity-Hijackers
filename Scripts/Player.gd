@@ -1,7 +1,5 @@
 extends CharacterBody3D
 
-signal leaderboard_property_changed(peer_id)
-
 #Assets
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
@@ -49,23 +47,19 @@ const max_health = 20
 @export var health = max_health
 
 #Leaderboard Stats
-@export var username = "Default": # username is set in func _ready()
-	set(value): if username != value:
-		username = value
-		leaderboard_property_changed.emit(multiplayer.get_unique_id())
+@export var username = "Default" # username is set in func _ready()
 @export var kills = 0:
 	set(value): 
 		kills = value
 		if is_multiplayer_authority(): # is_multiplayer_authority prevents all peers from making this player emit a signal
-			print("kills changed for %s" % multiplayer.get_unique_id())
-			leaderboard_property_changed.emit(multiplayer.get_unique_id())
+			print("kills changed for %s to %s" % [multiplayer.get_unique_id(), kills])
+			leaderboard.update_entry.rpc_id(1, multiplayer.get_unique_id())
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
-
 
 func _enter_tree(): #Starts the game, gives multiplayer authority for your controls
 	set_multiplayer_authority(str(name).to_int())
@@ -157,7 +151,7 @@ func _unhandled_input(event):
 			var damage = bullet_damage*2 if headshot else bullet_damage
 			if hit_obj.health - damage <= 0: 
 				kills += 1
-				print("kills increased")
+				print("kills increased to %s" % kills)
 			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame
@@ -255,6 +249,7 @@ func receive_damage(damage, from_peer_id, hit_direction):
 	velocity = hit_direction * knockback_strength
 	health -= damage
 	if health <= 0:
+		# print("%s was killed by %s, they now have %s kills" % [multiplayer.get_unique_id(), from_peer_id, get_parent().get_node_or_null(str(from_peer_id)).kills])
 		health = max_health
 		position = Vector3.ZERO
 	health_bar.value = health
