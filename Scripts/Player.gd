@@ -6,7 +6,7 @@ signal health_changed(health_value)
 #Assets
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
-@onready var muzzle_flash = $Camera3D/ViewModel/Pistol/MuzzleFlash
+@onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
@@ -14,6 +14,7 @@ signal health_changed(health_value)
 @onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 @onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
 @onready var grav_flip_timer = $GravFlipTimer
+@onready var weaponsManager = $weaponsManager
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -68,6 +69,9 @@ func _ready(): #Plays on first entering the game
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
+	
+	if weaponsManager and is_multiplayer_authority():
+		weaponsManager.request_weapon_change(0)
 
 func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -182,6 +186,13 @@ func _physics_process(delta): #Occurs every delta frame
 		if !is_multiplayer_authority():
 			return
 		crouch.rpc()
+	
+	if Input.is_action_just_pressed("equip_perry"):
+		weaponsManager.request_weapon_change(1)
+	if Input.is_action_just_pressed("equip_shotgun"):
+		weaponsManager.request_weapon_change(2)
+	if Input.is_action_just_pressed("equip_pistol"):
+		weaponsManager.request_weapon_change(0)
 
 
 

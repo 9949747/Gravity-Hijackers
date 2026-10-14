@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://xcjrjq5cbn7y"]
 
 [ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
-[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://models/Pistol.fbx" id="2_dqkch"]
+[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://WeaponManager/Weapons/Pistol.fbx" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
-[ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://models/Gun2.tscn" id="5_qlg0r"]
-[ext_resource type="Resource" uid="uid://df3abs7dow0av" path="res://WeaponManager/Pistol/Pistol.tres" id="6_smehm"]
-[ext_resource type="PackedScene" uid="uid://tclgjg0aatgs" path="res://WeaponManager/Weapon_manager.tscn" id="8_smehm"]
+[ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://WeaponManager/Weapons/Gun2.tscn" id="5_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://cln7ie1mxbcwg" path="res://WeaponManager/Weapons/Shotgun.tscn" id="5_tuyoq"]
+[ext_resource type="Script" uid="uid://by31we2ky2hql" path="res://WeaponManager/weapons_manager.gd" id="7_fjrip"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
 
@@ -140,7 +140,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/2/path = NodePath("Camera3D/Pistol:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -152,7 +152,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/3/path = NodePath("Camera3D/Pistol:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -192,7 +192,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/2/path = NodePath("Camera3D/Pistol:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -204,7 +204,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/3/path = NodePath("Camera3D/Pistol:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -279,7 +279,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/5/path = NodePath("Camera3D/Pistol:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -291,7 +291,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/6/path = NodePath("Camera3D/Pistol:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -332,7 +332,7 @@ step = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/0/path = NodePath("Camera3D/Pistol:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -344,7 +344,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/1/path = NodePath("Camera3D/Pistol:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -425,7 +425,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/0/path = NodePath("Camera3D/Pistol:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -437,7 +437,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/1/path = NodePath("Camera3D/Pistol:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -478,7 +478,7 @@ step = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/0/path = NodePath("Camera3D/Pistol:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -507,7 +507,7 @@ step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/ViewModel/Pistol:position")
+tracks/0/path = NodePath("Camera3D/Pistol:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -519,7 +519,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Camera3D/ViewModel/Pistol:rotation")
+tracks/1/path = NodePath("Camera3D/Pistol:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -577,14 +577,6 @@ properties/2/path = NodePath("Camera3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_x7k0j"]
-radius = 0.1
-height = 1.0
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o5w4n"]
-radius = 0.1
-height = 1.0
-
 [node name="Player" type="CharacterBody3D" unique_id=820130408 groups=["Player"]]
 collision_layer = 3
 script = ExtResource("1_2v3wm")
@@ -608,12 +600,10 @@ visible = false
 target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
-[node name="ViewModel" type="Node3D" parent="Camera3D" unique_id=1640886993]
-
-[node name="Pistol" parent="Camera3D/ViewModel" unique_id=158055108 instance=ExtResource("2_dqkch")]
+[node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
 transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/ViewModel/Pistol" unique_id=215553547]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)
 emitting = false
 amount = 1
@@ -622,6 +612,8 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
+
+[node name="Doofenshotgun" parent="Camera3D" unique_id=1501388774 instance=ExtResource("5_tuyoq")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
@@ -649,77 +641,11 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "hi"
 
-[node name="Weapon_Manager" parent="." unique_id=1026124955 node_paths=PackedStringArray("player", "Bullet_raycast", "view_model_container", "world_model_container", "current_weapon_view_model") instance=ExtResource("8_smehm")]
-current_weapon = ExtResource("6_smehm")
-player = NodePath("..")
-Bullet_raycast = NodePath("../Camera3D/RayCast3D")
-view_model_container = NodePath("../Camera3D/ViewModel")
-world_model_container = NodePath("../Skeleton3D/BoneAttachment3D")
-current_weapon_view_model = NodePath("../Camera3D/ViewModel")
-
-[node name="Skeleton3D" type="Skeleton3D" parent="." unique_id=1433119838]
-bones/0/name = "RootBone"
-bones/0/parent = -1
-bones/0/rest = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
-bones/0/enabled = true
-bones/0/position = Vector3(0, 1.4393377, 0)
-bones/0/rotation = Quaternion(0, 0, 0, 1)
-bones/0/scale = Vector3(1, 1, 1)
-bones/1/name = "Spine"
-bones/1/parent = 0
-bones/1/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-bones/1/enabled = true
-bones/1/position = Vector3(0, -1.2332401, 0)
-bones/1/rotation = Quaternion(0, 0, 0, 1)
-bones/1/scale = Vector3(1, 1, 1)
-bones/2/name = "Arm"
-bones/2/parent = 0
-bones/2/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-bones/2/enabled = true
-bones/2/position = Vector3(0.4662242, -0.28478253, 0)
-bones/2/rotation = Quaternion(0, 0, 0, 1)
-bones/2/scale = Vector3(1, 1, 1)
-bones/3/name = "Hand"
-bones/3/parent = 2
-bones/3/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-bones/3/enabled = true
-bones/3/position = Vector3(0.0011754632, 0.17550373, -0.83717364)
-bones/3/rotation = Quaternion(0, 0, 0, 1)
-bones/3/scale = Vector3(1, 1, 1)
-
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Skeleton3D" unique_id=1737415895]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46739966, 1.3300589, -0.83717364)
-bone_name = "Hand"
-bone_idx = 3
-
-[node name="Arm" type="PhysicalBone3D" parent="Skeleton3D" unique_id=1645190098]
-transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0.113, -0.297)
-visible = false
-joint_type = 3
-joint_offset = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.113, 0.297)
-body_offset = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0.113, -0.297)
-joint_constraints/angular_limit_enabled = false
-joint_constraints/angular_limit_upper = 90.0
-joint_constraints/angular_limit_lower = -90.0
-joint_constraints/angular_limit_bias = 0.3
-joint_constraints/angular_limit_softness = 0.9
-joint_constraints/angular_limit_relaxation = 1.0
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Skeleton3D/Arm" unique_id=1664418098]
-transform = Transform3D(1, 0, 0, 0, 0.2330347, 0.97246844, 0, -0.97246844, 0.2330347, 0.46368873, 1.163565, -0.119731784)
-mesh = SubResource("CapsuleMesh_x7k0j")
-skeleton = NodePath("../../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Skeleton3D/Arm" unique_id=1734328029]
-transform = Transform3D(1, 0, 0, 0, 0.25881907, 0.9659258, 0, -0.9659258, 0.25881907, 0.464, 1.164, -0.12)
-shape = SubResource("CapsuleShape3D_o5w4n")
-
-[node name="Gun2" parent="." unique_id=254847227 instance=ExtResource("5_qlg0r")]
-transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -0.62836176, 0.5720277, 0.3218732)
-visible = false
-
 [node name="GravFlipTimer" type="Timer" parent="." unique_id=187622579]
 wait_time = 0.6
 one_shot = true
+
+[node name="weaponsManager" type="Node" parent="." unique_id=397170417 groups=["weaponsManager"]]
+script = ExtResource("7_fjrip")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
