@@ -48,12 +48,9 @@ const max_health = 20
 
 #Leaderboard Stats
 @export var username = "Default" # username is set in func _ready()
-@export var kills = 0:
-	set(value): 
-		kills = value
-		if is_multiplayer_authority(): # is_multiplayer_authority prevents all peers from making this player emit a signal
-			print("kills changed for %s to %s" % [multiplayer.get_unique_id(), kills])
-			leaderboard.update_entry.rpc_id(1, multiplayer.get_unique_id())
+@export var kills = 0
+@export var deaths = 0
+@export var flags = 0
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
@@ -249,7 +246,7 @@ func receive_damage(damage, from_peer_id, hit_direction):
 	velocity = hit_direction * knockback_strength
 	health -= damage
 	if health <= 0:
-		# print("%s was killed by %s, they now have %s kills" % [multiplayer.get_unique_id(), from_peer_id, get_parent().get_node_or_null(str(from_peer_id)).kills])
+		deaths += 1
 		health = max_health
 		position = Vector3.ZERO
 	health_bar.value = health

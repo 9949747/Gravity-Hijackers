@@ -263,6 +263,10 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_rucky")
 
+[node name="UpdateTimer" type="Timer" parent="CanvasLayer/Leaderboard" unique_id=1646387481]
+wait_time = 0.5
+autostart = true
+
 [node name="Title" type="Label" parent="CanvasLayer/Leaderboard" unique_id=1301874474]
 z_index = 1
 layout_mode = 0
@@ -670,4 +674,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="CanvasLayer/Leaderboard/UpdateTimer" to="CanvasLayer/Leaderboard" method="_on_update_timer_timeout"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
