@@ -6,13 +6,15 @@ extends CharacterBody3D
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
-@onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
-@onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
-@onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
+@onready var hud = Global.worldNode.hud
+@onready var crosshair = hud.get_node("Crosshair")
+@onready var ammo_display = hud.get_node("AmmoDisplay")
+@onready var grav_slider = hud.get_node("GravitySlider")
+@onready var flip_cd_label = hud.get_node("FlipCooldownLabel")
 @onready var health_bar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
 @onready var leaderboard = Global.worldNode.leaderboard
+@onready var esc_menu = Global.worldNode.esc_menu
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -88,14 +90,25 @@ func _unhandled_input(event):
 	
 	if Input.is_action_pressed("unlock_cursor"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	else:
+	elif not esc_menu.visible:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if Input.is_action_just_pressed("toggle_leaderboard"):
+	if Input.is_action_just_pressed("toggle_leaderboard") and not esc_menu.visible:
 		if leaderboard.visible:
 			leaderboard.hide()
 		else:
 			leaderboard.show()
+	
+	if Input.is_action_just_pressed("quit"):
+		if esc_menu.visible:
+			esc_menu.hide()
+			hud.show()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		else:
+			esc_menu.show()
+			leaderboard.hide()
+			hud.hide()
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		
 	if event.is_pressed() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: # check if pressed so scrolls dont fire twice. also prevent grav raising/lowering when scrolling in leaderboard
 		if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): 

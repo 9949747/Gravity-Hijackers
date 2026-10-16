@@ -81,7 +81,7 @@ func update_round_data(peer_id):
 	update_team_entry(plr_team)
 
 func _on_update_timer_timeout() -> void: # polling rate for leaderboard updating
-	if not is_multiplayer_authority(): # prevent unnecessary work on peers
+	if multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED or not is_multiplayer_authority(): # prevent unnecessary work on peers
 		return
 	
 	for peer_ids in entry_list:

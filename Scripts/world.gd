@@ -7,6 +7,7 @@ signal player_added(peer_id)
 @onready var username_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/UsernameEntry
 @onready var hud = $CanvasLayer/HUD
 @onready var leaderboard = $CanvasLayer/Leaderboard
+@onready var esc_menu = $CanvasLayer/EscMenu
 @onready var team1_playerlist = $CanvasLayer/Leaderboard/RedTeam/ScrollContainer/RedPlayerList
 @onready var team2_playerlist = $CanvasLayer/Leaderboard/BlueTeam/ScrollContainer/BluePlayerList
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
@@ -54,11 +55,23 @@ func _on_join_button_pressed():
 	
 	enet_peer.create_client(address_entry.text, PORT)
 	multiplayer.multiplayer_peer = enet_peer
+	multiplayer.server_disconnected.connect(
+		func(): 
+			hud.hide()
+			leaderboard.hide()
+			esc_menu.hide()
+			main_menu.show()
+	)
 
-func _on_multiplayer_spawner_spawned(node):
-	if node.is_multiplayer_authority():
-		pass
-		#node.health_changed.connect(update_health_bar)
+func _on_menu_button_down():
+	multiplayer.multiplayer_peer.close()
+	get_tree().change_scene_to_file("res://scenes/testWorld.tscn")
+
+func _on_quit_button_down():
+	get_tree().quit()
+
+func _on_button_pressed():
+	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
 
 func upnp_setup():
 	var upnp = UPNP.new()
@@ -78,7 +91,7 @@ func _physics_process(delta):
 		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("quit"):
+	if Input.is_action_just_pressed("quit") and enet_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED: # allows for game close in main menu but not ingame
 		get_tree().quit()
 
 func add_player(peer_id):
@@ -86,9 +99,6 @@ func add_player(peer_id):
 	player.name = str(peer_id)
 	add_child(player)
 	tracked = true
-	if player.is_multiplayer_authority():
-		pass
-		#player.health_changed.connect(update_health_bar)
 	
 	var group_counts = {get_tree().get_node_count_in_group("Team1"): "Team1", get_tree().get_node_count_in_group("Team2"): "Team2"} # team 2 will override team 1 when both are even since keys match
 	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))] if len(group_counts) > 1 else ["Team1", "Team2"].pick_random() # removes bias to one team when both teams are even
@@ -139,9 +149,6 @@ func update_player_data(peer_id, data):
 func remove_player_data(peer_id):
 	pass
 
-func update_health_bar(health_value):
-	health_bar.value = health_value
-
 '''
 func radio_enable(event: InputEvent) -> void:
 	print("1")
@@ -153,5 +160,3 @@ func radio_enable(event: InputEvent) -> void:
 			radio.hide()
 			radio.visible = false
 '''
-func _on_button_pressed():
-	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
