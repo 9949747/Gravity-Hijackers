@@ -341,6 +341,12 @@ properties/5/replication_mode = 1
 properties/6/path = NodePath(".:health")
 properties/6/spawn = true
 properties/6/replication_mode = 1
+properties/7/path = NodePath(".:deaths")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath(".:flags")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" unique_id=820130408 groups=["Player"]]
 collision_layer = 3
@@ -411,7 +417,6 @@ one_shot = true
 [node name="UsernameLabel" type="Label3D" parent="." unique_id=1144511956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3875158, 0)
 billboard = 1
-no_depth_test = true
 text = "Username"
 font_size = 70
 outline_size = 30

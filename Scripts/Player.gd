@@ -148,7 +148,6 @@ func _unhandled_input(event):
 			var damage = bullet_damage*2 if headshot else bullet_damage
 			if hit_obj.health - damage <= 0: 
 				kills += 1
-				print("kills increased to %s" % kills)
 			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame

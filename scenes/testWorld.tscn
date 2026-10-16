@@ -43,6 +43,32 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rucky"]
+properties/0/path = NodePath("RedTeam/TeamPanel/Kills:text")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("RedTeam/TeamPanel/Deaths:text")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("RedTeam/TeamPanel/KDR:text")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("RedTeam/TeamPanel/Flags:text")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("BlueTeam/TeamPanel/Kills:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("BlueTeam/TeamPanel/Deaths:text")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("BlueTeam/TeamPanel/KDR:text")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("BlueTeam/TeamPanel/Flags:text")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+
 [node name="World" type="Node" unique_id=1730723652]
 script = ExtResource("1_rucky")
 
@@ -93,8 +119,10 @@ vertical_alignment = 1
 
 [node name="UsernameEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=2007818648]
 layout_mode = 2
+tooltip_text = "max_length=22"
 placeholder_text = "Enter username here"
 alignment = 1
+max_length = 22
 
 [node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1093809675]
 layout_mode = 2
@@ -266,6 +294,9 @@ script = ExtResource("4_rucky")
 [node name="UpdateTimer" type="Timer" parent="CanvasLayer/Leaderboard" unique_id=1646387481]
 wait_time = 0.5
 autostart = true
+
+[node name="TeamEntrySynchronizer" type="MultiplayerSynchronizer" parent="CanvasLayer/Leaderboard" unique_id=766658876]
+replication_config = SubResource("SceneReplicationConfig_rucky")
 
 [node name="Title" type="Label" parent="CanvasLayer/Leaderboard" unique_id=1301874474]
 z_index = 1
