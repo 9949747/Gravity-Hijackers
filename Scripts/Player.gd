@@ -10,6 +10,10 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
+@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
+@onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
+@onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
+@onready var grav_flip_timer = $GravFlipTimer
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -20,15 +24,13 @@ signal health_changed(health_value)
 
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-@onready var speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup")
-#@onready var current_gravity = default_gravity
-@onready var gravity_multiplier = 2
+@onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+#get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
-var Crouchstate : bool = false
 @export var ANIMATIONPLAYER : AnimationPlayer
-@export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
+@export var CROUCH_SPEED : float = 0
 @export var is_crouching: bool = false
 
 #Instantiation
@@ -40,13 +42,14 @@ var health = 10
 var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
-const JUMP_VELOCITY = 10.0
-@export var team: int
+var JUMP_VELOCITY = 10
+var gravity_strengths = [3, 1.5, 0.75, 0.375]
+var gravity_direction = 1
+var knockback_strength = 12
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
 
@@ -68,9 +71,15 @@ func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
 	if event is InputEventMouseMotion: #Allows you to move mouse in game
-		rotate_y(-event.relative.x * X_mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * Y_mouse_sensitivity)
+		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
+		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+	
+	if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): # check if pressed so scrolls dont fire twice
+		grav_slider.value -= 1
+	
+	if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
+		grav_slider.value += 1
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
 		upd_ammo(0, true) # call reload update
@@ -83,15 +92,13 @@ func _unhandled_input(event):
 		if raycast.is_colliding():
 			var hit_obj = raycast.get_collider()
 			var hit_coords = raycast.get_collision_point()
+			var hit_direction = (hit_coords - raycast.global_position).normalized()
 			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			print("raycast col pos ", hit_coords, " hit obj pos ", hit_obj.position, " relative coords ", relative_hit_coords)
-			var headshot = true if relative_hit_coords.y >= 0.4 else false # above 1.4 is roughly where the player's head is
-			#print("ray hit ", hit_obj.name, " at ", hit_coords)
-			# avoid nesting
-			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy"):
+			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+			# avoid nesting, also prevents friendly fire
+			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy") or get_groups() == hit_obj.get_groups():
 				return
 			
-			print(hit_obj.get_groups())
 			# instance new client side hitmarker gui
 			var new_hit_marker = hit_marker.instantiate()
 			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
@@ -115,30 +122,13 @@ func _unhandled_input(event):
 			
 			# damage player only (enemy has no receive damage method)
 			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				print("player is in team " + str(hit_obj.team))
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot) # pass bool as arg for headshot
+				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot, hit_direction) # pass bool as arg for headshot
 
 func _physics_process(delta): #Occurs every delta frame
-	speed_pickup_scene_instantiated = get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
+	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
+	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y -= default_gravity * gravity_multiplier * delta
-
-	# Handle Jump.
-	if Input.is_action_just_pressed("player_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-												  
-	if Input.is_action_pressed("player_sprint"):
-		SPEED = 8 * speed_pickup_multiplier
-	else:
-		SPEED = 5.5 * speed_pickup_multiplier
-
-	if Input.is_action_just_pressed("player_crouch"):
-		print("crouch")
-		crouch()
-		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	#MOVEMENT AND CONTROLS
@@ -146,35 +136,47 @@ func _physics_process(delta): #Occurs every delta frame
 	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var dir_change_strength = SPEED if (is_on_floor() and gravity_direction == 1) or (is_on_ceiling() and gravity_direction == -1) else 10 * gravity_strengths[int(grav_slider.value)] * delta
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = move_toward(velocity.x, direction.x * SPEED, dir_change_strength)
+		velocity.z = move_toward(velocity.z, direction.z * SPEED, dir_change_strength)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+		velocity.x = move_toward(velocity.x, 0, dir_change_strength)
+		velocity.z = move_toward(velocity.z, 0, dir_change_strength)
 	
 	#JUMPING AND GRAVITY
-	if not is_on_floor():
-		velocity.y -= default_gravity * gravity_multiplier * delta
-	if Input.is_action_just_pressed("player_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("flip_gravity") and grav_flip_timer.time_left == 0:
+		gravity_direction = -gravity_direction
+		grav_flip_timer.start()
+		# instant flip mechannics
+		#rotate_z(PI) # flip
+		#rotation.y = -rotation.y # correct flip reversal
+		#camera.rotation.x = -camera.rotation.x # correct flip reversal
+		#position -= Vector3(0, 2*gravity_direction, 0) # keep player pos after instant flip
+	rotation.z = lerp_angle(rotation.z, PI if gravity_direction == -1 else 0.0, 5*delta)
+	if grav_flip_timer.time_left == 0:
+		flip_cd_label.text = ""
+	else:
+		flip_cd_label.text = "CD %.2fs" % grav_flip_timer.time_left
+	
+	if (not is_on_floor() and gravity_direction == 1) or (not is_on_ceiling() and gravity_direction == -1):
+		velocity.y -= default_gravity * gravity_direction * gravity_strengths[int(grav_slider.value)] * delta
+	
+	if Input.is_action_pressed("player_jump") and ((is_on_floor() and gravity_direction == 1) or (is_on_ceiling() and gravity_direction == -1)):
+		velocity.y = JUMP_VELOCITY if is_on_floor() else -JUMP_VELOCITY if is_on_ceiling() else int(velocity.y) # wrap velocity.y in int to get ternary warnings to pipe down
 
 	#SPRINTING AND CROUCHING
 	if Input.is_action_pressed("player_sprint"):
 		SPEED = 8 * speed_pickup_multiplier
 	else:
 		SPEED = 5.5 * speed_pickup_multiplier
+	
 	if Input.is_action_just_pressed("player_crouch"):
-		if not is_multiplayer_authority():
+		if !is_multiplayer_authority():
 			return
-		if is_in_group("Crouching"):
-			remove_from_group("Crouching")
-			crouch()
-		else:
-			add_to_group("Crouching")
-			crouch()
-			#print("crouch")
+		crouch.rpc()
+
+
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -196,28 +198,33 @@ func _physics_process(delta): #Occurs every delta frame
 	#Shoot animation
 	if anim_player.current_animation == "shoot": 
 		pass
+	elif anim_player.current_animation in ["Crouch", "Uncrouch"]:
+		pass
 	elif input_dir != Vector2.ZERO and is_on_floor():
 		anim_player.play("move")
 	else:
 		anim_player.play("idle")
 
 #ANIMATION FUNCTIONS
+@rpc("call_local")
 func crouch():
-	if is_in_group("Crouching"):
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, -CROUCH_SPEED, true)
-			Crouchstate = false
+	#print(is_crouching)
+	#print($".".name)
+	if is_crouching == true:
+		#print("Crouch2")
+		anim_player.play("Uncrouch")
+		is_crouching = false
 
-	elif !is_in_group("Crouching"):
-		if Input.is_action_just_pressed("player_crouch"):
-			anim_player.play("Crouch", -1, CROUCH_SPEED)
-			Crouchstate = true
-	rpc_id(1, "server_set_crouch", Crouchstate)
+	elif is_crouching == false:
+		#print("Crouch1")
+		anim_player.play("Crouch")
+		is_crouching = true
+
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
-
+		
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
@@ -228,7 +235,9 @@ func play_shoot_effects():
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func receive_damage(headshot: bool):
+func receive_damage(headshot: bool, hit_direction):
+	print(hit_direction * knockback_strength)
+	velocity = hit_direction * knockback_strength
 	health -= bullet_damage*2 if headshot else bullet_damage
 	if health <= 0:
 		health = 10

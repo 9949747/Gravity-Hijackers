@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpkxaqqgv1tix"
-path.s3tc="res://.godot/imported/shotgun4_Image_15.jpg-f80f372156d60582d5b1adab698d4198.s3tc.ctex"
+uid="uid://bt5ik8vx8yr8s"
+path.s3tc="res://.godot/imported/Seamless_White.jpg-3d9e9b8404755714c8706c931ed88a91.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "62afca1dfbf1ce29aec2fbfcc8358161"
-}
 
 [deps]
 
-source_file="res://models/Shotgun_Renders/shotgun4_Image_15.jpg"
-dest_files=["res://.godot/imported/shotgun4_Image_15.jpg-f80f372156d60582d5b1adab698d4198.s3tc.ctex"]
+source_file="res://assets/images/Seamless_White.jpg"
+dest_files=["res://.godot/imported/Seamless_White.jpg-3d9e9b8404755714c8706c931ed88a91.s3tc.ctex"]
 
 [params]
 
