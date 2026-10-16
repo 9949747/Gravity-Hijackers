@@ -3,20 +3,20 @@ extends Node
 # cache actual Node references (use $ or get_node)
 @onready var Pistol_node    := $"../Camera3D/Pistol"
 @onready var Gun2_node   := $"../Camera3D/Gun2"
-@onready var Shotgun_node   := $"../Camera3D/Doofenshotgun"
+@onready var Doofenshotgun_node   := $"../Camera3D/Doofenshotgun"
 
 
 # AFTER DEVELOPMENT: change all entries to be 'unlocked': false for the purposes of gameplay
 @export var weapons: Array[Dictionary] = [
 	{ "name": "Pistol", "unlocked": true },
 	{ "name": "Gun2", "unlocked": true },
-	{ "name": "Shotgun", "unlocked": true },
+	{ "name": "Doofenshotgun", "unlocked": true },
 ]
 var weapon_nodes: Array = []
 
 func _ready() -> void:
 	# build the nodes array so indexing matches weapons[]
-	weapon_nodes = [Pistol_node, Gun2_node, Shotgun_node]
+	weapon_nodes = [Pistol_node, Gun2_node, Doofenshotgun_node]
 	# optionally include sniper_node where appropriate
 
 # Call this locally when the local player changes weapon
@@ -47,9 +47,14 @@ func _apply_weapon_local(weapon_index: int) -> void:
 	# show the selected one
 	var n = weapon_nodes[weapon_index]
 	n.visible = true
-	n.position = Vector3(0.5, -0.25, -0.5)
+	if n == Pistol_node:
+		n.position = Vector3(0.5, -0.186, -0.5)
+	elif n == Gun2_node:
+		n.position = Vector3(0.393, -0.516, -0.136)
+	elif n == Doofenshotgun_node:
+		n.position = Vector3(0.516, -0.338, -0.295)
 	Global.currentWeapon = weapons[weapon_index]["name"]
-	print("Local weapon set to", Global.currentWeapon)
+	print("Local weapon set to ", Global.currentWeapon)
 
 func _valid_index(i: int) -> bool:
 	return i >= 0 and i < weapon_nodes.size()

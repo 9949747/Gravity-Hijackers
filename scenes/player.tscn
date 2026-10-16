@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://WeaponManager/Weapons/Gun2.tscn" id="5_qlg0r"]
-[ext_resource type="PackedScene" uid="uid://cln7ie1mxbcwg" path="res://WeaponManager/Weapons/Shotgun.tscn" id="5_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://cln7ie1mxbcwg" path="res://WeaponManager/Weapons/Doofenshotgun.tscn" id="5_tuyoq"]
 [ext_resource type="Script" uid="uid://by31we2ky2hql" path="res://WeaponManager/weapons_manager.gd" id="7_fjrip"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
@@ -593,8 +593,7 @@ shape = SubResource("CapsuleShape3D_67y6s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 
 [node name="Gun2" parent="Camera3D" unique_id=693693121 instance=ExtResource("5_qlg0r")]
-transform = Transform3D(-1.7484556e-08, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.7484556e-08, 0.5, -0.75, -0.3)
-visible = false
+transform = Transform3D(-8.742278e-09, 0, 0.2, 0, 0.2, 0, -0.2, 0, -8.742278e-09, 0.5, -0.75, -0.3)
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1804038237]
 target_position = Vector3(0, 0, -50)
@@ -602,6 +601,7 @@ collision_mask = 2
 
 [node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
 transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
+visible = false
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)
@@ -614,6 +614,8 @@ process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
 [node name="Doofenshotgun" parent="Camera3D" unique_id=1501388774 instance=ExtResource("5_tuyoq")]
+transform = Transform3D(0.09302421, 0, 4.4951296, 0, 3, 0, -1.9978354, 0, 0.20930447, 0.515641, -0.33798885, -0.2954396)
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
