@@ -22,5 +22,3 @@ func _on_area_3d_body_entered(body: CharacterBody3D) -> void:
 		queue_free()
 	else:
 		pass # Maybe "queue_free"?
-
-# REMINDER TO PUT 'add to group' CODE.

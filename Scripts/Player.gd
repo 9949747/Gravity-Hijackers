@@ -61,7 +61,6 @@ func _enter_tree(): #Starts the game, gives multiplayer authority for your contr
 func _ready(): #Plays on first entering the game
 	for pickup in speed_pickups:
 		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
-	#speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
@@ -272,6 +271,7 @@ func upd_ammo(num: int, reload: bool = false):
 		ammo_count += num
 	ammo_display.text = "%d / 15" % ammo_count
 
+@rpc("call_local")
 func _on_speed_pickup_pickedup(value):
 	print("SPEED_PICKUP")
 	speed_pickup_multiplier = value
