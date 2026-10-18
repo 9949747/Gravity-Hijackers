@@ -1,20 +1,21 @@
 extends CharacterBody3D
 
-#Signals:
-signal health_changed(health_value)
-
 #Assets
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
-@onready var crosshair = Global.worldNode.hud.get_node("Crosshair")
-@onready var ammo_display = Global.worldNode.hud.get_node("AmmoDisplay")
-@onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
-@onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
+@onready var hud = Global.worldNode.hud
+@onready var crosshair = hud.get_node("Crosshair")
+@onready var ammo_display = hud.get_node("AmmoDisplay")
+@onready var grav_slider = hud.get_node("GravitySlider")
+@onready var flip_cd_label = hud.get_node("FlipCooldownLabel")
+@onready var health_bar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
 @onready var weaponsManager = $weaponsManager
+@onready var leaderboard = Global.worldNode.leaderboard
+@onready var esc_menu = Global.worldNode.esc_menu
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -26,7 +27,6 @@ signal health_changed(health_value)
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
-#get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
@@ -52,13 +52,20 @@ var JUMP_VELOCITY = 10
 var gravity_strengths = [3, 1.5, 0.75, 0.375]
 var gravity_direction = 1
 var knockback_strength = 12
+const max_health = 20
+@export var health = max_health
+
+#Leaderboard Stats
+@export var username = "Default" # username is set in func _ready()
+@export var kills = 0
+@export var deaths = 0
+@export var flags = 0
 
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
-
 
 func _enter_tree(): #Starts the game, gives multiplayer authority for your controls
 	set_multiplayer_authority(str(name).to_int())
@@ -72,6 +79,12 @@ func _ready(): #Plays on first entering the game
 	
 	if weaponsManager and is_multiplayer_authority():
 		weaponsManager.request_weapon_change(0)
+	username = Global.worldNode.username_entry.text
+	$UsernameLabel.text = username
+	$UsernameLabel.hide() # local
+	
+	health_bar.max_value = max_health
+	health_bar.value = max_health
 
 func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -79,16 +92,39 @@ func _exit_tree() -> void: #for when you leave the actual game for the main menu
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
-	if event is InputEventMouseMotion: #Allows you to move mouse in game
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: #Allows you to move mouse in game
 		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
 		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
-	if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): # check if pressed so scrolls dont fire twice
-		grav_slider.value -= 1
+	if Input.is_action_pressed("unlock_cursor"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif not esc_menu.visible:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
-		grav_slider.value += 1
+	if Input.is_action_just_pressed("toggle_leaderboard") and not esc_menu.visible:
+		if leaderboard.visible:
+			leaderboard.hide()
+		else:
+			leaderboard.show()
+	
+	if Input.is_action_just_pressed("quit"):
+		if esc_menu.visible:
+			esc_menu.hide()
+			hud.show()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		else:
+			esc_menu.show()
+			leaderboard.hide()
+			hud.hide()
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		
+	if event.is_pressed() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: # check if pressed so scrolls dont fire twice. also prevent grav raising/lowering when scrolling in leaderboard
+		if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): 
+			grav_slider.value -= 1
+		
+		if Input.is_action_just_pressed("increase_gravity") and event.is_pressed():
+			grav_slider.value += 1
 	
 	if Input.is_action_just_pressed("reload") and !reloading and anim_player.current_animation != "shoot":
 		upd_ammo(0, true) # call reload update
@@ -98,40 +134,43 @@ func _unhandled_input(event):
 		upd_ammo(-1)
 		play_shoot_effects.rpc()
 		
-		if raycast.is_colliding():
-			var hit_obj = raycast.get_collider()
-			var hit_coords = raycast.get_collision_point()
-			var hit_direction = (hit_coords - raycast.global_position).normalized()
-			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
-			# avoid nesting, also prevents friendly fire
-			if !hit_obj.is_in_group("Player") and !hit_obj.is_in_group("enemy") or get_groups() == hit_obj.get_groups():
-				return
-			
-			# instance new client side hitmarker gui
-			var new_hit_marker = hit_marker.instantiate()
-			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
-			new_hit_marker.position = Vector2(
-				crosshair.position.x - (new_hit_marker.size.x / 2), 
-				crosshair.position.y - (new_hit_marker.size.y / 2)
-			)
-			new_hit_marker.scale = Vector2(0.5, 0.5)
-			# instance new damage count billboard gui where ray collides
-			var new_damage_billboard = damage_billboard.instantiate()
-			var billboard_label = new_damage_billboard.get_node("Label3D") 
-			Global.worldNode.add_child(new_damage_billboard)
-			new_damage_billboard.position = Vector3(hit_coords)
-			if headshot:
-				billboard_label.text = str(-bullet_damage*2)
-				billboard_label.modulate = Color("e10006")
-				billboard_label.outline_modulate = Color("400000")
-			else: 
-				billboard_label.text = str(-bullet_damage)
-			#print(new_damage_billboard.position, new_damage_billboard.get_parent())
-			
-			# damage player only (enemy has no receive damage method)
-			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), headshot, hit_direction) # pass bool as arg for headshot
+		if not raycast.is_colliding():
+			return
+		
+		var hit_obj = raycast.get_collider()
+		var hit_coords = raycast.get_collision_point()
+		var hit_direction = (hit_coords - raycast.global_position).normalized()
+		var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+		var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+		
+		# avoids nesting, also prevents friendly fire
+		if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
+			return
+		
+		# instance new clientside hitmarker gui
+		var new_hit_marker = hit_marker.instantiate()
+		Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
+		new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
+		new_hit_marker.scale = Vector2(0.5, 0.5)
+		
+		# instance new damage count billboard gui where ray collides
+		var new_damage_billboard = damage_billboard.instantiate()
+		var billboard_label = new_damage_billboard.get_node("Label3D") 
+		Global.worldNode.add_child(new_damage_billboard)
+		new_damage_billboard.position = Vector3(hit_coords)
+		if headshot:
+			billboard_label.text = str(-bullet_damage*2)
+			billboard_label.modulate = Color("e10006")
+			billboard_label.outline_modulate = Color("400000")
+		else: 
+			billboard_label.text = str(-bullet_damage)
+		
+		# damage player
+		if hit_obj in get_tree().get_nodes_in_group("Player"):
+			var damage = bullet_damage*2 if headshot else bullet_damage
+			if hit_obj.health - damage <= 0: 
+				kills += 1
+			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and perry_ammo_count > 0 and Global.currentWeapon == 1:
 		pass
@@ -162,11 +201,7 @@ func _physics_process(delta): #Occurs every delta frame
 	if Input.is_action_just_pressed("flip_gravity") and grav_flip_timer.time_left == 0:
 		gravity_direction = -gravity_direction
 		grav_flip_timer.start()
-		# instant flip mechannics
-		#rotate_z(PI) # flip
-		#rotation.y = -rotation.y # correct flip reversal
-		#camera.rotation.x = -camera.rotation.x # correct flip reversal
-		#position -= Vector3(0, 2*gravity_direction, 0) # keep player pos after instant flip
+	
 	rotation.z = lerp_angle(rotation.z, PI if gravity_direction == -1 else 0.0, 5*delta)
 	if grav_flip_timer.time_left == 0:
 		flip_cd_label.text = ""
@@ -196,8 +231,6 @@ func _physics_process(delta): #Occurs every delta frame
 		weaponsManager.request_weapon_change(2)
 	if Input.is_action_just_pressed("equip_pistol"):
 		weaponsManager.request_weapon_change(0)
-
-
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -243,6 +276,15 @@ func crouch():
 		anim_player.play("Crouch")
 		is_crouching = true
 
+@rpc("any_peer")
+func receive_damage(damage, from_peer_id, hit_direction):
+	velocity = hit_direction * knockback_strength
+	health -= damage
+	if health <= 0:
+		deaths += 1
+		health = max_health
+		position = Vector3.ZERO
+	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
@@ -256,16 +298,6 @@ func play_shoot_effects():
 	$AudioStreamPlayer3D.play()
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
-
-@rpc("any_peer")
-func receive_damage(headshot: bool, hit_direction):
-	print(hit_direction * knockback_strength)
-	velocity = hit_direction * knockback_strength
-	health -= bullet_damage*2 if headshot else bullet_damage
-	if health <= 0:
-		health = 10
-		position = Vector3.ZERO
-	health_changed.emit(health)
 
 #SETTINGS FUNCTIONS
 func _on_fov_updated(value):
