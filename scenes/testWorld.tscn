@@ -389,7 +389,7 @@ offset_bottom = 48.0
 size_flags_vertical = 0
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
-text = "Red team"
+text = "Hijackers"
 vertical_alignment = 1
 
 [node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1560723643]
@@ -566,7 +566,7 @@ offset_bottom = 48.0
 size_flags_vertical = 0
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
-text = "Blue team"
+text = "Defenders"
 vertical_alignment = 1
 
 [node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=983952080]

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dgfvj3x00eovb"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ys5s5"]
+top_radius = 0.05
+bottom_radius = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_26hld"]
+albedo_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ys5s5"]
+lightmap_size_hint = Vector2i(5, 4)
+size = Vector2(0.8, 0.6)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4cnv"]
+cull_mode = 2
+
+[node name="Flag" type="Node3D" unique_id=1940656681]
+
+[node name="PoleMesh" type="MeshInstance3D" parent="." unique_id=1383019594]
+mesh = SubResource("CylinderMesh_ys5s5")
+surface_material_override/0 = SubResource("StandardMaterial3D_26hld")
+
+[node name="FlagMesh" type="MeshInstance3D" parent="." unique_id=1394216353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.7, 0)
+mesh = SubResource("PlaneMesh_ys5s5")
+surface_material_override/0 = SubResource("StandardMaterial3D_b4cnv")
