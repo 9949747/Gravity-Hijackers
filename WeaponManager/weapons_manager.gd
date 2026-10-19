@@ -36,7 +36,7 @@ func rpc_apply_weapon(weapon_index: int) -> void:
 	if not _valid_index(weapon_index):
 		return
 	_apply_weapon_local(weapon_index)
-	print("RPC applied on peer", get_tree().get_multiplayer().get_unique_id(), "weapon", weapon_index)
+	#print("RPC applied on peer", get_tree().get_multiplayer().get_unique_id(), "weapon", weapon_index)
 
 func _apply_weapon_local(weapon_index: int) -> void:
 	# hide all

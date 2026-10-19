@@ -44,8 +44,6 @@ var perry_ammo_count = 30
 var shotgun_ammo_count = 5
 
 #Stats
-var health = 10
-
 var bullet_damage = 2
 var SPEED = 5.5
 var JUMP_VELOCITY = 10
@@ -130,7 +128,7 @@ func _unhandled_input(event):
 		upd_ammo(0, true) # call reload update
 	
 	#ALL SHOOTING STUFF, IT WORKS, DO NOT CHANGE IT UNLESS RHYS
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and pistol_ammo_count > 0 and Global.currentWeapon == 0:
+	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot":
 		upd_ammo(-1)
 		play_shoot_effects.rpc()
 		
@@ -171,12 +169,6 @@ func _unhandled_input(event):
 			if hit_obj.health - damage <= 0: 
 				kills += 1
 			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
-
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and perry_ammo_count > 0 and Global.currentWeapon == 1:
-		pass
-
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and shotgun_ammo_count > 0 and Global.currentWeapon == 2:
-		pass
 
 func _physics_process(delta): #Occurs every delta frame
 	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
@@ -227,10 +219,13 @@ func _physics_process(delta): #Occurs every delta frame
 	
 	if Input.is_action_just_pressed("equip_perry"):
 		weaponsManager.request_weapon_change(1)
+		bullet_damage = 1
 	if Input.is_action_just_pressed("equip_shotgun"):
 		weaponsManager.request_weapon_change(2)
+		bullet_damage = 6
 	if Input.is_action_just_pressed("equip_pistol"):
 		weaponsManager.request_weapon_change(0)
+		bullet_damage = 2
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -319,11 +314,27 @@ func upd_ammo(num: int, reload: bool = false):
 		crosshair.hide()
 		await get_tree().create_timer(1).timeout
 		crosshair.show()
-		pistol_ammo_count = 15
+		if Global.currentWeapon == 2:
+			pistol_ammo_count = 15
+		elif Global.currentWeapon == 0:
+			perry_ammo_count = 30
+		elif Global.currentWeapon == 1:
+			shotgun_ammo_count = 5
 		reloading = false
 	else:
-		pistol_ammo_count += num
-	ammo_display.text = "%d / 15" % pistol_ammo_count
+		if Global.currentWeapon == str(2):
+			pistol_ammo_count += num
+		elif Global.currentWeapon == str(0):
+			perry_ammo_count += num
+		elif Global.currentWeapon == str(1):
+			shotgun_ammo_count += num
+		if Global.currentWeapon == str(2):
+			ammo_display.text = "%d / 15" % pistol_ammo_count
+		elif Global.currentWeapon == str(0):
+			ammo_display.text = "%d / 30" % perry_ammo_count
+		elif Global.currentWeapon == str(1):
+			ammo_display.text = "%d / 5" % shotgun_ammo_count
+	
 
 func _on_speed_pickup_pickedup(value):
 	print("SPEED_PICKUP")
