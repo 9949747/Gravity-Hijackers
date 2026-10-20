@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://models/Gun2.tscn" id="5_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://0h1decnruoaw" path="res://assets/images/FlagIcon.png" id="6_tuyoq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
 
@@ -348,6 +349,21 @@ properties/8/path = NodePath(".:flags")
 properties/8/spawn = true
 properties/8/replication_mode = 1
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_qlg0r"]
+top_radius = 0.05
+bottom_radius = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tuyoq"]
+albedo_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fjrip"]
+lightmap_size_hint = Vector2i(5, 4)
+size = Vector2(0.8, 0.6)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smehm"]
+cull_mode = 2
+
 [node name="Player" type="CharacterBody3D" unique_id=820130408 groups=["Player"]]
 collision_layer = 3
 script = ExtResource("1_2v3wm")
@@ -420,5 +436,27 @@ billboard = 1
 text = "Username"
 font_size = 70
 outline_size = 30
+
+[node name="Flag" type="Node3D" parent="." unique_id=189484732]
+visible = false
+
+[node name="PoleMesh" type="MeshInstance3D" parent="Flag" unique_id=2071196725]
+transform = Transform3D(-0.8660254, -0.5, 7.5710346e-08, -0.5, 0.8660254, 4.371139e-08, -8.742278e-08, 0, -1, 0.048205085, 1.1468911, 0.55)
+mesh = SubResource("CylinderMesh_qlg0r")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_tuyoq")
+
+[node name="FlagMesh" type="MeshInstance3D" parent="Flag" unique_id=1356399081]
+transform = Transform3D(-0.8660254, -0.5, 7.5710346e-08, -0.5, 0.8660254, 4.371139e-08, -8.742278e-08, 0, -1, -0.6482051, 1.5531089, 0.55)
+mesh = SubResource("PlaneMesh_fjrip")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_smehm")
+
+[node name="FlagIcon" type="Sprite3D" parent="Flag" unique_id=1892360853]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 3, 0)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("6_tuyoq")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

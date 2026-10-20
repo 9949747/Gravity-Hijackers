@@ -57,6 +57,8 @@ const max_health = 20
 #MISC
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
+var current_held_flag: Node3D
+
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
 
@@ -135,7 +137,7 @@ func _unhandled_input(event):
 		var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
 		
 		# avoids nesting, also prevents friendly fire
-		if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
+		if !hit_obj.is_in_group("Player") or (is_in_group("RedTeam") and hit_obj.is_in_group("RedTeam")) or (is_in_group("BlueTeam") and hit_obj.is_in_group("BlueTeam")):
 			return
 		
 		# instance new clientside hitmarker gui
@@ -261,6 +263,8 @@ func receive_damage(damage, from_peer_id, hit_direction):
 		deaths += 1
 		health = max_health
 		position = Vector3.ZERO
+		if current_held_flag:
+			current_held_flag.return_flag.rpc()
 	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):

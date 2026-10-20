@@ -57,9 +57,9 @@ import/blender/enabled=false
 [global_group]
 
 Player=""
-Team2=""
-Team1=""
 speed_pickups=""
+BlueTeam=""
+RedTeam=""
 
 [input]
 

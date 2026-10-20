@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dgfvj3x00eovb"]
 
+[ext_resource type="Script" uid="uid://b4f2uwt8g0fo0" path="res://Scripts/flag.gd" id="1_hdgai"]
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_ys5s5"]
 top_radius = 0.05
 bottom_radius = 0.05
@@ -14,8 +16,18 @@ orientation = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4cnv"]
 cull_mode = 2
+albedo_color = Color(1, 0, 0, 1)
 
-[node name="Flag" type="Node3D" unique_id=1940656681]
+[sub_resource type="BoxShape3D" id="BoxShape3D_k4svv"]
+size = Vector3(0.85, 2, 0.1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hdgai"]
+properties/0/path = NodePath(".:visible")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Flag" type="Area3D" unique_id=441726338]
+script = ExtResource("1_hdgai")
 
 [node name="PoleMesh" type="MeshInstance3D" parent="." unique_id=1383019594]
 mesh = SubResource("CylinderMesh_ys5s5")
@@ -25,3 +37,12 @@ surface_material_override/0 = SubResource("StandardMaterial3D_26hld")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.7, 0)
 mesh = SubResource("PlaneMesh_ys5s5")
 surface_material_override/0 = SubResource("StandardMaterial3D_b4cnv")
+
+[node name="HitBox" type="CollisionShape3D" parent="." unique_id=762047853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.375, 0, 0)
+shape = SubResource("BoxShape3D_k4svv")
+
+[node name="CapturedStateSync" type="MultiplayerSynchronizer" parent="." unique_id=395733618]
+replication_config = SubResource("SceneReplicationConfig_hdgai")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

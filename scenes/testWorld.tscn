@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scripts/world.gd" id="1_rucky"]
 [ext_resource type="Texture2D" uid="uid://c4dk7vc0tehju" path="res://assets/images/Skybox1.jpg" id="2_0ddhe"]
+[ext_resource type="PackedScene" uid="uid://dgfvj3x00eovb" path="res://scenes/Flag.tscn" id="3_0ddhe"]
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_lwfgy"]
 [ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://Scripts/leaderboard.gd" id="4_rucky"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
@@ -98,9 +99,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -180.25
-offset_top = -58.5
+offset_top = -84.0
 offset_right = 180.25
-offset_bottom = 58.5
+offset_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -124,6 +125,11 @@ text = "Return to menu"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Exit game"
+
+[node name="Close" type="Button" parent="CanvasLayer/EscMenu/MarginContainer/VBoxContainer" unique_id=1752884965]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Close"
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer" unique_id=1311570075]
 anchors_preset = 15
@@ -721,6 +727,13 @@ spawn_path = NodePath("..")
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
 
+[node name="Flag" parent="." unique_id=1294043018 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7000003, 5.3, -4.4)
+flag_team = 2
+
+[node name="Flag2" parent="." unique_id=441726338 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5.4, 15.3, 5.7000003)
+
 [node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66145325)
 
@@ -740,6 +753,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572
 
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_button_down"]
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_button_down"]
+[connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Close" to="." method="_on_close_button_down"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

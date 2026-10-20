@@ -8,8 +8,6 @@ signal player_added(peer_id)
 @onready var hud = $CanvasLayer/HUD
 @onready var leaderboard = $CanvasLayer/Leaderboard
 @onready var esc_menu = $CanvasLayer/EscMenu
-@onready var team1_playerlist = $CanvasLayer/Leaderboard/RedTeam/ScrollContainer/RedPlayerList
-@onready var team2_playerlist = $CanvasLayer/Leaderboard/BlueTeam/ScrollContainer/BluePlayerList
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -70,6 +68,11 @@ func _on_menu_button_down():
 func _on_quit_button_down():
 	get_tree().quit()
 
+func _on_close_button_down():
+	esc_menu.hide()
+	hud.show()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
 
@@ -100,8 +103,8 @@ func add_player(peer_id):
 	add_child(player)
 	tracked = true
 	
-	var group_counts = {get_tree().get_node_count_in_group("Team1"): "Team1", get_tree().get_node_count_in_group("Team2"): "Team2"} # team 2 will override team 1 when both are even since keys match
-	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))] if len(group_counts) > 1 else ["Team1", "Team2"].pick_random() # removes bias to one team when both teams are even
+	var group_counts = {get_tree().get_node_count_in_group("RedTeam"): "RedTeam", get_tree().get_node_count_in_group("BlueTeam"): "BlueTeam"} # team 2 will override team 1 when both are even since keys match
+	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("RedTeam"), get_tree().get_node_count_in_group("BlueTeam"))] if len(group_counts) > 1 else ["RedTeam", "BlueTeam"].pick_random() # removes bias to one team when both teams are even
 
 	update_player_data(peer_id, {"groups": [smallest_team]}) # load new player on host
 	update_player_data.rpc(peer_id, {"groups": [smallest_team]}) # load new player on peers
@@ -115,6 +118,9 @@ func remove_player(peer_id):
 	var exiting_player = get_node_or_null(str(peer_id))
 	if not exiting_player:
 		return
+	
+	if exiting_player.current_held_flag:
+		exiting_player.current_held_flag.return_flag.rpc()
 	
 	exiting_player.queue_free()
 
@@ -135,15 +141,24 @@ func update_player_data(peer_id, data):
 		player_node.add_to_group(group)
 
 	# inits
+	var flag_icon: Sprite3D = player_node.get_node("Flag/FlagIcon")
 	var plr_mat = player_node.get_node("MeshInstance3D").get_active_material(0).duplicate()
-	if player_node.is_in_group("Team1"):
+	var flag_color = StandardMaterial3D.new()
+	flag_color.cull_mode = BaseMaterial3D.CULL_DISABLED
+	
+	if player_node.is_in_group("RedTeam"):
 		plr_mat.albedo_color = Color(1, 0, 0)
-	elif player_node.is_in_group("Team2"):
+		flag_icon.modulate = Color(0, 0, 1)
+		flag_color.albedo_color = Color(0, 0, 1)
+	elif player_node.is_in_group("BlueTeam"):
 		plr_mat.albedo_color = Color(0, 0, 1)
+		flag_icon.modulate = Color(1, 0, 0)
+		flag_color.albedo_color = Color(1, 0, 0)
 	else:
 		print("player %s has not been assigned a team" % peer_id)
 	
 	player_node.get_node("MeshInstance3D").set_surface_override_material(0, plr_mat)
+	player_node.get_node("Flag/FlagMesh").set_surface_override_material(0, flag_color)
 
 @rpc
 func remove_player_data(peer_id):
