@@ -10,11 +10,14 @@ enum Teams {RED = 1, BLUE = 2}
 		update_editor_visual()
 
 func _ready():
-	if is_multiplayer_authority() and capturing_player_node:
-		multiplayer.peer_connected.connect(load_capturing_player_node)
+	print("%s is connecting signal" % multiplayer.get_unique_id())
+	multiplayer.peer_connected.connect(load_capturing_player_node)
 
 func load_capturing_player_node(peer_id):
-	pick_up_flag.rpc_id(peer_id, capturing_player_node)
+	if not is_multiplayer_authority(): return
+	print("%s joined for %s" % [peer_id, multiplayer.get_unique_id()])
+	if capturing_player_node:
+		pick_up_flag.rpc_id(peer_id, null, get_path_to(capturing_player_node))
 
 func update_editor_visual():
 	var flag_color = StandardMaterial3D.new()
@@ -37,15 +40,16 @@ func return_flag():
 	capturing_player_node.current_held_flag = null
 	capturing_player_node = null
 
-func secure_captured_flag(player):
+func secure_captured_flag(player: Node3D):
 	if not player.current_held_flag: return # player must have a flag to secure it
 	
 	player.flags += 1 # only capturing player has auth over flags val
 	player.current_held_flag.return_flag()
 
 @rpc
-func pick_up_flag(player: Node3D):
-	print("%s called" % multiplayer.get_unique_id())
+func pick_up_flag(player: Node3D, player_path: NodePath = ""):
+	if player_path: player = get_node(player_path) # only necessary when syncing flag states to new players
+	
 	if player.current_held_flag: return # player cant pick up more than one flag. also allow all peers to proceed below so capturing player knows what flag they're holding
 	
 	hide()
