@@ -396,4 +396,9 @@ visible = false
 wait_time = 0.6
 one_shot = true
 
+[node name="SpeedPickupTimer" type="Timer" parent="." unique_id=1740781716]
+wait_time = 25.0
+one_shot = true
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="SpeedPickupTimer" to="." method="_speed_pickup_timer_timeout"]

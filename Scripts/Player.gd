@@ -14,6 +14,8 @@ signal health_changed(health_value)
 @onready var grav_slider = Global.worldNode.hud.get_node("GravitySlider")
 @onready var flip_cd_label = Global.worldNode.hud.get_node("FlipCooldownLabel")
 @onready var grav_flip_timer = $GravFlipTimer
+@onready var SpeedPickupTimer = $SpeedPickupTimer
+
 
 #Preloads
 @onready var damage_billboard = preload("res://scenes/DamageIndicator.tscn")
@@ -62,6 +64,8 @@ func _ready(): #Plays on first entering the game
 	for pickup in speed_pickups:
 		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
 	if not is_multiplayer_authority(): return
+	
+	SpeedPickupTimer.timeout.connect(_speed_pickup_timer_timeout)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
@@ -130,6 +134,7 @@ func _physics_process(delta): #Occurs every delta frame
 	#speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
 	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
+	
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -275,3 +280,14 @@ func upd_ammo(num: int, reload: bool = false):
 func _on_speed_pickup_pickedup(value):
 	print("SPEED_PICKUP")
 	speed_pickup_multiplier = value
+	SpeedPickupTimer.start()
+
+func _speed_pickup_multiplier_changed() -> void:
+	if speed_pickup_multiplier == 1:
+		pass
+	else:
+		SpeedPickupTimer.start()
+
+func _speed_pickup_timer_timeout() -> void:
+	print("Speed pickup timed out.")
+	speed_pickup_multiplier = 1
