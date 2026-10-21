@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dgfvj3x00eovb"]
 
 [ext_resource type="Script" uid="uid://b4f2uwt8g0fo0" path="res://Scripts/flag.gd" id="1_hdgai"]
+[ext_resource type="Texture2D" uid="uid://0h1decnruoaw" path="res://assets/images/FlagIcon.png" id="2_step0"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ys5s5"]
 top_radius = 0.05
@@ -28,6 +29,14 @@ properties/0/replication_mode = 1
 
 [node name="Flag" type="Area3D" unique_id=441726338]
 script = ExtResource("1_hdgai")
+
+[node name="FlagIcon" type="Sprite3D" parent="." unique_id=1233996597]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.375, 2, 0)
+modulate = Color(1, 0, 0, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("2_step0")
 
 [node name="PoleMesh" type="MeshInstance3D" parent="." unique_id=1383019594]
 mesh = SubResource("CylinderMesh_ys5s5")

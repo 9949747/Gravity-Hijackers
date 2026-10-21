@@ -1,5 +1,5 @@
-@tool # updates live in editor
-extends Area3D
+@tool # updates live in editor. note: this script is not synced across clients, all clients run this script.
+extends Area3D 
 
 var capturing_player_node: Node3D # the player who is currently capturing this flag
 
@@ -26,8 +26,10 @@ func update_editor_visual():
 	match flag_team:
 		Teams.RED:
 			flag_color.albedo_color = Color(1, 0, 0)
+			$FlagIcon.modulate = Color(1, 0, 0)
 		Teams.BLUE:
 			flag_color.albedo_color = Color(0, 0, 1)
+			$FlagIcon.modulate = Color(0, 0, 1)
 	
 	$FlagMesh.set_surface_override_material(0, flag_color)
 
@@ -55,9 +57,7 @@ func pick_up_flag(player: Node3D, player_path: NodePath = ""):
 	hide()
 	player.current_held_flag = self
 	capturing_player_node = player
-	#print("%s passed" % multiplayer.get_unique_id())
 	if not player.is_multiplayer_authority(): # only allow other peers to see flag indication
-		#print("%s is showing flag" % multiplayer.get_unique_id())
 		player.get_node("Flag").show()
 
 func _on_body_entered(body: Node3D): # let host handle all body entered signals

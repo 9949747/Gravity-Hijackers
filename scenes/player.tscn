@@ -108,6 +108,22 @@ tracks/4/keys = {
 "values": [Vector3(0, 1, 0), Vector3(0, 0.25, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "FlagIconPulse"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Flag/FlagIcon:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+
 [sub_resource type="Animation" id="Animation_jhgv2"]
 length = 0.001
 tracks/0/type = "value"
@@ -169,6 +185,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Flag/FlagIcon:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Flag/FlagIcon:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
 }
 
 [sub_resource type="Animation" id="Animation_dqkch"]
@@ -313,6 +353,7 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p6wdk"]
 _data = {
 &"Crouch": SubResource("Animation_qhqgy"),
+&"FlagIconPulse": SubResource("Animation_tuyoq"),
 &"RESET": SubResource("Animation_jhgv2"),
 &"Uncrouch": SubResource("Animation_dqkch"),
 &"idle": SubResource("Animation_knepc"),
@@ -384,7 +425,7 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 2
 
 [node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
-transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000002, 0.5, -0.25, -0.5)
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)
@@ -398,7 +439,7 @@ draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
-autoplay = &"idle"
+autoplay = &"FlagIconPulse"
 playback_default_blend_time = 0.05
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=374552710]
@@ -438,7 +479,6 @@ font_size = 70
 outline_size = 30
 
 [node name="Flag" type="Node3D" parent="." unique_id=189484732]
-visible = false
 
 [node name="PoleMesh" type="MeshInstance3D" parent="Flag" unique_id=2071196725]
 transform = Transform3D(-0.8660254, -0.5, 7.5710346e-08, -0.5, 0.8660254, 4.371139e-08, -8.742278e-08, 0, -1, 0.048205085, 1.1468911, 0.55)
@@ -453,7 +493,8 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_smehm")
 
 [node name="FlagIcon" type="Sprite3D" parent="Flag" unique_id=1892360853]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 3, 0)
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 3.5, 0)
+modulate = Color(1, 1, 1, 0)
 billboard = 1
 no_depth_test = true
 fixed_size = true
