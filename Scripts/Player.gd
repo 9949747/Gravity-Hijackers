@@ -138,49 +138,50 @@ func _unhandled_input(event):
 	
 	#ALL SHOOTING STUFF, IT WORKS, DO NOT CHANGE IT UNLESS RHYS
 	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and anim_player.current_animation != "shoot2" and anim_player.current_animation != "shoot3":
-		var now = Time.get_ticks_msec() / 1000.0
-		if now >= next_shot_time:
-			next_shot_time = now + FIRE_RATE
-			upd_ammo(-1)
-			play_shoot_effects.rpc()
-			
-			if not raycast.is_colliding():
-				return
-			
-			var hit_obj = raycast.get_collider()
-			var hit_coords = raycast.get_collision_point()
-			var hit_direction = (hit_coords - raycast.global_position).normalized()
-			var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-			var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
-			
-			# avoids nesting, also prevents friendly fire
-			if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
-				return
-			
-			# instance new clientside hitmarker gui
-			var new_hit_marker = hit_marker.instantiate()
-			Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
-			new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
-			new_hit_marker.scale = Vector2(0.5, 0.5)
-			
-			# instance new damage count billboard gui where ray collides
-			var new_damage_billboard = damage_billboard.instantiate()
-			var billboard_label = new_damage_billboard.get_node("Label3D") 
-			Global.worldNode.add_child(new_damage_billboard)
-			new_damage_billboard.position = Vector3(hit_coords)
-			if headshot:
-				billboard_label.text = str(-bullet_damage*2)
-				billboard_label.modulate = Color("e10006")
-				billboard_label.outline_modulate = Color("400000")
-			else: 
-				billboard_label.text = str(-bullet_damage)
-			
-			# damage player
-			if hit_obj in get_tree().get_nodes_in_group("Player"):
-				var damage = bullet_damage*2 if headshot else bullet_damage
-				if hit_obj.health - damage <= 0: 
-					kills += 1
-				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
+		if Global.currentWeapon == "Pistol" and pistol_ammo_count > 0 or Global.currentWeapon == "Gun2" and perry_ammo_count > 0 or Global.currentWeapon == "Doofenshotgun" and shotgun_ammo_count > 0:
+			var now = Time.get_ticks_msec() / 1000.0
+			if now >= next_shot_time:
+				next_shot_time = now + FIRE_RATE
+				upd_ammo(-1)
+				play_shoot_effects.rpc()
+				
+				if not raycast.is_colliding():
+					return
+				
+				var hit_obj = raycast.get_collider()
+				var hit_coords = raycast.get_collision_point()
+				var hit_direction = (hit_coords - raycast.global_position).normalized()
+				var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+				var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+				
+				# avoids nesting, also prevents friendly fire
+				if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
+					return
+				
+				# instance new clientside hitmarker gui
+				var new_hit_marker = hit_marker.instantiate()
+				Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
+				new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
+				new_hit_marker.scale = Vector2(0.5, 0.5)
+				
+				# instance new damage count billboard gui where ray collides
+				var new_damage_billboard = damage_billboard.instantiate()
+				var billboard_label = new_damage_billboard.get_node("Label3D") 
+				Global.worldNode.add_child(new_damage_billboard)
+				new_damage_billboard.position = Vector3(hit_coords)
+				if headshot:
+					billboard_label.text = str(-bullet_damage*2)
+					billboard_label.modulate = Color("e10006")
+					billboard_label.outline_modulate = Color("400000")
+				else: 
+					billboard_label.text = str(-bullet_damage)
+				
+				# damage player
+				if hit_obj in get_tree().get_nodes_in_group("Player"):
+					var damage = bullet_damage*2 if headshot else bullet_damage
+					if hit_obj.health - damage <= 0: 
+						kills += 1
+					hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame
 	#speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
@@ -234,14 +235,17 @@ func _physics_process(delta): #Occurs every delta frame
 		weaponsManager.request_weapon_change(1)
 		bullet_damage = 1
 		FIRE_RATE = 0.1
+		ammo_display.text = "%d / 30" % perry_ammo_count
 	if Input.is_action_just_pressed("equip_shotgun"):
 		weaponsManager.request_weapon_change(2)
 		bullet_damage = 6
 		FIRE_RATE = 0.8
+		ammo_display.text = "%d / 5" % shotgun_ammo_count
 	if Input.is_action_just_pressed("equip_pistol"):
 		weaponsManager.request_weapon_change(0)
 		bullet_damage = 2
 		FIRE_RATE = 0.4
+		ammo_display.text = "%d / 15" % pistol_ammo_count
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -332,25 +336,25 @@ func upd_ammo(num: int, reload: bool = false):
 		crosshair.hide()
 		await get_tree().create_timer(1).timeout
 		crosshair.show()
-		if Global.currentWeapon == 2:
+		if Global.currentWeapon == "Pistol":
 			pistol_ammo_count = 15
-		elif Global.currentWeapon == 0:
+		elif Global.currentWeapon == "Gun2":
 			perry_ammo_count = 30
-		elif Global.currentWeapon == 1:
+		elif Global.currentWeapon == "Doofenshotgun":
 			shotgun_ammo_count = 5
 		reloading = false
 	else:
-		if Global.currentWeapon == str(2):
+		if Global.currentWeapon == "Pistol":
 			pistol_ammo_count += num
-		elif Global.currentWeapon == str(0):
+		elif Global.currentWeapon == "Gun2":
 			perry_ammo_count += num
-		elif Global.currentWeapon == str(1):
+		elif Global.currentWeapon == "Doofenshotgun":
 			shotgun_ammo_count += num
-		if Global.currentWeapon == str(2):
+		if Global.currentWeapon == "Pistol":
 			ammo_display.text = "%d / 15" % pistol_ammo_count
-		elif Global.currentWeapon == str(0):
+		elif Global.currentWeapon == "Gun2":
 			ammo_display.text = "%d / 30" % perry_ammo_count
-		elif Global.currentWeapon == str(1):
+		elif Global.currentWeapon == "Doofenshotgun":
 			ammo_display.text = "%d / 5" % shotgun_ammo_count
 	
 
