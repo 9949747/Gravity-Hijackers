@@ -13,6 +13,9 @@ extends CharacterBody3D
 @onready var flip_cd_label = hud.get_node("FlipCooldownLabel")
 @onready var health_bar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
+@onready var weaponsManager = $weaponsManager
+@onready var SpeedPickupTimer = $SpeedPickupTimer
+
 @onready var leaderboard = Global.worldNode.leaderboard
 @onready var esc_menu = Global.worldNode.esc_menu
 
@@ -25,7 +28,9 @@ extends CharacterBody3D
 
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-@onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+@onready var speed_pickups = get_tree().get_nodes_in_group("speed_pickups")
+#speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+#get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
@@ -37,8 +42,14 @@ extends CharacterBody3D
 @onready var player_scene_instantiated = player_scene.instantiate()
 @onready var world_scene_instantiated = world_scene.instantiate()
 
+#Guns
+var pistol_ammo_count = 15
+var perry_ammo_count = 30
+var shotgun_ammo_count = 5
+var next_shot_time = 0.0
+var FIRE_RATE = 0.4
+
 #Stats
-var ammo_count = 15
 var bullet_damage = 2
 var SPEED = 5.5
 var JUMP_VELOCITY = 10
@@ -64,12 +75,17 @@ func _enter_tree(): #Starts the game, gives multiplayer authority for your contr
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready(): #Plays on first entering the game
-	#speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
+	for pickup in speed_pickups:
+		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
 	if not is_multiplayer_authority(): return
+	
+	SpeedPickupTimer.timeout.connect(_speed_pickup_timer_timeout)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
 	
+	if weaponsManager and is_multiplayer_authority():
+		weaponsManager.request_weapon_change(0)
 	username = Global.worldNode.username_entry.text
 	$UsernameLabel.text = username
 	$UsernameLabel.hide() # local
@@ -121,55 +137,59 @@ func _unhandled_input(event):
 		upd_ammo(0, true) # call reload update
 	
 	#ALL SHOOTING STUFF, IT WORKS, DO NOT CHANGE IT UNLESS RHYS
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and ammo_count > 0:
-		upd_ammo(-1)
-		play_shoot_effects.rpc()
-		
-		if not raycast.is_colliding():
-			return
-		
-		var hit_obj = raycast.get_collider()
-		var hit_coords = raycast.get_collision_point()
-		var hit_direction = (hit_coords - raycast.global_position).normalized()
-		var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-		var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
-		
-		# avoids nesting, also prevents friendly fire
-		if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
-			return
-		
-		# instance new clientside hitmarker gui
-		var new_hit_marker = hit_marker.instantiate()
-		Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
-		new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
-		new_hit_marker.scale = Vector2(0.5, 0.5)
-		
-		# instance new damage count billboard gui where ray collides
-		var new_damage_billboard = damage_billboard.instantiate()
-		var billboard_label = new_damage_billboard.get_node("Label3D") 
-		Global.worldNode.add_child(new_damage_billboard)
-		new_damage_billboard.position = Vector3(hit_coords)
-		if headshot:
-			billboard_label.text = str(-bullet_damage*2)
-			billboard_label.modulate = Color("e10006")
-			billboard_label.outline_modulate = Color("400000")
-		else: 
-			billboard_label.text = str(-bullet_damage)
-		
-		# damage player
-		if hit_obj in get_tree().get_nodes_in_group("Player"):
-			var damage = bullet_damage*2 if headshot else bullet_damage
-			if hit_obj.health - damage <= 0: 
-				kills += 1
-			hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
+	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and anim_player.current_animation != "shoot2" and anim_player.current_animation != "shoot3":
+		if Global.currentWeapon == "Pistol" and pistol_ammo_count > 0 or Global.currentWeapon == "Gun2" and perry_ammo_count > 0 or Global.currentWeapon == "Doofenshotgun" and shotgun_ammo_count > 0:
+			var now = Time.get_ticks_msec() / 1000.0
+			if now >= next_shot_time:
+				next_shot_time = now + FIRE_RATE
+				upd_ammo(-1)
+				play_shoot_effects.rpc()
+				
+				if not raycast.is_colliding():
+					return
+				
+				var hit_obj = raycast.get_collider()
+				var hit_coords = raycast.get_collision_point()
+				var hit_direction = (hit_coords - raycast.global_position).normalized()
+				var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
+				var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+				
+				# avoids nesting, also prevents friendly fire
+				if !hit_obj.is_in_group("Player") or get_groups() == hit_obj.get_groups():
+					return
+				
+				# instance new clientside hitmarker gui
+				var new_hit_marker = hit_marker.instantiate()
+				Global.worldNode.get_node("CanvasLayer/HUD").add_child(new_hit_marker)
+				new_hit_marker.position = Vector2(crosshair.position.x - (new_hit_marker.size.x / 2), crosshair.position.y - (new_hit_marker.size.y / 2))
+				new_hit_marker.scale = Vector2(0.5, 0.5)
+				
+				# instance new damage count billboard gui where ray collides
+				var new_damage_billboard = damage_billboard.instantiate()
+				var billboard_label = new_damage_billboard.get_node("Label3D") 
+				Global.worldNode.add_child(new_damage_billboard)
+				new_damage_billboard.position = Vector3(hit_coords)
+				if headshot:
+					billboard_label.text = str(-bullet_damage*2)
+					billboard_label.modulate = Color("e10006")
+					billboard_label.outline_modulate = Color("400000")
+				else: 
+					billboard_label.text = str(-bullet_damage)
+				
+				# damage player
+				if hit_obj in get_tree().get_nodes_in_group("Player"):
+					var damage = bullet_damage*2 if headshot else bullet_damage
+					if hit_obj.health - damage <= 0: 
+						kills += 1
+					hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame
-	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
+	#speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
 	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
+	
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	#MOVEMENT AND CONTROLS
 	move_and_slide()
 	
@@ -210,6 +230,22 @@ func _physics_process(delta): #Occurs every delta frame
 		if !is_multiplayer_authority():
 			return
 		crouch.rpc()
+	
+	if Input.is_action_just_pressed("equip_perry"):
+		weaponsManager.request_weapon_change(1)
+		bullet_damage = 1
+		FIRE_RATE = 0.1
+		ammo_display.text = "%d / 30" % perry_ammo_count
+	if Input.is_action_just_pressed("equip_shotgun"):
+		weaponsManager.request_weapon_change(2)
+		bullet_damage = 6
+		FIRE_RATE = 0.8
+		ammo_display.text = "%d / 5" % shotgun_ammo_count
+	if Input.is_action_just_pressed("equip_pistol"):
+		weaponsManager.request_weapon_change(0)
+		bullet_damage = 2
+		FIRE_RATE = 0.4
+		ammo_display.text = "%d / 15" % pistol_ammo_count
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -229,14 +265,13 @@ func _physics_process(delta): #Occurs every delta frame
 	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
 	
 	#Shoot animation
-	if anim_player.current_animation == "shoot": 
+	if anim_player.is_playing() and anim_player.current_animation in ["shoot", "shoot2", "shoot3", "Reload", "Crouch", "Uncrouch"]:
 		pass
-	elif anim_player.current_animation in ["Crouch", "Uncrouch"]:
-		pass
-	elif input_dir != Vector2.ZERO and is_on_floor():
-		anim_player.play("move")
 	else:
-		anim_player.play("idle")
+		if input_dir != Vector2.ZERO and is_on_floor():
+			anim_player.play("move")
+		else:
+			anim_player.play("idle")
 
 #ANIMATION FUNCTIONS
 @rpc("call_local")
@@ -264,14 +299,19 @@ func receive_damage(damage, from_peer_id, hit_direction):
 	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "shoot":
+	if anim_name == "shoot" or anim_name == "shoot2" or anim_name == "shoot3":
 		anim_player.play("idle")
 		
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
 	anim_player.stop()
-	anim_player.play("shoot")
+	if Global.currentWeapon == "Pistol":
+		anim_player.play("shoot")
+	elif Global.currentWeapon == "Gun2":
+		anim_player.play("shoot2")
+	elif Global.currentWeapon == "Doofenshotgun":
+		anim_player.play("shoot3")
 	$AudioStreamPlayer3D.play()
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
@@ -292,15 +332,44 @@ func _Y_on_mouse_sens_updated(value):
 func upd_ammo(num: int, reload: bool = false):
 	if reload:
 		reloading = true
+		anim_player.play("Reload")
 		crosshair.hide()
 		await get_tree().create_timer(1).timeout
 		crosshair.show()
-		ammo_count = 15
+		if Global.currentWeapon == "Pistol":
+			pistol_ammo_count = 15
+		elif Global.currentWeapon == "Gun2":
+			perry_ammo_count = 30
+		elif Global.currentWeapon == "Doofenshotgun":
+			shotgun_ammo_count = 5
 		reloading = false
 	else:
-		ammo_count += num
-	ammo_display.text = "%d / 15" % ammo_count
+		if Global.currentWeapon == "Pistol":
+			pistol_ammo_count += num
+		elif Global.currentWeapon == "Gun2":
+			perry_ammo_count += num
+		elif Global.currentWeapon == "Doofenshotgun":
+			shotgun_ammo_count += num
+		if Global.currentWeapon == "Pistol":
+			ammo_display.text = "%d / 15" % pistol_ammo_count
+		elif Global.currentWeapon == "Gun2":
+			ammo_display.text = "%d / 30" % perry_ammo_count
+		elif Global.currentWeapon == "Doofenshotgun":
+			ammo_display.text = "%d / 5" % shotgun_ammo_count
+	
 
+@rpc("call_local")
 func _on_speed_pickup_pickedup(value):
 	print("SPEED_PICKUP")
 	speed_pickup_multiplier = value
+	SpeedPickupTimer.start()
+
+func _speed_pickup_multiplier_changed() -> void:
+	if speed_pickup_multiplier == 1:
+		pass
+	else:
+		SpeedPickupTimer.start()
+
+func _speed_pickup_timer_timeout() -> void:
+	print("Speed pickup timed out.")
+	speed_pickup_multiplier = 1

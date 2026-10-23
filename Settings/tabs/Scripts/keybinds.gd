@@ -38,6 +38,14 @@ func set_action_name():
 			label.text = "Crouch"
 		"reload":
 			label.text = "Reload"
+		"flip_gravity":
+			label.text = "Flip Gravity"
+		"equip_perry":
+			label.text = "Equip Perry"
+		"equip_shotun":
+			label.text = "Equip Shotgun"
+		"equip_pistol":
+			label.text = "Equip Pistol"
 		"quit":
 			label.text = "Quit"
 
@@ -140,6 +148,8 @@ func rebind_action_key(event) -> void:
 			Save.game_data["player_jump"] = bind_text
 		"reload":
 			Save.game_data["reload"] = bind_text
+		"flip_gravity":
+			Save.game_data["flip_gravity"] = bind_text
 		"quit":
 			Save.game_data["quit"] = bind_text
 	Save.save_data()

@@ -3,18 +3,18 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b3xnoc6x1ghu7"
-path="res://.godot/imported/Pistol.fbx-62be6655a3422b850f764e27a2021744.scn"
+uid="uid://cf1dcxwv6bvl3"
+path="res://.godot/imported/Pistol.glb-ec374fde5f403e75df2c13fb316e9ab3.scn"
 
 [deps]
 
-source_file="res://models/Pistol.fbx"
-dest_files=["res://.godot/imported/Pistol.fbx-62be6655a3422b850f764e27a2021744.scn"]
+source_file="res://WeaponManager/Weapons/Pistol.glb"
+dest_files=["res://.godot/imported/Pistol.glb-ec374fde5f403e75df2c13fb316e9ab3.scn"]
 
 [params]
 
-nodes/root_type=""
-nodes/root_name=""
+nodes/root_type="Node3D"
+nodes/root_name="Scene Root"
 nodes/root_script=null
 mesh_library/use_node_names_as_mesh_names=false
 array_mesh/deduplicate_surfaces=true
@@ -32,7 +32,7 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=true
+animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
@@ -40,7 +40,6 @@ materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
-fbx/naming_version=2
+gltf/naming_version=0
+gltf/embedded_image_handling=1
+gltf/texture_map_mode=0
