@@ -137,7 +137,7 @@ func _unhandled_input(event):
 		upd_ammo(0, true) # call reload update
 	
 	#ALL SHOOTING STUFF, IT WORKS, DO NOT CHANGE IT UNLESS RHYS
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" or anim_player.current_animation != "shoot2" or anim_player.current_animation != "shoot3":
+	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and anim_player.current_animation != "shoot2" and anim_player.current_animation != "shoot3":
 		var now = Time.get_ticks_msec() / 1000.0
 		if now >= next_shot_time:
 			next_shot_time = now + FIRE_RATE
@@ -233,12 +233,15 @@ func _physics_process(delta): #Occurs every delta frame
 	if Input.is_action_just_pressed("equip_perry"):
 		weaponsManager.request_weapon_change(1)
 		bullet_damage = 1
+		FIRE_RATE = 0.1
 	if Input.is_action_just_pressed("equip_shotgun"):
 		weaponsManager.request_weapon_change(2)
 		bullet_damage = 6
+		FIRE_RATE = 0.8
 	if Input.is_action_just_pressed("equip_pistol"):
 		weaponsManager.request_weapon_change(0)
 		bullet_damage = 2
+		FIRE_RATE = 0.4
 
 	# THIS WAS DONE AT THE TEMPLATE AND CHARLES IS TOO SCARED TO REMOVE IT
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down") # SUPPOSED CONTROLLER SENSITIVITY STUFF
@@ -258,7 +261,9 @@ func _physics_process(delta): #Occurs every delta frame
 	_Y_on_mouse_sens_updated(Save.game_data["Y_Mouse_sens_Multi"])
 	
 	#Shoot animation
-	if anim_player.current_animation != "shoot" and anim_player.current_animation != "shoot2" and anim_player.current_animation != "shoot3" and anim_player.current_animation not in ["Crouch", "Uncrouch"] and anim_player.current_animation != "Reload":
+	if anim_player.is_playing() and anim_player.current_animation in ["shoot", "shoot2", "shoot3", "Reload", "Crouch", "Uncrouch"]:
+		pass
+	else:
 		if input_dir != Vector2.ZERO and is_on_floor():
 			anim_player.play("move")
 		else:
@@ -290,18 +295,18 @@ func receive_damage(damage, from_peer_id, hit_direction):
 	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "shoot" or "shoot2" or "shoot3":
+	if anim_name == "shoot" or anim_name == "shoot2" or anim_name == "shoot3":
 		anim_player.play("idle")
 		
 #MULTIPLAYER STUFF
 @rpc("call_local")
 func play_shoot_effects():
 	anim_player.stop()
-	if Global.currentWeapon == str(0):
+	if Global.currentWeapon == "Pistol":
 		anim_player.play("shoot")
-	elif Global.currentWeapon == str(1):
+	elif Global.currentWeapon == "Gun2":
 		anim_player.play("shoot2")
-	elif Global.currentWeapon == str(2):
+	elif Global.currentWeapon == "Doofenshotgun":
 		anim_player.play("shoot3")
 	$AudioStreamPlayer3D.play()
 	muzzle_flash.restart()
