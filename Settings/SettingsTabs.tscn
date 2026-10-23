@@ -253,6 +253,10 @@ action_name = "player_crouch"
 layout_mode = 2
 action_name = "reload"
 
+[node name="Hotkeys11" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=170263676 instance=ExtResource("2_hc7o7")]
+layout_mode = 2
+action_name = "flip_gravity"
+
 [node name="Hotkeys10" parent="TabContainer/Controls/MarginContainer/ScrollContainer/VBoxContainer" unique_id=829451642 instance=ExtResource("2_hc7o7")]
 layout_mode = 2
 action_name = "quit"
