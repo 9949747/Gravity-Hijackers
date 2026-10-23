@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
+[ext_resource type="Script" uid="uid://b6xpbtgkmjy5g" path="res://scenes/pickup_spawner.gd" id="7_rucky"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_0ddhe")
@@ -297,10 +298,28 @@ volume_db = -10.0
 bus = &"Music"
 
 [node name="Speed_Pickup" parent="." unique_id=1682309210 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.399181, -22.712837, -4.200104)
 
 [node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
+
+[node name="PickupSpawner" type="Node3D" parent="." unique_id=785005362]
+script = ExtResource("7_rucky")
+
+[node name="PickupSpawnTimer" type="Timer" parent="PickupSpawner" unique_id=1869175075]
+wait_time = 3.0
+autostart = true
+
+[node name="SpawnPoints" type="Node3D" parent="PickupSpawner" unique_id=2023186344]
+
+[node name="PickupSpawnMarker1" type="Marker3D" parent="PickupSpawner/SpawnPoints" unique_id=1614592019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.937)
+
+[node name="PickupSpawnMarker2" type="Marker3D" parent="PickupSpawner/SpawnPoints" unique_id=911068801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.57299, 2.8360958, -5.3575516)
+
+[node name="PickupSpawnMarker3" type="Marker3D" parent="PickupSpawner/SpawnPoints" unique_id=416711593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.941606, 24.714828)
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
