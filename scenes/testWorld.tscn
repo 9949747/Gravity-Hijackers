@@ -735,6 +735,9 @@ bus = &"Music"
 [node name="Speed_Pickup" parent="." unique_id=1682309210 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
 
+[node name="SlidingDoors" parent="." unique_id=2083297842 instance=ExtResource("7_t8p5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 5.7)
+[node name="Speed_Pickup2" parent="." unique_id=82090874 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
 [node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
 

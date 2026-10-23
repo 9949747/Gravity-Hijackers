@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://qgmqc0w6qru6"]
+
+[ext_resource type="Script" uid="uid://bkhn6tfpbvp13" path="res://scenes/sliding_doors.gd" id="1_iy36u"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cgwwt"]
+size = Vector3(2, 4, 0.1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_iy36u"]
+data = PackedVector3Array(-1, 2, 0.049999997, 1, 2, 0.049999997, -1, -2, 0.049999997, 1, 2, 0.049999997, 1, -2, 0.049999997, -1, -2, 0.049999997, 1, 2, -0.049999997, -1, 2, -0.049999997, 1, -2, -0.049999997, -1, 2, -0.049999997, -1, -2, -0.049999997, 1, -2, -0.049999997, 1, 2, 0.049999997, 1, 2, -0.049999997, 1, -2, 0.049999997, 1, 2, -0.049999997, 1, -2, -0.049999997, 1, -2, 0.049999997, -1, 2, -0.049999997, -1, 2, 0.049999997, -1, -2, -0.049999997, -1, 2, 0.049999997, -1, -2, 0.049999997, -1, -2, -0.049999997, 1, 2, 0.049999997, -1, 2, 0.049999997, 1, 2, -0.049999997, -1, 2, 0.049999997, -1, 2, -0.049999997, 1, 2, -0.049999997, -1, -2, 0.049999997, 1, -2, 0.049999997, -1, -2, -0.049999997, 1, -2, 0.049999997, 1, -2, -0.049999997, -1, -2, -0.049999997)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_11uem"]
+data = PackedVector3Array(-1, 2, 0.049999997, 1, 2, 0.049999997, -1, -2, 0.049999997, 1, 2, 0.049999997, 1, -2, 0.049999997, -1, -2, 0.049999997, 1, 2, -0.049999997, -1, 2, -0.049999997, 1, -2, -0.049999997, -1, 2, -0.049999997, -1, -2, -0.049999997, 1, -2, -0.049999997, 1, 2, 0.049999997, 1, 2, -0.049999997, 1, -2, 0.049999997, 1, 2, -0.049999997, 1, -2, -0.049999997, 1, -2, 0.049999997, -1, 2, -0.049999997, -1, 2, 0.049999997, -1, -2, -0.049999997, -1, 2, 0.049999997, -1, -2, 0.049999997, -1, -2, -0.049999997, 1, 2, 0.049999997, -1, 2, 0.049999997, 1, 2, -0.049999997, -1, 2, 0.049999997, -1, 2, -0.049999997, 1, 2, -0.049999997, -1, -2, 0.049999997, 1, -2, 0.049999997, -1, -2, -0.049999997, 1, -2, 0.049999997, 1, -2, -0.049999997, -1, -2, -0.049999997)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25vvo"]
+size = Vector3(4, 4, 4)
+
+[node name="SlidingDoors" type="Node3D" unique_id=2083297842]
+script = ExtResource("1_iy36u")
+
+[node name="left" type="MeshInstance3D" parent="." unique_id=1219386191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
+mesh = SubResource("BoxMesh_cgwwt")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="left" unique_id=1886742903]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="left/StaticBody3D" unique_id=1615640232]
+shape = SubResource("ConcavePolygonShape3D_iy36u")
+
+[node name="right" type="MeshInstance3D" parent="." unique_id=1580331201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+mesh = SubResource("BoxMesh_cgwwt")
+skeleton = NodePath("../left")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="right" unique_id=1462316098]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="right/StaticBody3D" unique_id=1149763467]
+shape = SubResource("ConcavePolygonShape3D_11uem")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1365305178]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=541542325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_25vvo")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
