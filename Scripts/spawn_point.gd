@@ -34,9 +34,9 @@ func spawn_player(player: Node3D):
 	player.global_position = global_position
 	if initial_gravity == "Positive":
 		player.rotation.z = 0.0 # upright
-		player.gravity_direction = 1
+		player.up_direction.y = 1
 		player.global_position += Vector3(0, 1, 0)
 	elif initial_gravity == "Negative":
 		player.rotation.z = PI # upsidedown
-		player.gravity_direction = -1
+		player.up_direction.y = -1
 		player.global_position -= Vector3(0, 1, 0)

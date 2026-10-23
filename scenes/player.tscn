@@ -57,7 +57,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 1.51306, 0), Vector3(0, 0.5, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0, -1, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -93,7 +93,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 1, 0), Vector3(0, 0.25, 0)]
+"values": [Vector3(0, -0.5, 0), Vector3(0, -1.25, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -105,110 +105,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 1, 0), Vector3(0, 0.25, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_tuyoq"]
-resource_name = "FlagIconPulse"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Flag/FlagIcon:modulate:a")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [1.0, 0.0, 1.0]
-}
-
-[sub_resource type="Animation" id="Animation_jhgv2"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.51306, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:mesh:height")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:shape:height")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("MeshInstance3D:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("CollisionShape3D:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Flag/FlagIcon:modulate:a")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Flag/FlagIcon:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector3(0, -0.5, 0), Vector3(0, -1.25, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dqkch"]
@@ -224,7 +121,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0.5, 0), Vector3(0, 1.513, 0)]
+"values": [Vector3(0, -1, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -260,7 +157,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0.25, 0), Vector3(0, 1, 0)]
+"values": [Vector3(0, -1.25, 0), Vector3(0, -0.5, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -272,7 +169,23 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0.25, 0), Vector3(0, 1, 0)]
+"values": [Vector3(0, -1.25, 0), Vector3(0, -0.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "flag_icon_pulse"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Flag/FlagIcon:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
 }
 
 [sub_resource type="Animation" id="Animation_knepc"]
@@ -353,12 +266,65 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p6wdk"]
 _data = {
 &"Crouch": SubResource("Animation_qhqgy"),
-&"FlagIconPulse": SubResource("Animation_tuyoq"),
-&"RESET": SubResource("Animation_jhgv2"),
 &"Uncrouch": SubResource("Animation_dqkch"),
+&"flag_icon_pulse": SubResource("Animation_tuyoq"),
 &"idle": SubResource("Animation_knepc"),
 &"move": SubResource("Animation_qcgne"),
 &"shoot": SubResource("Animation_efeb8")
+}
+
+[sub_resource type="Animation" id="Animation_y4r1p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_d2wvv"]
+resource_name = "flip_upright"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:rotation:z")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(-3, 1),
+"update": 0,
+"values": [-3.142, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3v2ag"]
+resource_name = "flip_upsidedown"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:rotation:z")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(-3, 1),
+"update": 0,
+"values": [0.0, 3.142]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jej6c"]
+_data = {
+&"RESET": SubResource("Animation_y4r1p"),
+&"flip_upright": SubResource("Animation_d2wvv"),
+&"flip_upsidedown": SubResource("Animation_3v2ag")
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hn37q"]
@@ -410,15 +376,14 @@ collision_layer = 3
 script = ExtResource("1_2v3wm")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 mesh = SubResource("CapsuleMesh_xk8km")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2073760843]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("CapsuleShape3D_67y6s")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1853814499]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1804038237]
 target_position = Vector3(0, 0, -50)
@@ -439,19 +404,24 @@ draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
-autoplay = &"FlagIconPulse"
+autoplay = &"flag_icon_pulse"
 playback_default_blend_time = 0.05
+
+[node name="FlipAnimationPlayer" type="AnimationPlayer" parent="." unique_id=1207029343]
+root_node = NodePath("../AnimationPlayer")
+libraries/ = SubResource("AnimationLibrary_jej6c")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=374552710]
 replication_config = SubResource("SceneReplicationConfig_hn37q")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1619676891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 stream = ExtResource("4_dqkch")
 volume_db = -20.0
 bus = &"SFX"
 
 [node name="Gun2" parent="." unique_id=693693121 instance=ExtResource("5_qlg0r")]
-transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -0.62836176, 0.5720277, 0.3218732)
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -0.62836176, -0.9279723, 0.3218732)
 visible = false
 
 [node name="GravFlipTimer" type="Timer" parent="." unique_id=187622579]
@@ -463,13 +433,14 @@ wait_time = 5.0
 one_shot = true
 
 [node name="UsernameLabel" type="Label3D" parent="." unique_id=1144511956]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9000001, 0)
 billboard = 1
 text = "Username"
 font_size = 70
 outline_size = 30
 
 [node name="Flag" type="Node3D" parent="." unique_id=189484732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 visible = false
 
 [node name="PoleMesh" type="MeshInstance3D" parent="Flag" unique_id=2071196725]
@@ -485,8 +456,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_smehm")
 
 [node name="FlagIcon" type="Sprite3D" parent="Flag" unique_id=1892360853]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 3.5, 0)
-modulate = Color(1, 1, 1, 0)
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 4, 0)
 billboard = 1
 no_depth_test = true
 fixed_size = true

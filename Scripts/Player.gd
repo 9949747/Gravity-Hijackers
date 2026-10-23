@@ -3,6 +3,7 @@ extends CharacterBody3D
 #Assets
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
+@onready var flip_anim_player = $FlipAnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var camera_3d: Camera3D = $Camera3D
@@ -44,7 +45,6 @@ var bullet_damage = 2
 var SPEED = 5.5
 var JUMP_VELOCITY = 10
 var gravity_strengths = [3, 1.5, 0.75, 0.375]
-var gravity_direction = 1
 var knockback_strength = 12
 const max_health = 20
 @export var health = max_health
@@ -80,7 +80,7 @@ func _ready(): #Plays on first entering the game
 	health_bar.max_value = max_health
 	health_bar.value = max_health
 
-func _exit_tree() -> void: #for when you leave the actual game for the main menu (Can't actually do this yet)
+func _exit_tree() -> void: #for when you leave the actual game for the main menu
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_input(event):
@@ -178,7 +178,7 @@ func _physics_process(delta): #Occurs every delta frame
 	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var dir_change_strength = SPEED if (is_on_floor() and gravity_direction == 1) or (is_on_ceiling() and gravity_direction == -1) else 10 * gravity_strengths[int(grav_slider.value)] * delta
+	var dir_change_strength = SPEED if is_on_floor() else 10 * gravity_strengths[int(grav_slider.value)] * delta
 	if direction:
 		velocity.x = move_toward(velocity.x, direction.x * SPEED, dir_change_strength)
 		velocity.z = move_toward(velocity.z, direction.z * SPEED, dir_change_strength)
@@ -188,20 +188,23 @@ func _physics_process(delta): #Occurs every delta frame
 	
 	#JUMPING AND GRAVITY
 	if Input.is_action_just_pressed("flip_gravity") and grav_flip_timer.time_left == 0:
-		gravity_direction = -gravity_direction
+		if up_direction.y == -1: flip_anim_player.play("flip_upright")
+		elif up_direction.y == 1: flip_anim_player.play("flip_upsidedown")
+		
+		up_direction.y = -up_direction.y # turns the ceiling into the floor/floor into the ceiling
 		grav_flip_timer.start()
 	
-	rotation.z = lerp_angle(rotation.z, PI if gravity_direction == -1 else 0.0, 5*delta)
+	rotation.x = 0 # this stops flipping from breaking if the player turns their camera mid animation
 	if grav_flip_timer.time_left == 0:
 		flip_cd_label.text = ""
 	else:
 		flip_cd_label.text = "CD %.2fs" % grav_flip_timer.time_left
 	
-	if (not is_on_floor() and gravity_direction == 1) or (not is_on_ceiling() and gravity_direction == -1):
-		velocity.y -= default_gravity * gravity_direction * gravity_strengths[int(grav_slider.value)] * delta
+	if not is_on_floor(): # gravity
+		velocity.y -= default_gravity * up_direction.y * gravity_strengths[int(grav_slider.value)] * delta
 	
-	if Input.is_action_pressed("player_jump") and ((is_on_floor() and gravity_direction == 1) or (is_on_ceiling() and gravity_direction == -1)):
-		velocity.y = JUMP_VELOCITY if is_on_floor() else -JUMP_VELOCITY if is_on_ceiling() else int(velocity.y) # wrap velocity.y in int to get ternary warnings to pipe down
+	if Input.is_action_pressed("player_jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY * up_direction.y
 
 	#SPRINTING AND CROUCHING
 	if Input.is_action_pressed("player_sprint"):

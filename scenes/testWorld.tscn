@@ -9,7 +9,6 @@
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
 [ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
-[ext_resource type="PackedScene" uid="uid://c4qj62qhgutw8" path="res://scenes/BoxTest.tscn" id="10_ftq4a"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_0ddhe")
@@ -225,9 +224,9 @@ show_percentage = false
 layout_mode = 0
 offset_left = 1016.0
 offset_top = 944.0
-offset_right = 1896.0
+offset_right = 1240.0
 offset_bottom = 999.0
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -784,10 +783,6 @@ flag_team = 2
 
 [node name="Flag4" parent="." unique_id=711811821 instance=ExtResource("3_0ddhe")]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -25, 16, 25)
-
-[node name="BoxTest" parent="." unique_id=1018952206 instance=ExtResource("10_ftq4a")]
-transform = Transform3D(-0.5449388, -0.83920527, 0, 0.83920527, -0.5449388, 0, 0, 0, 1, 1.0217029, 1.315369, 0.021685392)
-visible = false
 
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_button_down"]
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_button_down"]
