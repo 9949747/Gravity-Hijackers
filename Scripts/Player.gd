@@ -14,6 +14,8 @@ extends CharacterBody3D
 @onready var health_bar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
 @onready var weaponsManager = $weaponsManager
+@onready var SpeedPickupTimer = $SpeedPickupTimer
+
 @onready var leaderboard = Global.worldNode.leaderboard
 @onready var esc_menu = Global.worldNode.esc_menu
 
@@ -26,7 +28,9 @@ extends CharacterBody3D
 
 #Pickups
 @onready var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-@onready var speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+@onready var speed_pickups = get_tree().get_nodes_in_group("speed_pickups")
+#speed_pickup_scene_instantiated = get_tree().get_nodes_in_group("speed_pickups")
+#get_parent().get_node("Speed_Pickup")
 @onready var speed_pickup_multiplier = 1
 
 #Crouching
@@ -71,8 +75,11 @@ func _enter_tree(): #Starts the game, gives multiplayer authority for your contr
 	set_multiplayer_authority(str(name).to_int())
 
 func _ready(): #Plays on first entering the game
-	#speed_pickup_scene_instantiated.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup) #WIP, TALK TO JAYDAN
+	for pickup in speed_pickups:
+		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
 	if not is_multiplayer_authority(): return
+	
+	SpeedPickupTimer.timeout.connect(_speed_pickup_timer_timeout)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true
@@ -176,9 +183,10 @@ func _unhandled_input(event):
 				hit_obj.receive_damage.rpc_id(hit_obj.get_multiplayer_authority(), damage, multiplayer.get_unique_id(), hit_direction)
 
 func _physics_process(delta): #Occurs every delta frame
-	speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
+	#speed_pickup_scene_instantiated = speed_pickup_scene.instantiate
 	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
+	
 	
 	# Get the input direction and handle the movement/deceleration.
 	#MOVEMENT AND CONTROLS
@@ -341,6 +349,18 @@ func upd_ammo(num: int, reload: bool = false):
 			ammo_display.text = "%d / 5" % shotgun_ammo_count
 	
 
+@rpc("call_local")
 func _on_speed_pickup_pickedup(value):
 	print("SPEED_PICKUP")
 	speed_pickup_multiplier = value
+	SpeedPickupTimer.start()
+
+func _speed_pickup_multiplier_changed() -> void:
+	if speed_pickup_multiplier == 1:
+		pass
+	else:
+		SpeedPickupTimer.start()
+
+func _speed_pickup_timer_timeout() -> void:
+	print("Speed pickup timed out.")
+	speed_pickup_multiplier = 1

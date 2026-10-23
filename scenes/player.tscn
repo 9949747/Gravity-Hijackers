@@ -726,6 +726,10 @@ one_shot = true
 [node name="weaponsManager" type="Node" parent="." unique_id=397170417 groups=["weaponsManager"]]
 script = ExtResource("7_fjrip")
 
+[node name="SpeedPickupTimer" type="Timer" parent="." unique_id=1740781716]
+wait_time = 25.0
+one_shot = true
+
 [node name="UsernameLabel" type="Label3D" parent="." unique_id=1144511956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3875158, 0)
 billboard = 1
@@ -734,3 +738,4 @@ font_size = 70
 outline_size = 30
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="SpeedPickupTimer" to="." method="_speed_pickup_timer_timeout"]
