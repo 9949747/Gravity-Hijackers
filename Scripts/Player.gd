@@ -74,7 +74,7 @@ func _ready(): #Plays on first entering the game
 	
 	username = Global.worldNode.username_entry.text
 	$UsernameLabel.text = username
-	$UsernameLabel.hide() # local
+	$UsernameLabel.hide() # hide locally
 	
 	health_bar.max_value = max_health
 	health_bar.value = max_health
@@ -262,7 +262,8 @@ func receive_damage(damage, from_peer_id, hit_direction):
 	if health <= 0:
 		deaths += 1
 		health = max_health
-		position = Vector3.ZERO
+		if is_in_group("RedTeam"): get_tree().get_nodes_in_group("RedSpawn").pick_random().respawn_player(self)
+		elif is_in_group("BlueTeam"): get_tree().get_nodes_in_group("BlueSpawn").pick_random().respawn_player(self)
 		if current_held_flag:
 			current_held_flag.return_flag.rpc()
 	health_bar.value = health

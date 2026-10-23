@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dr07vvyi1xjlk"]
+
+[ext_resource type="Script" uid="uid://f2gf6tm65odl" path="res://Scripts/spawn_point.gd" id="1_2epfp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ys5s5"]
+size = Vector3(2, 0.1, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4cnv"]
+albedo_color = Color(0, 0, 1, 1)
+
+[node name="BlueSpawnPoint" type="Node3D" unique_id=204800776 groups=["BlueSpawn", "RedSpawn"]]
+script = ExtResource("1_2epfp")
+
+[node name="Platform" type="MeshInstance3D" parent="." unique_id=288905711]
+mesh = SubResource("BoxMesh_ys5s5")
+surface_material_override/0 = SubResource("StandardMaterial3D_b4cnv")

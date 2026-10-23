@@ -479,6 +479,7 @@ font_size = 70
 outline_size = 30
 
 [node name="Flag" type="Node3D" parent="." unique_id=189484732]
+visible = false
 
 [node name="PoleMesh" type="MeshInstance3D" parent="Flag" unique_id=2071196725]
 transform = Transform3D(-0.8660254, -0.5, 7.5710346e-08, -0.5, 0.8660254, 4.371139e-08, -8.742278e-08, 0, -1, 0.048205085, 1.1468911, 0.55)
