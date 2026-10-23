@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
 [ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
+[ext_resource type="PackedScene" uid="uid://c4qj62qhgutw8" path="res://scenes/BoxTest.tscn" id="10_ftq4a"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_0ddhe")
@@ -30,7 +31,7 @@ adjustment_saturation = 2.21
 bg_color = Color(1, 0.117647, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmecq"]
-bg_color = Color(0.00392157, 1, 0, 1)
+bg_color = Color(0.003921569, 1, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ddhe"]
 bg_color = Color(0.16565639, 0.16565642, 0.1656563, 1)
@@ -74,15 +75,15 @@ properties/7/replication_mode = 1
 [node name="World" type="Node" unique_id=1730723652]
 script = ExtResource("1_rucky")
 
-[node name="DirectionalLight3DLower" type="DirectionalLight3D" parent="." unique_id=1539882701]
-transform = Transform3D(-0.8660249, -0.433013, 0.25, 0, 0.5, 0.8660252, -0.5, 0.75, -0.4330125, 0, 0.3, 0)
-light_color = Color(0, 1, 1, 1)
+[node name="DirectionalLight3DBlue" type="DirectionalLight3D" parent="." unique_id=1539882701]
+transform = Transform3D(-0.8660249, -0.433013, 0.25, 0, 0.5, 0.8660252, -0.5, 0.75, -0.4330125, 0, 1, 0)
+light_color = Color(0.75, 0.75, 1, 1)
 light_energy = 2.936
 sky_mode = 1
 
-[node name="DirectionalLight3DUpper" type="DirectionalLight3D" parent="." unique_id=797478212]
-transform = Transform3D(-0.8660254, 0.43301278, 0.24999999, 0, 0.49999994, -0.86602545, -0.50000006, -0.75, -0.4330126, 0, 20.3, 0)
-light_color = Color(1, 0, 0, 1)
+[node name="DirectionalLight3DRed" type="DirectionalLight3D" parent="." unique_id=797478212]
+transform = Transform3D(-0.8660254, 0.43301278, 0.24999999, 0, 0.49999994, -0.86602545, -0.50000006, -0.75, -0.4330126, 0, 22, 0)
+light_color = Color(1, 0.55, 0.55, 1)
 light_energy = 2.0
 sky_mode = 1
 
@@ -210,7 +211,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1013.0
+offset_left = 1016.0
 offset_top = 999.0
 offset_right = -24.5
 offset_bottom = -24.5
@@ -219,6 +220,16 @@ grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_ujyws")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cmecq")
 show_percentage = false
+
+[node name="SpawnImmunityLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1257765546]
+layout_mode = 0
+offset_left = 1016.0
+offset_top = 944.0
+offset_right = 1896.0
+offset_bottom = 999.0
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AmmoDisplay" type="Label" parent="CanvasLayer/HUD" unique_id=615191762]
 layout_mode = 0
@@ -729,17 +740,16 @@ _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
 
 [node name="Flag" parent="." unique_id=1294043018 instance=ExtResource("3_0ddhe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7000003, 5.3, -4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0000005, 5, -5)
 flag_team = 2
 
 [node name="Flag2" parent="." unique_id=441726338 instance=ExtResource("3_0ddhe")]
-transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5.4, 15.3, 5.7000003)
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5, 18, 5.0000005)
 
 [node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66145325)
 
 [node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
-transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, -0.372, 20.289, 0.661)
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 23, 0)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=658871929]
 stream = ExtResource("6_8b5ia")
@@ -753,20 +763,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.2001
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
 
 [node name="BlueSpawnPoint2" parent="." unique_id=204800776 instance=ExtResource("9_lwfgy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -25)
 
 [node name="BlueSpawnPoint" parent="." unique_id=1109644590 instance=ExtResource("9_lwfgy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2, 0)
 
 [node name="RedSpawnPoint" parent="." unique_id=969224642 instance=ExtResource("9_lwfgy")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 20.2, -2.1855695e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 20.95, 0)
 initial_gravity = "Negative"
 spawn_team = 1
 
 [node name="RedSpawnPoint2" parent="." unique_id=1051212620 instance=ExtResource("9_lwfgy")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 20.2, 2.1855695e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.95, 25)
 initial_gravity = "Negative"
 spawn_team = 1
+
+[node name="Flag3" parent="." unique_id=1380935449 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 7, -25)
+flag_team = 2
+
+[node name="Flag4" parent="." unique_id=711811821 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -25, 16, 25)
+
+[node name="BoxTest" parent="." unique_id=1018952206 instance=ExtResource("10_ftq4a")]
+transform = Transform3D(-0.5449388, -0.83920527, 0, 0.83920527, -0.5449388, 0, 0, 0, 1, 1.0217029, 1.315369, 0.021685392)
+visible = false
 
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_button_down"]
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_button_down"]

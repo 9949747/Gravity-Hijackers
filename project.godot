@@ -60,6 +60,8 @@ Player=""
 speed_pickups=""
 BlueTeam=""
 RedTeam=""
+BlueSpawn=""
+RedSpawn=""
 
 [input]
 

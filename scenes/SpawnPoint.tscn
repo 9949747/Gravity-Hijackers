@@ -5,12 +5,12 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ys5s5"]
 size = Vector3(2, 0.1, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4cnv"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2epfp"]
 albedo_color = Color(0, 0, 1, 1)
 
-[node name="BlueSpawnPoint" type="Node3D" unique_id=204800776 groups=["BlueSpawn", "RedSpawn"]]
+[node name="BlueSpawnPoint" type="Node3D" unique_id=204800776]
 script = ExtResource("1_2epfp")
 
 [node name="Platform" type="MeshInstance3D" parent="." unique_id=288905711]
 mesh = SubResource("BoxMesh_ys5s5")
-surface_material_override/0 = SubResource("StandardMaterial3D_b4cnv")
+surface_material_override/0 = SubResource("StandardMaterial3D_2epfp")

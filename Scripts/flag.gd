@@ -10,12 +10,10 @@ enum Teams {RED = 1, BLUE = 2}
 		update_editor_visual()
 
 func _ready():
-	print("%s is connecting signal" % multiplayer.get_unique_id())
 	multiplayer.peer_connected.connect(load_capturing_player_node)
 
 func load_capturing_player_node(peer_id):
 	if not is_multiplayer_authority(): return
-	print("%s joined for %s" % [peer_id, multiplayer.get_unique_id()])
 	if capturing_player_node:
 		pick_up_flag.rpc_id(peer_id, null, get_path_to(capturing_player_node))
 

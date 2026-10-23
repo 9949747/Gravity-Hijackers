@@ -11,7 +11,8 @@ extends CharacterBody3D
 @onready var ammo_display = hud.get_node("AmmoDisplay")
 @onready var grav_slider = hud.get_node("GravitySlider")
 @onready var flip_cd_label = hud.get_node("FlipCooldownLabel")
-@onready var health_bar = Global.worldNode.health_bar
+@onready var spawn_immunity_label = hud.get_node("SpawnImmunityLabel")
+@onready var health_bar: ProgressBar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
 @onready var leaderboard = Global.worldNode.leaderboard
 @onready var esc_menu = Global.worldNode.esc_menu
@@ -239,6 +240,15 @@ func _physics_process(delta): #Occurs every delta frame
 		anim_player.play("move")
 	else:
 		anim_player.play("idle")
+	
+	var health_color = StyleBoxFlat.new()
+	if $SpawnImmunityTimer.time_left == 0:
+		spawn_immunity_label.text = ""
+		health_color.bg_color = Color(0, 1, 0)
+	else:
+		spawn_immunity_label.text = "Protected %.2fs" % $SpawnImmunityTimer.time_left
+		health_color.bg_color = Color(0, 1, 1)
+	health_bar.add_theme_stylebox_override("fill", health_color)
 
 #ANIMATION FUNCTIONS
 @rpc("call_local")
@@ -257,13 +267,16 @@ func crouch():
 
 @rpc("any_peer")
 func receive_damage(damage, from_peer_id, hit_direction):
+	if $SpawnImmunityTimer.time_left > 0: return
+	
 	velocity = hit_direction * knockback_strength
 	health -= damage
 	if health <= 0:
 		deaths += 1
 		health = max_health
-		if is_in_group("RedTeam"): get_tree().get_nodes_in_group("RedSpawn").pick_random().respawn_player(self)
-		elif is_in_group("BlueTeam"): get_tree().get_nodes_in_group("BlueSpawn").pick_random().respawn_player(self)
+		if is_in_group("RedTeam"): get_tree().get_nodes_in_group("RedSpawn").pick_random().spawn_player(self)
+		elif is_in_group("BlueTeam"): get_tree().get_nodes_in_group("BlueSpawn").pick_random().spawn_player(self)
+		$SpawnImmunityTimer.start()
 		if current_held_flag:
 			current_held_flag.return_flag.rpc()
 	health_bar.value = health

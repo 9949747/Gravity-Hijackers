@@ -29,7 +29,7 @@ func update_editor_visual():
 	
 	$Platform.set_surface_override_material(0, spawn_color)
 
-func respawn_player(player: Node3D):
+func spawn_player(player: Node3D):
 	player.velocity = Vector3.ZERO
 	player.global_position = global_position
 	if initial_gravity == "Positive":

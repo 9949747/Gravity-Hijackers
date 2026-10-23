@@ -150,15 +150,18 @@ func update_player_data(peer_id, data):
 		plr_mat.albedo_color = Color(1, 0, 0)
 		flag_icon.modulate = Color(0, 0, 1)
 		flag_color.albedo_color = Color(0, 0, 1)
+		get_tree().get_nodes_in_group("RedSpawn").pick_random().spawn_player(player_node)
 	elif player_node.is_in_group("BlueTeam"):
 		plr_mat.albedo_color = Color(0, 0, 1)
 		flag_icon.modulate = Color(1, 0, 0)
 		flag_color.albedo_color = Color(1, 0, 0)
+		get_tree().get_nodes_in_group("BlueSpawn").pick_random().spawn_player(player_node)
 	else:
 		print("player %s has not been assigned a team" % peer_id)
 	
 	player_node.get_node("MeshInstance3D").set_surface_override_material(0, plr_mat)
 	player_node.get_node("Flag/FlagMesh").set_surface_override_material(0, flag_color)
+	
 
 @rpc
 func remove_player_data(peer_id):
