@@ -87,6 +87,7 @@ material = SubResource("StandardMaterial3D_vahqy")
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1142465909]
 transform = Transform3D(-4.4240575e-10, -0.21545705, 0, 0.010121063, -9.417926e-09, 0, 0, 0, 0.012315229, 0.28983793, 0, 0)
 operation = 2
+sides = 17
 smooth_faces = false
 material = SubResource("StandardMaterial3D_cug6a")
 

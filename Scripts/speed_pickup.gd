@@ -7,20 +7,20 @@ func _ready() -> void:
 	add_to_group("speed_pickups")
 
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
 
 func _on_area_3d_body_entered(body: CharacterBody3D) -> void:
-	print("Entered.")
-	#if is_multiplayer_authority():
-	if body.is_in_group ("Player"):
-		print("Hello, Player!")
-		speed_pickup_pickedup.emit(2)
-		print("Emitted.")
-		queue_free()
+	if body.is_multiplayer_authority():
+		print("Entered.")
+		#if is_multiplayer_authority():
+		if body.is_in_group ("Player"):
+			print("Hello, Player!")
+			speed_pickup_pickedup.emit(2)
+			print("Emitted.")
+			queue_free()
 	else:
-		pass # Maybe "queue_free"?
-
-# REMINDER TO PUT 'add to group' CODE.
+		pass
