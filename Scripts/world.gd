@@ -19,6 +19,7 @@ var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var tracked = false
 var player
 var connected_player_ids = []
+var random_camera_direction = Vector3(randf_range(-10, 10), randf_range(-10, 10), randf_range(-10, 10))
 
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
@@ -91,7 +92,7 @@ func upnp_setup():
 	print("Success! Join Address: %s" % upnp.query_external_address())
 
 func _physics_process(delta):
-	menu_camera.rotation_degrees += Vector3(7.5 * delta, 4 * delta, 5 * delta)
+	menu_camera.rotation_degrees += random_camera_direction * delta
 	if tracked and player:
 		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
