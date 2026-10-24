@@ -3,12 +3,13 @@ extends Node
 signal player_added(peer_id)
 
 @onready var main_menu = $CanvasLayer/MainMenu
-@onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
-@onready var username_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/UsernameEntry
+@onready var address_entry = $CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer/AddressEntry
+@onready var username_entry = $CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer/UsernameEntry
 @onready var hud = $CanvasLayer/HUD
 @onready var leaderboard = $CanvasLayer/Leaderboard
 @onready var esc_menu = $CanvasLayer/EscMenu
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
+@onready var menu_camera = $MenuCamera
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -90,6 +91,7 @@ func upnp_setup():
 	print("Success! Join Address: %s" % upnp.query_external_address())
 
 func _physics_process(delta):
+	menu_camera.rotation_degrees += Vector3(7.5 * delta, 4 * delta, 5 * delta)
 	if tracked and player:
 		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
@@ -166,15 +168,3 @@ func update_player_data(peer_id, data):
 @rpc
 func remove_player_data(peer_id):
 	pass
-
-'''
-func radio_enable(event: InputEvent) -> void:
-	print("1")
-	if event.is_action_just_pressed("radio_toggle"):
-		if radio.visible == false:
-			radio.show()
-			radio.visible = true
-		else:
-			radio.hide()
-			radio.visible = false
-'''

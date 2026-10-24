@@ -2,6 +2,8 @@
 extends Area3D 
 
 var capturing_player_node: Node3D # the player who is currently capturing this flag
+@onready var flag_status_label: Label = get_tree().current_scene.get_node("CanvasLayer/HUD/FlagStatus")
+@onready var status_timout: Timer = flag_status_label.get_node("Timer")
 
 enum Teams {RED = 1, BLUE = 2}
 @export var flag_team: Teams = Teams.RED:
@@ -11,6 +13,7 @@ enum Teams {RED = 1, BLUE = 2}
 
 func _ready():
 	multiplayer.peer_connected.connect(load_capturing_player_node)
+	status_timout.timeout.connect(func(): flag_status_label.hide())
 
 func load_capturing_player_node(peer_id):
 	if not is_multiplayer_authority(): return
@@ -32,19 +35,28 @@ func update_editor_visual():
 	$FlagMesh.set_surface_override_material(0, flag_color)
 
 @rpc("any_peer", "call_local") # rpc called by client who dies with a flag
-func return_flag():
+func return_flag(was_captured: bool = false):
 	if not capturing_player_node: return # ensure new players dont try access capturing_player_node
 	
 	show()
 	capturing_player_node.get_node("Flag").hide()
 	capturing_player_node.current_held_flag = null
 	capturing_player_node = null
+	
+	if multiplayer.is_server():
+		status_timout.start()
+		flag_status_label.show()
+		
+		if was_captured:
+			flag_status_label.text = "The %s team has captured a flag" % "red" if flag_team == Teams.BLUE else "blue"
+		else:
+			flag_status_label.text = "The %s team has recovered a flag" % "blue" if flag_team == Teams.BLUE else "red"
 
 func secure_captured_flag(player: Node3D):
 	if not player.current_held_flag: return # player must have a flag to secure it
 	
 	player.flags += 1 # only capturing player has auth over flags val
-	player.current_held_flag.return_flag()
+	player.current_held_flag.return_flag(true)
 
 @rpc
 func pick_up_flag(player: Node3D, player_path: NodePath = ""):
@@ -57,6 +69,11 @@ func pick_up_flag(player: Node3D, player_path: NodePath = ""):
 	capturing_player_node = player
 	if not player.is_multiplayer_authority(): # only allow other peers to see flag indication
 		player.get_node("Flag").show()
+	
+	if multiplayer.is_server():
+		status_timout.start()
+		flag_status_label.show()
+		flag_status_label.text = "The %s team has stolen a flag" % "red" if flag_team == Teams.BLUE else "blue"
 
 func _on_body_entered(body: Node3D): # let host handle all body entered signals
 	if capturing_player_node: return # cant secure a flag if local flag is captured, also cant pick up a flag that has already been picked up
