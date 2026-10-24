@@ -43,14 +43,25 @@ func return_flag(was_captured: bool = false):
 	capturing_player_node.current_held_flag = null
 	capturing_player_node = null
 	
-	if multiplayer.is_server():
-		status_timout.start()
-		flag_status_label.show()
-		
-		if was_captured:
-			flag_status_label.text = "The %s team has captured a flag" % "red" if flag_team == Teams.BLUE else "blue"
-		else:
-			flag_status_label.text = "The %s team has recovered a flag" % "blue" if flag_team == Teams.BLUE else "red"
+	if not multiplayer.is_server():
+		return
+	status_timout.start()
+	flag_status_label.show()
+	
+	if was_captured:
+		if flag_team == Teams.BLUE:
+			flag_status_label.text = "The red team has captured a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("ff2626"))
+		elif flag_team == Teams.RED:
+			flag_status_label.text = "The blue team has captured a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("4040ff"))
+	elif not was_captured:
+		if flag_team == Teams.BLUE:
+			flag_status_label.text = "The blue team has recovered a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("4040ff"))
+		elif flag_team == Teams.RED:
+			flag_status_label.text = "The red team has recovered a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("ff2626"))
 
 func secure_captured_flag(player: Node3D):
 	if not player.current_held_flag: return # player must have a flag to secure it
@@ -73,7 +84,12 @@ func pick_up_flag(player: Node3D, player_path: NodePath = ""):
 	if multiplayer.is_server():
 		status_timout.start()
 		flag_status_label.show()
-		flag_status_label.text = "The %s team has stolen a flag" % "red" if flag_team == Teams.BLUE else "blue"
+		if flag_team == Teams.BLUE:
+			flag_status_label.text = "The red team has stolen a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("ff2626"))
+		elif flag_team == Teams.RED:
+			flag_status_label.text = "The blue team has stolen a flag"
+			flag_status_label.add_theme_color_override("font_color", Color("4040ff"))
 
 func _on_body_entered(body: Node3D): # let host handle all body entered signals
 	if capturing_player_node: return # cant secure a flag if local flag is captured, also cant pick up a flag that has already been picked up
