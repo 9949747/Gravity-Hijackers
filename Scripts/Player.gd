@@ -160,8 +160,7 @@ func _unhandled_input(event):
 				var hit_coords = raycast.get_collision_point()
 				var hit_direction = (hit_coords - raycast.global_position).normalized()
 				var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-				var headshot = true if (relative_hit_coords.y >= -0.1 and up_direction.y == 1) or (relative_hit_coords.y <= 0.1 and up_direction.y == -1) else false
-				
+				var headshot = true if (relative_hit_coords.y >= -0.1 and hit_obj.up_direction.y == 1) or (relative_hit_coords.y <= 0.1 and hit_obj.up_direction.y == -1) else false
 				# avoids nesting, also prevents friendly fire
 				if !hit_obj.is_in_group("Player") or (is_in_group("RedTeam") and hit_obj.is_in_group("RedTeam")) or (is_in_group("BlueTeam") and hit_obj.is_in_group("BlueTeam")):
 					return

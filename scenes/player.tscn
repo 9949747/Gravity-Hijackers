@@ -344,6 +344,9 @@ properties/9/replication_mode = 1
 properties/10/path = NodePath("CollisionShape3D:disabled")
 properties/10/spawn = true
 properties/10/replication_mode = 1
+properties/11/path = NodePath(".:up_direction")
+properties/11/spawn = true
+properties/11/replication_mode = 1
 
 [sub_resource type="Animation" id="Animation_tuyoq"]
 resource_name = "flag_icon_pulse"
