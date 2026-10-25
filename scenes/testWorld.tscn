@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scripts/world.gd" id="1_rucky"]
 [ext_resource type="Texture2D" uid="uid://c4dk7vc0tehju" path="res://assets/images/Skybox1.jpg" id="2_0ddhe"]
+[ext_resource type="PackedScene" uid="uid://dgfvj3x00eovb" path="res://scenes/Flag.tscn" id="3_0ddhe"]
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_lwfgy"]
 [ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://Scripts/leaderboard.gd" id="4_rucky"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
-[ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
+[ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_0ddhe")
@@ -20,15 +21,25 @@ background_mode = 2
 sky = SubResource("Sky_rucky")
 sky_custom_fov = 96.8
 adjustment_enabled = true
-adjustment_brightness = 0.61
-adjustment_contrast = 1.05
-adjustment_saturation = 2.21
+adjustment_brightness = 0.65
+adjustment_saturation = 2.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lwfgy"]
+properties/0/path = NodePath(".:text")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:visible")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:theme_override_colors/font_color")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujyws"]
 bg_color = Color(1, 0.117647, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmecq"]
-bg_color = Color(0.00392157, 1, 0, 1)
+bg_color = Color(0.003921569, 1, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ddhe"]
 bg_color = Color(0.16565639, 0.16565642, 0.1656563, 1)
@@ -72,20 +83,20 @@ properties/7/replication_mode = 1
 [node name="World" type="Node" unique_id=1730723652]
 script = ExtResource("1_rucky")
 
-[node name="DirectionalLight3DLower" type="DirectionalLight3D" parent="." unique_id=1539882701]
-transform = Transform3D(-0.8660249, -0.433013, 0.25, 0, 0.5, 0.8660252, -0.5, 0.75, -0.4330125, 0, 0.3, 0)
-light_color = Color(0, 1, 1, 1)
+[node name="DirectionalLight3DBlue" type="DirectionalLight3D" parent="." unique_id=1539882701]
+transform = Transform3D(-0.8660249, -0.433013, 0.25, 0, 0.5, 0.8660252, -0.5, 0.75, -0.4330125, 0, 1, 0)
+light_color = Color(0.75, 0.75, 1, 1)
 light_energy = 2.936
-sky_mode = 1
-
-[node name="DirectionalLight3DUpper" type="DirectionalLight3D" parent="." unique_id=797478212]
-transform = Transform3D(-0.8660254, 0.43301278, 0.24999999, 0, 0.49999994, -0.86602545, -0.50000006, -0.75, -0.4330126, 0, 20.3, 0)
-light_color = Color(1, 0, 0, 1)
-light_energy = 2.0
 sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1137519621]
 environment = SubResource("Environment_0ddhe")
+
+[node name="DirectionalLight3DRed" type="DirectionalLight3D" parent="." unique_id=797478212]
+transform = Transform3D(-0.8660254, 0.43301278, 0.24999999, 0, 0.49999994, -0.86602545, -0.50000006, -0.75, -0.4330126, 0, 22, 0)
+light_color = Color(1, 0.55, 0.55, 1)
+light_energy = 2.0
+sky_mode = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=781029339]
 
@@ -98,9 +109,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -180.25
-offset_top = -58.5
+offset_top = -84.0
 offset_right = 180.25
-offset_bottom = 58.5
+offset_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -125,55 +136,101 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Exit game"
 
-[node name="MainMenu" type="PanelContainer" parent="CanvasLayer" unique_id=1311570075]
+[node name="Close" type="Button" parent="CanvasLayer/EscMenu/MarginContainer/VBoxContainer" unique_id=1752884965]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Close"
+
+[node name="MainMenu" type="Control" parent="CanvasLayer" unique_id=481625808]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 423.0
-offset_top = 227.0
-offset_right = -423.0
-offset_bottom = -227.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu" unique_id=1657551070]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer" unique_id=326002742]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1369319182]
-layout_mode = 2
-text = "Main Menu"
+[node name="Gravity" type="Label" parent="CanvasLayer/MainMenu" unique_id=636952431]
+layout_mode = 1
+offset_left = 512.0
+offset_top = 256.0
+offset_right = 860.0
+offset_bottom = 393.0
+theme_override_colors/font_color = Color(0.25, 0.25, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_constants/shadow_outline_size = 20
+theme_override_font_sizes/font_size = 100
+text = "Gravity"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UsernameEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=2007818648]
+[node name="Hijackers" type="Label" parent="CanvasLayer/MainMenu" unique_id=1937715622]
+layout_mode = 1
+offset_left = 944.0
+offset_top = 256.0
+offset_right = 1389.0
+offset_bottom = 393.0
+theme_override_colors/font_color = Color(1, 0.14999998, 0.14999998, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -10
+theme_override_constants/shadow_offset_y = -10
+theme_override_constants/shadow_outline_size = 20
+theme_override_font_sizes/font_size = 100
+text = "Hijackers"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuPanel" type="PanelContainer" parent="CanvasLayer/MainMenu" unique_id=1311570075]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 544.0
+offset_top = 440.0
+offset_right = -544.0
+offset_bottom = -304.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu/MenuPanel" unique_id=1657551070]
 layout_mode = 2
-tooltip_text = "max_length=22"
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer" unique_id=326002742]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=1369319182]
+layout_mode = 2
+text = "Host or join a game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UsernameEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=2007818648]
+layout_mode = 2
+tooltip_text = "max length 22"
 placeholder_text = "Enter username here"
 alignment = 1
 max_length = 22
 
-[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1093809675]
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=1093809675]
 layout_mode = 2
 text = "Host"
 
-[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1953976071]
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=1953976071]
 layout_mode = 2
 text = "Join"
 
-[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=459800446]
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=459800446]
 layout_mode = 2
 placeholder_text = "Enter address to join here"
 alignment = 1
 
-[node name="Button" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1303317660]
+[node name="Button" type="Button" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=1303317660]
 layout_mode = 2
 text = "Settings"
 
@@ -186,6 +243,86 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="UsernameLabel" type="Label" parent="CanvasLayer/HUD" unique_id=888848130]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 1029.0
+offset_right = 1616.0
+offset_bottom = 1064.0
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 25
+text = "Player username: Default"
+vertical_alignment = 1
+
+[node name="HostAddressLabel" type="Label" parent="CanvasLayer/HUD" unique_id=667087072]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 984.0
+offset_right = 1616.0
+offset_bottom = 1019.0
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 25
+text = "Host address: 127.0.0.1"
+vertical_alignment = 1
+
+[node name="FlagStatus" type="Label" parent="CanvasLayer/HUD" unique_id=139355447]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 192.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 50
+text = "The <team> team has <status> a flag"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="CanvasLayer/HUD/FlagStatus" unique_id=475167933]
+wait_time = 4.0
+one_shot = true
+
+[node name="StatusSynchronizer" type="MultiplayerSynchronizer" parent="CanvasLayer/HUD/FlagStatus" unique_id=1578226940]
+replication_config = SubResource("SceneReplicationConfig_lwfgy")
+
+[node name="RespawnTimeLeft" type="Label" parent="CanvasLayer/HUD" unique_id=511089185]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -448.0
+offset_right = 448.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 11
+theme_override_font_sizes/font_size = 30
+text = "You will respawn in 5.0s"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeathMessage" type="Label" parent="CanvasLayer/HUD/RespawnTimeLeft" unique_id=1351205646]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -448.0
+offset_top = -168.0
+offset_right = 448.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 50
+text = "You have been killed"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1182405279]
 layout_mode = 0
@@ -203,7 +340,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1013.0
+offset_left = 1016.0
 offset_top = 999.0
 offset_right = -24.5
 offset_bottom = -24.5
@@ -212,6 +349,16 @@ grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_ujyws")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cmecq")
 show_percentage = false
+
+[node name="SpawnImmunityLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1257765546]
+layout_mode = 0
+offset_left = 1016.0
+offset_top = 944.0
+offset_right = 1240.0
+offset_bottom = 999.0
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AmmoDisplay" type="Label" parent="CanvasLayer/HUD" unique_id=615191762]
 layout_mode = 0
@@ -389,7 +536,7 @@ offset_bottom = 48.0
 size_flags_vertical = 0
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
-text = "Red team"
+text = "Hijackers"
 vertical_alignment = 1
 
 [node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/RedTeam/TeamPanel" unique_id=1560723643]
@@ -566,7 +713,7 @@ offset_bottom = 48.0
 size_flags_vertical = 0
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
-text = "Blue team"
+text = "Defenders"
 vertical_alignment = 1
 
 [node name="Kills" type="Label" parent="CanvasLayer/Leaderboard/BlueTeam/TeamPanel" unique_id=983952080]
@@ -721,29 +868,54 @@ spawn_path = NodePath("..")
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
 
-[node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37200165, 0.28874588, 0.66145325)
-
-[node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
-transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, -0.372, 20.289, 0.661)
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=658871929]
 stream = ExtResource("6_8b5ia")
 volume_db = -10.0
 bus = &"Music"
 
-[node name="Speed_Pickup" parent="." unique_id=1682309210 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
+[node name="MenuCamera" type="Camera3D" parent="." unique_id=1796198071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, 0)
+fov = 85.0
 
-[node name="SlidingDoors" parent="." unique_id=2083297842 instance=ExtResource("7_t8p5d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 5.7)
-[node name="Speed_Pickup2" parent="." unique_id=82090874 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
-[node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
+[node name="Flag" parent="." unique_id=1294043018 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0000005, 5, -5)
+flag_team = 2
+
+[node name="BlueSpawnPoint2" parent="." unique_id=204800776 instance=ExtResource("9_lwfgy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -25)
+
+[node name="Flag2" parent="." unique_id=441726338 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5, 18, 5.0000005)
+
+[node name="BlueSpawnPoint" parent="." unique_id=1109644590 instance=ExtResource("9_lwfgy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2, 0)
+
+[node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
+
+[node name="RedSpawnPoint" parent="." unique_id=969224642 instance=ExtResource("9_lwfgy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 20.95, 0)
+initial_gravity = "Negative"
+spawn_team = 1
+
+[node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 23, 0)
+
+[node name="RedSpawnPoint2" parent="." unique_id=1051212620 instance=ExtResource("9_lwfgy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.95, 25)
+initial_gravity = "Negative"
+spawn_team = 1
+
+[node name="Flag3" parent="." unique_id=1380935449 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 7, -25)
+flag_team = 2
+
+[node name="Flag4" parent="." unique_id=711811821 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -25, 16, 25)
 
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_button_down"]
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_button_down"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Close" to="." method="_on_close_button_down"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="CanvasLayer/Leaderboard/UpdateTimer" to="CanvasLayer/Leaderboard" method="_on_update_timer_timeout"]
