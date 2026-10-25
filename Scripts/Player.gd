@@ -13,8 +13,10 @@ extends CharacterBody3D
 @onready var grav_slider = hud.get_node("GravitySlider")
 @onready var flip_cd_label = hud.get_node("FlipCooldownLabel")
 @onready var spawn_immunity_label = hud.get_node("SpawnImmunityLabel")
+@onready var respawn_time_label: Label = hud.get_node("RespawnTimeLeft")
 @onready var health_bar: ProgressBar = Global.worldNode.health_bar
 @onready var grav_flip_timer = $GravFlipTimer
+@onready var respawn_timer: Timer = $RespawnTimer
 @onready var weaponsManager = $weaponsManager
 @onready var SpeedPickupTimer = $SpeedPickupTimer
 
@@ -70,6 +72,7 @@ const max_health = 20
 @export var X_mouse_sensitivity = 0.01
 @export var Y_mouse_sensitivity = 0.01
 var current_held_flag: Node3D
+var is_dead: bool = false
 
 var reloading = false
 const LOOK_SPEED = 5 #Existed since the begginning, Charles is scared to remove it
@@ -102,11 +105,6 @@ func _exit_tree() -> void: #for when you leave the actual game for the main menu
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: #Allows you to move mouse in game
-		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
-		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
-		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
-	
 	if Input.is_action_pressed("unlock_cursor"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	elif not esc_menu.visible:
@@ -128,7 +126,14 @@ func _unhandled_input(event):
 			leaderboard.hide()
 			hud.hide()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		
+	
+	if is_dead: return # prevent any actions below this point if the player is dead
+	
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: #Allows you to move mouse in game
+		rotate_object_local(Vector3.UP, -event.relative.x * X_mouse_sensitivity) # left right
+		camera.rotate_object_local(Vector3.RIGHT, -event.relative.y * Y_mouse_sensitivity) # up down
+		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+	
 	if event.is_pressed() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: # check if pressed so scrolls dont fire twice. also prevent grav raising/lowering when scrolling in leaderboard
 		if Input.is_action_just_pressed("decrease_gravity") and event.is_pressed(): 
 			grav_slider.value -= 1
@@ -191,6 +196,27 @@ func _physics_process(delta): #Occurs every delta frame
 	#get_parent().get_node("Speed_Pickup") #Speed Changing, WIP: TALK TO JAYDAN
 	if not is_multiplayer_authority(): return
 	
+	if grav_flip_timer.time_left == 0:
+		flip_cd_label.text = ""
+	else:
+		flip_cd_label.text = "CD %.2fs" % grav_flip_timer.time_left
+	
+	var health_color = StyleBoxFlat.new()
+	if $SpawnImmunityTimer.time_left == 0:
+		spawn_immunity_label.text = ""
+		health_color.bg_color = Color(0, 1, 0)
+	else:
+		spawn_immunity_label.text = "Protected %.1fs" % $SpawnImmunityTimer.time_left
+		health_color.bg_color = Color(0, 1, 1)
+	health_bar.add_theme_stylebox_override("fill", health_color)
+	
+	if respawn_timer.time_left == 0:
+		respawn_time_label.hide()
+	else:
+		respawn_time_label.text = "You will respawn in %.1fs" % respawn_timer.time_left
+		respawn_time_label.show()
+	
+	if is_dead: return # prevent any actions below this point if the player is dead
 	
 	# Get the input direction and handle the movement/deceleration.
 	#MOVEMENT AND CONTROLS
@@ -213,12 +239,7 @@ func _physics_process(delta): #Occurs every delta frame
 		
 		up_direction.y = -up_direction.y # turns the ceiling into the floor/floor into the ceiling
 		grav_flip_timer.start()
-	
 	rotation.x = 0 # this stops flipping from breaking if the player turns their camera mid animation
-	if grav_flip_timer.time_left == 0:
-		flip_cd_label.text = ""
-	else:
-		flip_cd_label.text = "CD %.2fs" % grav_flip_timer.time_left
 	
 	if not is_on_floor(): # gravity
 		velocity.y -= default_gravity * up_direction.y * gravity_strengths[int(grav_slider.value)] * delta
@@ -276,15 +297,6 @@ func _physics_process(delta): #Occurs every delta frame
 	else:
 		anim_player.play("idle")
 	
-	var health_color = StyleBoxFlat.new()
-	if $SpawnImmunityTimer.time_left == 0:
-		spawn_immunity_label.text = ""
-		health_color.bg_color = Color(0, 1, 0)
-	else:
-		spawn_immunity_label.text = "Protected %.2fs" % $SpawnImmunityTimer.time_left
-		health_color.bg_color = Color(0, 1, 1)
-	health_bar.add_theme_stylebox_override("fill", health_color)
-
 	if input_dir != Vector2.ZERO and is_on_floor():
 		anim_player.play("move")
 	else:
@@ -305,20 +317,32 @@ func crouch():
 		anim_player.play("Crouch")
 		is_crouching = true
 
+func player_die():
+	deaths += 1
+	respawn_timer.start()
+	velocity = Vector3.ZERO
+	$CollisionShape3D.disabled = true
+	is_dead = true
+	hide()
+	if current_held_flag: current_held_flag.return_flag.rpc()
+	await respawn_timer.timeout
+	is_dead = false
+	show()
+	if is_in_group("RedTeam"): get_tree().get_nodes_in_group("RedSpawn").pick_random().spawn_player(self)
+	elif is_in_group("BlueTeam"): get_tree().get_nodes_in_group("BlueSpawn").pick_random().spawn_player(self)
+	$CollisionShape3D.disabled = false
+	health = max_health
+	health_bar.value = health
+	$SpawnImmunityTimer.start()
+
 @rpc("any_peer")
-func receive_damage(damage, from_peer_id, hit_direction):
+func receive_damage(damage, _from_peer_id, hit_direction):
 	if $SpawnImmunityTimer.time_left > 0: return
 	
 	velocity = hit_direction * knockback_strength
 	health -= damage
 	if health <= 0:
-		deaths += 1
-		health = max_health
-		if is_in_group("RedTeam"): get_tree().get_nodes_in_group("RedSpawn").pick_random().spawn_player(self)
-		elif is_in_group("BlueTeam"): get_tree().get_nodes_in_group("BlueSpawn").pick_random().spawn_player(self)
-		$SpawnImmunityTimer.start()
-		if current_held_flag:
-			current_held_flag.return_flag.rpc()
+		player_die()
 	health_bar.value = health
 
 func _on_animation_player_animation_finished(anim_name):

@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://xcjrjq5cbn7y"]
 
 [ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
-[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://models/Pistol.fbx" id="2_dqkch"]
+[ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://WeaponManager/Weapons/Pistol.fbx" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
-[ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://models/Gun2.tscn" id="5_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://WeaponManager/Weapons/Gun2.tscn" id="5_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://0h1decnruoaw" path="res://assets/images/FlagIcon.png" id="6_tuyoq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
@@ -172,22 +172,6 @@ tracks/4/keys = {
 "values": [Vector3(0, -1.25, 0), Vector3(0, -0.5, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_tuyoq"]
-resource_name = "flag_icon_pulse"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Flag/FlagIcon:modulate:a")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [1.0, 0.0, 1.0]
-}
-
 [sub_resource type="Animation" id="Animation_knepc"]
 resource_name = "idle"
 length = 3.0
@@ -267,7 +251,6 @@ tracks/1/keys = {
 _data = {
 &"Crouch": SubResource("Animation_qhqgy"),
 &"Uncrouch": SubResource("Animation_dqkch"),
-&"flag_icon_pulse": SubResource("Animation_tuyoq"),
 &"idle": SubResource("Animation_knepc"),
 &"move": SubResource("Animation_qcgne"),
 &"shoot": SubResource("Animation_efeb8")
@@ -355,6 +338,33 @@ properties/7/replication_mode = 1
 properties/8/path = NodePath(".:flags")
 properties/8/spawn = true
 properties/8/replication_mode = 1
+properties/9/path = NodePath(".:visible")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+properties/10/path = NodePath("CollisionShape3D:disabled")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "flag_icon_pulse"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Flag/FlagIcon:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
+_data = {
+&"flag_icon_pulse": SubResource("Animation_tuyoq")
+}
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qlg0r"]
 top_radius = 0.05
@@ -432,6 +442,10 @@ one_shot = true
 wait_time = 5.0
 one_shot = true
 
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1575913552]
+wait_time = 10.0
+one_shot = true
+
 [node name="UsernameLabel" type="Label3D" parent="." unique_id=1144511956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9000001, 0)
 billboard = 1
@@ -442,6 +456,11 @@ outline_size = 30
 [node name="Flag" type="Node3D" parent="." unique_id=189484732]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 visible = false
+
+[node name="FlagPulseAnim" type="AnimationPlayer" parent="Flag" unique_id=800709554]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_fjrip")
+autoplay = &"flag_icon_pulse"
 
 [node name="PoleMesh" type="MeshInstance3D" parent="Flag" unique_id=2071196725]
 transform = Transform3D(-0.8660254, -0.5, 7.5710346e-08, -0.5, 0.8660254, 4.371139e-08, -8.742278e-08, 0, -1, 0.048205085, 1.1468911, 0.55)

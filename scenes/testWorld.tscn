@@ -21,9 +21,8 @@ background_mode = 2
 sky = SubResource("Sky_rucky")
 sky_custom_fov = 96.8
 adjustment_enabled = true
-adjustment_brightness = 0.61
-adjustment_contrast = 1.05
-adjustment_saturation = 2.21
+adjustment_brightness = 0.65
+adjustment_saturation = 2.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lwfgy"]
 properties/0/path = NodePath(".:text")
@@ -264,6 +263,44 @@ one_shot = true
 
 [node name="StatusSynchronizer" type="MultiplayerSynchronizer" parent="CanvasLayer/HUD/FlagStatus" unique_id=1578226940]
 replication_config = SubResource("SceneReplicationConfig_lwfgy")
+
+[node name="RespawnTimeLeft" type="Label" parent="CanvasLayer/HUD" unique_id=511089185]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -448.0
+offset_right = 448.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 11
+theme_override_font_sizes/font_size = 30
+text = "You will respawn in 5.0s"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeathMessage" type="Label" parent="CanvasLayer/HUD/RespawnTimeLeft" unique_id=1351205646]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -448.0
+offset_top = -168.0
+offset_right = 448.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 50
+text = "You have been killed"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1182405279]
 layout_mode = 0
