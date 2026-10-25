@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bspeqow4cj6d4"]
 
 [ext_resource type="PackedScene" uid="uid://cfkl6h8hfgk5q" path="res://models/Safety.glb" id="1_8qxle"]
-[ext_resource type="Script" uid="uid://c2uxctf635mmt" path="res://World.gd" id="2_umhpo"]
+[ext_resource type="Script" uid="uid://c2uxctf635mmt" path="res://Scripts/World.gd" id="2_umhpo"]
 [ext_resource type="Texture2D" uid="uid://c4dk7vc0tehju" path="res://assets/images/Skybox1.jpg" id="3_pfxu1"]
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_umhpo"]
 [ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://Scripts/leaderboard.gd" id="4_pfxu1"]
