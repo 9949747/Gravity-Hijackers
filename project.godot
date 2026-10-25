@@ -23,6 +23,7 @@ config/icon="uid://d0405cev35xv4"
 [autoload]
 
 Global="*uid://7r4ojokijiyj"
+Save="*uid://c2do32wxxnnsd"
 
 [display]
 
