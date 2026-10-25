@@ -2,8 +2,8 @@
 extends Area3D 
 
 var capturing_player_node: Node3D # the player who is currently capturing this flag
-@onready var flag_status_label: Label = get_tree().current_scene.get_node("CanvasLayer/HUD/FlagStatus")
-@onready var status_timout: Timer = flag_status_label.get_node("Timer")
+@onready var flag_status_label: Label
+@onready var status_timout: Timer
 
 enum Teams {RED = 1, BLUE = 2}
 @export var flag_team: Teams = Teams.RED:
@@ -12,6 +12,10 @@ enum Teams {RED = 1, BLUE = 2}
 		update_editor_visual()
 
 func _ready():
+	if not Engine.is_editor_hint():
+		flag_status_label = get_tree().current_scene.get_node("CanvasLayer/HUD/FlagStatus")
+		status_timout = flag_status_label.get_node("Timer")
+	
 	multiplayer.peer_connected.connect(load_capturing_player_node)
 	status_timout.timeout.connect(func(): flag_status_label.hide())
 

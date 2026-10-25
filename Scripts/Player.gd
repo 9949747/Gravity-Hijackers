@@ -82,7 +82,7 @@ func _ready(): #Plays on first entering the game
 		pickup.speed_pickup_pickedup.connect(_on_speed_pickup_pickedup)
 	if not is_multiplayer_authority(): return
 	
-	SpeedPickupTimer.timeout.connect(_speed_pickup_timer_timeout)
+	# SpeedPickupTimer.timeout.connect(_speed_pickup_timer_timeout)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED #Allows you to move camera
 	camera.current = true

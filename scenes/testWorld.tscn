@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://b6uvkpm8eyjif" path="res://Scripts/leaderboard.gd" id="4_rucky"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
-[ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
 [ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
@@ -91,14 +90,14 @@ light_color = Color(0.75, 0.75, 1, 1)
 light_energy = 2.936
 sky_mode = 1
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1137519621]
+environment = SubResource("Environment_0ddhe")
+
 [node name="DirectionalLight3DRed" type="DirectionalLight3D" parent="." unique_id=797478212]
 transform = Transform3D(-0.8660254, 0.43301278, 0.24999999, 0, 0.49999994, -0.86602545, -0.50000006, -0.75, -0.4330126, 0, 22, 0)
 light_color = Color(1, 0.55, 0.55, 1)
 light_energy = 2.0
 sky_mode = 1
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1137519621]
-environment = SubResource("Environment_0ddhe")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=781029339]
 
@@ -214,7 +213,7 @@ vertical_alignment = 1
 
 [node name="UsernameEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MenuPanel/MarginContainer/VBoxContainer" unique_id=2007818648]
 layout_mode = 2
-tooltip_text = "max_length=22"
+tooltip_text = "max length 22"
 placeholder_text = "Enter username here"
 alignment = 1
 max_length = 22
@@ -810,42 +809,37 @@ spawn_path = NodePath("..")
 _spawnable_scenes = PackedStringArray("uid://xcjrjq5cbn7y")
 spawn_path = NodePath("..")
 
-[node name="Flag" parent="." unique_id=1294043018 instance=ExtResource("3_0ddhe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0000005, 5, -5)
-flag_team = 2
-
-[node name="Flag2" parent="." unique_id=441726338 instance=ExtResource("3_0ddhe")]
-transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5, 18, 5.0000005)
-
-[node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
-
-[node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
-transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 23, 0)
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=658871929]
 stream = ExtResource("6_8b5ia")
 volume_db = -10.0
 bus = &"Music"
 
-[node name="Speed_Pickup" parent="." unique_id=1682309210 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8042068, 0.788746, -4.200104)
+[node name="MenuCamera" type="Camera3D" parent="." unique_id=1796198071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, 0)
+fov = 85.0
 
-[node name="SlidingDoors" parent="." unique_id=2083297842 instance=ExtResource("7_t8p5d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 5.7)
-[node name="Speed_Pickup2" parent="." unique_id=82090874 groups=["speed_pickups"] instance=ExtResource("7_dbplf")]
-[node name="Speed_Pickup2" parent="." unique_id=82090874 instance=ExtResource("7_dbplf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6084137, 0.8719456, 2.3572235)
+[node name="Flag" parent="." unique_id=1294043018 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0000005, 5, -5)
+flag_team = 2
 
 [node name="BlueSpawnPoint2" parent="." unique_id=204800776 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -25)
 
+[node name="Flag2" parent="." unique_id=441726338 instance=ExtResource("3_0ddhe")]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5, 18, 5.0000005)
+
 [node name="BlueSpawnPoint" parent="." unique_id=1109644590 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2, 0)
+
+[node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
 
 [node name="RedSpawnPoint" parent="." unique_id=969224642 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 20.95, 0)
 initial_gravity = "Negative"
 spawn_team = 1
+
+[node name="EnvironmentTop" parent="." unique_id=1851466389 instance=ExtResource("5_ftq4a")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 23, 0)
 
 [node name="RedSpawnPoint2" parent="." unique_id=1051212620 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.95, 25)
@@ -858,10 +852,6 @@ flag_team = 2
 
 [node name="Flag4" parent="." unique_id=711811821 instance=ExtResource("3_0ddhe")]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -25, 16, 25)
-
-[node name="MenuCamera" type="Camera3D" parent="." unique_id=1796198071]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, 0)
-fov = 85.0
 
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_button_down"]
 [connection signal="button_down" from="CanvasLayer/EscMenu/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_button_down"]
