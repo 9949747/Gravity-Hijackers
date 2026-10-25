@@ -2,20 +2,24 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgbj3kg1usha6"
-path="res://.godot/imported/360_F_321477018_SWfhoMP0WDSEKvra51t3jWvj8IltiLu1.jpg-3e2c1576f8e9838a0bfbb5be26912d26.ctex"
+uid="uid://chlt3sf68lp1g"
+path.s3tc="res://.godot/imported/Safety_14.png-6118f0beb08be93c7fa17700c7e97abe.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "d08251e6a66a0ece171f6f378ea08329"
 }
 
 [deps]
 
-source_file="res://assets/images/360_F_321477018_SWfhoMP0WDSEKvra51t3jWvj8IltiLu1.jpg"
-dest_files=["res://.godot/imported/360_F_321477018_SWfhoMP0WDSEKvra51t3jWvj8IltiLu1.jpg-3e2c1576f8e9838a0bfbb5be26912d26.ctex"]
+source_file="res://models/Safety_14.png"
+dest_files=["res://.godot/imported/Safety_14.png-6118f0beb08be93c7fa17700c7e97abe.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +27,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
