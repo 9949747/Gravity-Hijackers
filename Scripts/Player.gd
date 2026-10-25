@@ -160,7 +160,7 @@ func _unhandled_input(event):
 				var hit_coords = raycast.get_collision_point()
 				var hit_direction = (hit_coords - raycast.global_position).normalized()
 				var relative_hit_coords = hit_coords - hit_obj.position # relative to the colliding object
-				var headshot = true if relative_hit_coords.y >= 1.4 else false # above 1.4 is roughly where the player's head is
+				var headshot = true if (relative_hit_coords.y >= -0.1 and up_direction.y == 1) or (relative_hit_coords.y <= 0.1 and up_direction.y == -1) else false
 				
 				# avoids nesting, also prevents friendly fire
 				if !hit_obj.is_in_group("Player") or (is_in_group("RedTeam") and hit_obj.is_in_group("RedTeam")) or (is_in_group("BlueTeam") and hit_obj.is_in_group("BlueTeam")):
@@ -207,7 +207,7 @@ func _physics_process(delta): #Occurs every delta frame
 		health_color.bg_color = Color(0, 1, 0)
 	else:
 		spawn_immunity_label.text = "Protected %.1fs" % $SpawnImmunityTimer.time_left
-		health_color.bg_color = Color(0, 1, 1)
+		health_color.bg_color = Color(1, 1, 1)
 	health_bar.add_theme_stylebox_override("fill", health_color)
 	
 	if respawn_timer.time_left == 0:
