@@ -244,6 +244,28 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="UsernameLabel" type="Label" parent="CanvasLayer/HUD" unique_id=888848130]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 1029.0
+offset_right = 1616.0
+offset_bottom = 1064.0
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 25
+text = "Player username: Default"
+vertical_alignment = 1
+
+[node name="HostAddressLabel" type="Label" parent="CanvasLayer/HUD" unique_id=667087072]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 984.0
+offset_right = 1616.0
+offset_bottom = 1019.0
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 25
+text = "Host address: 127.0.0.1"
+vertical_alignment = 1
+
 [node name="FlagStatus" type="Label" parent="CanvasLayer/HUD" unique_id=139355447]
 visible = false
 layout_mode = 1
@@ -253,7 +275,7 @@ offset_bottom = 192.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 50
-text = "The <team> team has <status> a flag!"
+text = "The <team> team has <status> a flag"
 horizontal_alignment = 1
 vertical_alignment = 1
 

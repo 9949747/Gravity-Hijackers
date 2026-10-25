@@ -10,6 +10,8 @@ signal player_added(peer_id)
 @onready var esc_menu = $CanvasLayer/EscMenu
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 @onready var menu_camera = $MenuCamera
+@onready var host_label = $CanvasLayer/HUD/HostAddressLabel
+@onready var username_label = $CanvasLayer/HUD/UsernameLabel
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -24,15 +26,32 @@ var random_camera_direction = Vector3(randf_range(-10, 10), randf_range(-10, 10)
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
 
+func get_local_ip() -> String:
+	var addresses = IP.get_local_addresses()
+	var fallback_172 = ""
+	
+	for ip in addresses:
+		if ip.begins_with("192.168."):
+			return ip
+		if ip.begins_with("10."):
+			return ip
+		if ip.begins_with("172."): # take precaution around 172 addresses because of vn bridges
+			fallback_172 = ip
+	
+	if fallback_172 != "":
+		return fallback_172
+	return "not found"
+
 func _ready() -> void:
-	#$AudioStreamPlayer.play()
 	Global.worldNode = self
-	#print(Save.game_data)
 
 func _on_host_button_pressed():
 	if not username_entry.text:
 		username_entry.placeholder_text = "Enter a username before joining/hosting"
 		return
+	
+	username_label.text = "Player username: %s" % username_entry.text
+	host_label.text = "Host address: %s" % get_local_ip()
 	
 	main_menu.hide()
 	hud.show()
@@ -49,6 +68,9 @@ func _on_join_button_pressed():
 	if not username_entry.text:
 		username_entry.placeholder_text = "Enter a username before joining/hosting"
 		return
+	
+	username_label.text = "Player username: %s" % username_entry.text
+	host_label.text = ""
 	
 	main_menu.hide()
 	hud.show()
