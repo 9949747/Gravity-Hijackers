@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://qyiiwlpw3rdb" path="res://scenes/speed_pickup.tscn" id="7_dbplf"]
-[ext_resource type="Script" uid="uid://b6xpbtgkmjy5g" path="res://scenes/pickup_spawner.gd" id="7_rucky"]
 [ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
