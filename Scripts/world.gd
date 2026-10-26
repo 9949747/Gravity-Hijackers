@@ -1,17 +1,25 @@
 extends Node
-# Ough.,,
+
+signal player_added(peer_id)
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+@onready var username_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/UsernameEntry
 @onready var hud = $CanvasLayer/HUD
+@onready var leaderboard = $CanvasLayer/Leaderboard
+@onready var esc_menu = $CanvasLayer/EscMenu
+@onready var team1_playerlist = $CanvasLayer/Leaderboard/RedTeam/ScrollContainer/RedPlayerList
+@onready var team2_playerlist = $CanvasLayer/Leaderboard/BlueTeam/ScrollContainer/BluePlayerList
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 # @onready var radio = $CanvasLayer/Radio
 var world_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var playerScene = preload("res://scenes/player.tscn")
+@onready var leaderboard_entry_scene = preload("res://scenes/LeaderboardEntry.tscn")
 
 var tracked = false
 var player
+var connected_player_ids = []
 
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
@@ -19,9 +27,13 @@ var enet_peer = ENetMultiplayerPeer.new()
 func _ready() -> void:
 	#$AudioStreamPlayer.play()
 	Global.worldNode = self
-	print(Save.game_data)
+	#print(Save.game_data)
 
 func _on_host_button_pressed():
+	if not username_entry.text:
+		username_entry.placeholder_text = "Enter a username before joining/hosting"
+		return
+	
 	main_menu.hide()
 	hud.show()
 	
@@ -34,15 +46,32 @@ func _on_host_button_pressed():
 	
 	#upnp_setup()
 func _on_join_button_pressed():
+	if not username_entry.text:
+		username_entry.placeholder_text = "Enter a username before joining/hosting"
+		return
+	
 	main_menu.hide()
 	hud.show()
 	
 	enet_peer.create_client(address_entry.text, PORT)
 	multiplayer.multiplayer_peer = enet_peer
+	multiplayer.server_disconnected.connect(
+		func(): 
+			hud.hide()
+			leaderboard.hide()
+			esc_menu.hide()
+			main_menu.show()
+	)
 
-func _on_multiplayer_spawner_spawned(node):
-	if node.is_multiplayer_authority():
-		node.health_changed.connect(update_health_bar)
+func _on_menu_button_down():
+	multiplayer.multiplayer_peer.close()
+	get_tree().change_scene_to_file("res://scenes/testWorld.tscn")
+
+func _on_quit_button_down():
+	get_tree().quit()
+
+func _on_button_pressed():
+	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
 
 func upnp_setup():
 	var upnp = UPNP.new()
@@ -62,64 +91,64 @@ func _physics_process(delta):
 		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("quit"):
+	if Input.is_action_just_pressed("quit") and enet_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED: # allows for game close in main menu but not ingame
 		get_tree().quit()
-
-func _on_single_player_button_pressed():
-	main_menu.hide()
-	hud.show()
-	#multiplayer.multiplayer_peer = enet_peer
-	add_player(multiplayer.get_unique_id())
-
 
 func add_player(peer_id):
 	player = playerScene.instantiate()
 	player.name = str(peer_id)
 	add_child(player)
 	tracked = true
-	if player.is_multiplayer_authority():
-		player.health_changed.connect(update_health_bar)
 	
 	var group_counts = {get_tree().get_node_count_in_group("Team1"): "Team1", get_tree().get_node_count_in_group("Team2"): "Team2"} # team 2 will override team 1 when both are even since keys match
 	var smallest_team = group_counts[min(get_tree().get_node_count_in_group("Team1"), get_tree().get_node_count_in_group("Team2"))] if len(group_counts) > 1 else ["Team1", "Team2"].pick_random() # removes bias to one team when both teams are even
-	apply_team(peer_id, smallest_team) # host must skip straight to apply_team since they need to add the peer to their group so others can replicate
-	filter_loaded_players.rpc(get_tree().get_nodes_in_group("Team1").map(func(node): return node.name), get_tree().get_nodes_in_group("Team2").map(func(node): return node.name)) # converts nodes in each team to peer ids before sending rpc
+
+	update_player_data(peer_id, {"groups": [smallest_team]}) # load new player on host
+	update_player_data.rpc(peer_id, {"groups": [smallest_team]}) # load new player on peers
+	for connected_players in connected_player_ids: # load existing players on new peer
+		update_player_data.rpc_id(peer_id, connected_players, get_player_data(connected_players))
+	connected_player_ids.append(peer_id)
 	
-	# gets synced via mp synchronizer node
-	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
-	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
+	player_added.emit(peer_id) # currently only used by leaderboard.gd
 
 func remove_player(peer_id):
-	var player = get_node_or_null(str(peer_id))
-	if not player:
+	var exiting_player = get_node_or_null(str(peer_id))
+	if not exiting_player:
 		return
 	
-	player.queue_free()
-	await get_tree().create_timer(0.1).timeout # breifly pause thread so print statement below returns accurate info
-	$CanvasLayer/HUD/Team1.text = "Team1: " + str(get_tree().get_node_count_in_group("Team1")) + " players"
-	$CanvasLayer/HUD/Team2.text = "Team2: " + str(get_tree().get_node_count_in_group("Team2")) + " players"
+	exiting_player.queue_free()
+
+func get_player_data(peer_id):
+	var player_node = get_node_or_null(str(peer_id))
+	if not player_node:
+		return
+
+	return {"groups": player_node.get_groups()}
 
 @rpc
-func filter_loaded_players(team1, team2):
-	# filter out players who are already loaded locally (sorry for the lambda slop)
-	var unloaded_team1_players = team1.filter(func(id): return not get_tree().get_nodes_in_group("Team1").map(func(node): return node.name).has(id))
-	var unloaded_team2_players = team2.filter(func(id): return not get_tree().get_nodes_in_group("Team2").map(func(node): return node.name).has(id))
-	print("unloaded team 1 players: ", unloaded_team1_players, " unloaded team 2 players: ", unloaded_team2_players, " on client: ", multiplayer.get_unique_id())
+func update_player_data(peer_id, data):
+	var player_node = get_node_or_null(str(peer_id))
+	if not player_node:
+		return
 	
-	for ids in unloaded_team1_players:
-		apply_team(ids, "Team1")
-	for ids in unloaded_team2_players:
-		apply_team(ids, "Team2")
+	for group in data.groups:
+		player_node.add_to_group(group)
 
-func apply_team(plr_id, team): # keeps filter_loaded_players relatively dry and resolves host group conflict
-	var player_node = get_node(str(plr_id))
+	# inits
 	var plr_mat = player_node.get_node("MeshInstance3D").get_active_material(0).duplicate()
-	plr_mat.albedo_color = Color(1, 0, 0) if team == "Team1" else Color(0, 0, 1)
+	if player_node.is_in_group("Team1"):
+		plr_mat.albedo_color = Color(1, 0, 0)
+	elif player_node.is_in_group("Team2"):
+		plr_mat.albedo_color = Color(0, 0, 1)
+	else:
+		print("player %s has not been assigned a team" % peer_id)
+	
 	player_node.get_node("MeshInstance3D").set_surface_override_material(0, plr_mat)
-	player_node.add_to_group(team)
 
-func update_health_bar(health_value):
-	health_bar.value = health_value
+@rpc
+func remove_player_data(peer_id):
+	pass
+
 '''
 func radio_enable(event: InputEvent) -> void:
 	print("1")
@@ -131,5 +160,3 @@ func radio_enable(event: InputEvent) -> void:
 			radio.hide()
 			radio.visible = false
 '''
-func _on_button_pressed():
-	get_tree().change_scene_to_file("res://Settings/SettingsMenu.tscn")
