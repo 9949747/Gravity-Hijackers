@@ -7,7 +7,7 @@
 script = ExtResource("2_icfx5")
 
 [node name="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="0" unique_id=1402582745]
-text = "Y Sensitivititty"
+text = "Y Sensitivity"
 
 [node name="ysens_slider" type="HSlider" parent="HBoxContainer" parent_id_path=PackedInt32Array(212681061) index="2" unique_id=1697959625]
 custom_minimum_size = Vector2(500, 0)

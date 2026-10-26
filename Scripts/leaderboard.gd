@@ -21,9 +21,9 @@ func add_entry(peer_id):
 	var leaderboard_entry = leaderboard_entry_scene.instantiate()
 	
 	leaderboard_entry.name = str(peer_id)
-	if player_node.is_in_group("Team1"):
+	if player_node.is_in_group("RedTeam"):
 		red_team_playerlist.add_child(leaderboard_entry)
-	elif player_node.is_in_group("Team2"):
+	elif player_node.is_in_group("BlueTeam"):
 		blue_team_playerlist.add_child(leaderboard_entry)
 	
 	entry_list[peer_id] = leaderboard_entry
@@ -31,6 +31,15 @@ func add_entry(peer_id):
 
 func remove_entry(peer_id):
 	if is_multiplayer_authority(): # only mpauth needs to delete entry since mpspawner syncs the instance
+		var player_node = get_tree().current_scene.get_node_or_null(str(peer_id))
+		
+		# reset kills and deaths for exiting players
+		var plr_team
+		if player_node.is_in_group("RedTeam"): plr_team = "red"
+		elif player_node.is_in_group("BlueTeam"): plr_team = "blue"
+		team_stats_memory[plr_team][peer_id]["kills"] = 0
+		team_stats_memory[plr_team][peer_id]["deaths"] = 0
+		
 		entry_list[peer_id].queue_free()
 		entry_list.erase(peer_id)
 
@@ -69,8 +78,8 @@ func update_round_data(peer_id):
 	var player_node = get_tree().current_scene.get_node_or_null(str(peer_id))
 	
 	var plr_team
-	if player_node.is_in_group("Team1"): plr_team = "red"
-	elif player_node.is_in_group("Team2"): plr_team = "blue"
+	if player_node.is_in_group("RedTeam"): plr_team = "red"
+	elif player_node.is_in_group("BlueTeam"): plr_team = "blue"
 	
 	team_stats_memory[plr_team][peer_id] = {
 		"kills": player_node.kills,

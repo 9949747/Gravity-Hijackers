@@ -2,16 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnmwo2rknwnse"
-path="res://.godot/imported/80dd9a5bbe466eae69c214673d4c1e27.jpg-c65bdf2189454a1a077aad753d97763d.ctex"
+uid="uid://cul5p6ejhwvf1"
+path="res://.godot/imported/Safety_3.png-8ddf916639d7b7ff8baaef2296793ae1.ctex"
 metadata={
 "vram_texture": false
+}
+generator_parameters={
+"md5": "0d85643ce12e7d965461c23e27b36a02"
 }
 
 [deps]
 
-source_file="res://assets/images/80dd9a5bbe466eae69c214673d4c1e27.jpg"
-dest_files=["res://.godot/imported/80dd9a5bbe466eae69c214673d4c1e27.jpg-c65bdf2189454a1a077aad753d97763d.ctex"]
+source_file="res://models/Safety_3.png"
+dest_files=["res://.godot/imported/Safety_3.png-8ddf916639d7b7ff8baaef2296793ae1.ctex"]
 
 [params]
 
@@ -23,7 +26,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

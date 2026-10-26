@@ -20,6 +20,10 @@ const DEFAULT_GAME_DATA = {
 	"player_sprint": "Shift",
 	"player_crouch": "Ctrl",
 	"reload": "R",
+	"flip_gravity": "F",
+	"equip_perry": "1",
+	"equip_shotgun": "2",
+	"equip_pistol": "3",
 	"quit": "Esc",
 }
 var game_data
@@ -104,7 +108,7 @@ func load_saved_keybind(action_name: String) -> void:
 		InputMap.action_add_event(action_name, event)
 
 func load_saved_keybinds() -> void:
-	for action_name in ["shoot", "left", "right", "up", "down", "player_jump", "player_sprint", "player_crouch", "reload", "quit"]:
+	for action_name in ["shoot", "left", "right", "up", "down", "player_jump", "player_sprint", "player_crouch", "reload", "flip_gravity", "quit"]:
 		load_saved_keybind(action_name)
 	
 
