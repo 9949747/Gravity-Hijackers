@@ -24,7 +24,7 @@ const DEFAULT_GAME_DATA = {
 	"equip_perry": "1",
 	"equip_shotgun": "2",
 	"equip_pistol": "3",
-	"quit": "Esc",
+	"quit": "Escape",
 }
 var game_data
 
