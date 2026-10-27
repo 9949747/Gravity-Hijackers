@@ -1,4 +1,4 @@
 extends Node
 
 var worldNode
-var currentWeapon = 0
+var currentWeapon = "Pistol"
