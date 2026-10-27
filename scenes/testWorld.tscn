@@ -80,6 +80,24 @@ properties/7/path = NodePath("BlueTeam/TeamPanel/Flags:text")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_r1245"]
+size = Vector2(30, 20)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0ddhe"]
+size = Vector2(11.1, 20)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3kbh8"]
+size = Vector2(11, 20)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3d15q"]
+size = Vector2(30, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3kbh8"]
+size = Vector3(0.5, 2.5, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lwfgy"]
+size = Vector2(11.1, 20)
+
 [node name="World" type="Node" unique_id=1730723652]
 script = ExtResource("1_rucky")
 
@@ -891,6 +909,155 @@ transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -5, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2, 0)
 
 [node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
+
+[node name="Floor" type="MeshInstance3D" parent="Environment" unique_id=1761121788]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.01, 5.992, 0)
+mesh = SubResource("PlaneMesh_r1245")
+
+[node name="Roof" type="MeshInstance3D" parent="Environment/Floor" unique_id=1017576895]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 11.007999, 0)
+mesh = SubResource("PlaneMesh_r1245")
+skeleton = NodePath("../..")
+
+[node name="Wall" type="MeshInstance3D" parent="Environment/Floor" unique_id=95868919]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -15.006998, 5.4979997, -20)
+mesh = SubResource("PlaneMesh_0ddhe")
+skeleton = NodePath("../..")
+
+[node name="Wall2" type="MeshInstance3D" parent="Environment/Floor" unique_id=1792144213]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -15.0065365, 5.49752, 20.002726)
+mesh = SubResource("PlaneMesh_0ddhe")
+skeleton = NodePath("../..")
+
+[node name="Wall3" type="MeshInstance3D" parent="Environment/Floor" unique_id=840980997]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 15, 5.5, 0)
+mesh = SubResource("PlaneMesh_3kbh8")
+
+[node name="Wall4" type="MeshInstance3D" parent="Environment/Floor" unique_id=580291312]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 5.5, -10)
+mesh = SubResource("PlaneMesh_3d15q")
+
+[node name="Wall5" type="MeshInstance3D" parent="Environment/Floor" unique_id=1973870387]
+transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 5.5, 10)
+mesh = SubResource("PlaneMesh_3d15q")
+
+[node name="Barrier" type="MeshInstance3D" parent="Environment/Floor" unique_id=1018679916]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.25, 6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+
+[node name="Barrier2" type="MeshInstance3D" parent="Environment/Floor" unique_id=529289228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.25, -6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+
+[node name="Barrier3" type="MeshInstance3D" parent="Environment/Floor" unique_id=1228826534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 9.75, 6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+
+[node name="Barrier4" type="MeshInstance3D" parent="Environment/Floor" unique_id=1098293536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 9.75, -6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+
+[node name="Floor2" type="MeshInstance3D" parent="Environment" unique_id=1578679541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 5.992, 0)
+mesh = SubResource("PlaneMesh_r1245")
+
+[node name="Roof2" type="MeshInstance3D" parent="Environment/Floor2" unique_id=1994414094]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 11.007999, 0)
+mesh = SubResource("PlaneMesh_r1245")
+skeleton = NodePath("../..")
+
+[node name="Wall3" type="MeshInstance3D" parent="Environment/Floor2" unique_id=1646744608]
+transform = Transform3D(1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 0, 0, 1, 15, 5.4979997, -20)
+mesh = SubResource("PlaneMesh_lwfgy")
+skeleton = NodePath("../..")
+
+[node name="Wall4" type="MeshInstance3D" parent="Environment/Floor2" unique_id=1656927216]
+transform = Transform3D(1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 0, 0, 1, 15, 5.4979997, 20)
+mesh = SubResource("PlaneMesh_lwfgy")
+skeleton = NodePath("../..")
+
+[node name="Wall5" type="MeshInstance3D" parent="Environment/Floor2" unique_id=2050036159]
+transform = Transform3D(4.371139e-08, 1, -8.742278e-08, 1, -4.371139e-08, 0, -3.821371e-15, -8.742278e-08, -1, -15, 5.5, 0)
+mesh = SubResource("PlaneMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall6" type="MeshInstance3D" parent="Environment/Floor2" unique_id=2050566096]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 5.5000005, -10)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall7" type="MeshInstance3D" parent="Environment/Floor2" unique_id=170965248]
+transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 5.5000005, 10)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Floor3" type="MeshInstance3D" parent="Environment" unique_id=605144853]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 6, 45)
+mesh = SubResource("PlaneMesh_r1245")
+
+[node name="Roof3" type="MeshInstance3D" parent="Environment/Floor3" unique_id=730742648]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 11, 0)
+mesh = SubResource("PlaneMesh_r1245")
+skeleton = NodePath("../..")
+
+[node name="Wall6" type="MeshInstance3D" parent="Environment/Floor3" unique_id=972889368]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 15, 5.49, 20)
+mesh = SubResource("PlaneMesh_0ddhe")
+skeleton = NodePath("../..")
+
+[node name="Wall8" type="MeshInstance3D" parent="Environment/Floor3" unique_id=1432660315]
+transform = Transform3D(4.371139e-08, 1, 3.1786506e-08, 1, -4.371139e-08, 0, 1.3894324e-15, 3.1786506e-08, -1, 15, 5.49, -20)
+mesh = SubResource("PlaneMesh_lwfgy")
+skeleton = NodePath("../..")
+
+[node name="Wall4" type="MeshInstance3D" parent="Environment/Floor3" unique_id=1164078466]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 105, 5.5, 0)
+mesh = SubResource("PlaneMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall7" type="MeshInstance3D" parent="Environment/Floor3" unique_id=1979583278]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 5.5, -10)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall9" type="MeshInstance3D" parent="Environment/Floor3" unique_id=1634703136]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 5.5, 10)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Floor4" type="MeshInstance3D" parent="Environment" unique_id=409419354]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 6, -45)
+mesh = SubResource("PlaneMesh_r1245")
+
+[node name="Roof4" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1884389703]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 11, 0)
+mesh = SubResource("PlaneMesh_r1245")
+skeleton = NodePath("../..")
+
+[node name="Wall5" type="MeshInstance3D" parent="Environment/Floor4" unique_id=860092679]
+transform = Transform3D(4.371139e-08, -1, 3.1786506e-08, -1, -4.371139e-08, 0, 1.3894324e-15, -3.1786506e-08, -1, -15, 5.5, 20)
+mesh = SubResource("PlaneMesh_0ddhe")
+skeleton = NodePath("../..")
+
+[node name="Wall7" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1028730733]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -15, 5.55, -20)
+mesh = SubResource("PlaneMesh_lwfgy")
+skeleton = NodePath("../..")
+
+[node name="Wall6" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1737945605]
+transform = Transform3D(4.371139e-08, 1, -8.742277e-08, 1, -4.371139e-08, 0, -3.8213714e-15, -8.742277e-08, -1, -105, 5.5, 0)
+mesh = SubResource("PlaneMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall10" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1493143009]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 5.5, -10.000004)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Wall11" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1225665386]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 5.5, 9.999996)
+mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
 
 [node name="RedSpawnPoint" parent="." unique_id=969224642 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 20.95, 0)

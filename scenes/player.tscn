@@ -4,8 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://b3xnoc6x1ghu7" path="res://WeaponManager/Weapons/Pistol.fbx" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 [ext_resource type="AudioStream" uid="uid://cddr268ryi66b" path="res://assets/sound/gun/gunshot1.mp3" id="4_dqkch"]
+[ext_resource type="PackedScene" uid="uid://cln7ie1mxbcwg" path="res://WeaponManager/Weapons/Doofenshotgun.tscn" id="5_fjrip"]
 [ext_resource type="PackedScene" uid="uid://d2dbwf6nflgkw" path="res://WeaponManager/Weapons/Gun2.tscn" id="5_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://0h1decnruoaw" path="res://assets/images/FlagIcon.png" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://by31we2ky2hql" path="res://WeaponManager/weapons_manager.gd" id="8_smehm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anhm7"]
 
@@ -403,7 +405,8 @@ target_position = Vector3(0, 0, -100)
 collision_mask = 2
 
 [node name="Pistol" parent="Camera3D" unique_id=158055108 instance=ExtResource("2_dqkch")]
-transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000002, 0.5, -0.25, -0.5)
+transform = Transform3D(1.0000001, 0, 0, 0, 0.89879405, -0.43837127, 0, 0.43837115, 0.8987943, 0.5, -0.186, -0.5)
+visible = false
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Pistol" unique_id=215553547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.084553175, 0.11784935, -0.34567696)
@@ -414,6 +417,13 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
+
+[node name="Gun2" parent="Camera3D" unique_id=693693121 instance=ExtResource("5_qlg0r")]
+transform = Transform3D(-1.3113417e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.3113417e-08, 0.6065353, -0.74941695, -0.09832513)
+visible = false
+
+[node name="Doofenshotgun" parent="Camera3D" unique_id=1501388774 instance=ExtResource("5_fjrip")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 0.47858828, -0.28333595, -0.5307291)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
@@ -432,10 +442,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 stream = ExtResource("4_dqkch")
 volume_db = -20.0
 bus = &"SFX"
-
-[node name="Gun2" parent="." unique_id=693693121 instance=ExtResource("5_qlg0r")]
-transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -0.62836176, -0.9279723, 0.3218732)
-visible = false
 
 [node name="GravFlipTimer" type="Timer" parent="." unique_id=187622579]
 wait_time = 0.6
@@ -483,5 +489,8 @@ billboard = 1
 no_depth_test = true
 fixed_size = true
 texture = ExtResource("6_tuyoq")
+
+[node name="weaponsManager" type="Node" parent="." unique_id=258455095]
+script = ExtResource("8_smehm")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
