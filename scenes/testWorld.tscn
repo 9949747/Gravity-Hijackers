@@ -8,6 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://scenes/environment.tscn" id="5_ftq4a"]
 [ext_resource type="AudioStream" uid="uid://bx2vjggij13yq" path="res://assets/sound/theme finished-ish.mp3" id="6_8b5ia"]
 [ext_resource type="PackedScene" uid="uid://dr07vvyi1xjlk" path="res://scenes/SpawnPoint.tscn" id="9_lwfgy"]
+[ext_resource type="Texture2D" uid="uid://r8147m0lintl" path="res://assets/images/Safety_0.png" id="9_r1245"]
+[ext_resource type="Texture2D" uid="uid://h013dn6w0stk" path="res://assets/images/Safety_6.png" id="10_ftq4a"]
+[ext_resource type="Texture2D" uid="uid://c7dxbpiccyihj" path="res://assets/images/Safety_4.png" id="11_cdpo3"]
+[ext_resource type="Texture2D" uid="uid://hcl0ypdm7r48" path="res://assets/images/Safety_2.png" id="12_3c8my"]
+[ext_resource type="Texture2D" uid="uid://f4xs2tf5325e" path="res://assets/images/Seamlessfuturisticmetal.jpg" id="13_pdj1a"]
+[ext_resource type="Texture2D" uid="uid://bcaxlwrexaxok" path="res://models/Safety_6.png" id="14_623b0"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7nwna"]
 panorama = ExtResource("2_0ddhe")
@@ -80,22 +86,60 @@ properties/7/path = NodePath("BlueTeam/TeamPanel/Flags:text")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7v8mi"]
+albedo_texture = ExtResource("9_r1245")
+uv1_scale = Vector3(5, 5, 5)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_r1245"]
+material = SubResource("StandardMaterial3D_7v8mi")
 size = Vector2(30, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mkoxp"]
+albedo_texture = ExtResource("10_ftq4a")
+backlight_enabled = true
+backlight = Color(1, 1, 1, 1)
+uv1_scale = Vector3(0.333, 0.333, 0.333)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_0ddhe"]
+material = SubResource("StandardMaterial3D_mkoxp")
 size = Vector2(11.1, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdpo3"]
+albedo_texture = ExtResource("11_cdpo3")
+backlight_enabled = true
+backlight = Color(1, 1, 1, 1)
+uv1_scale = Vector3(0.333, 0.333, 0.333)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_3kbh8"]
+material = SubResource("StandardMaterial3D_cdpo3")
 size = Vector2(11, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3c8my"]
+albedo_texture = ExtResource("12_3c8my")
+backlight_enabled = true
+backlight = Color(1, 1, 1, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_3d15q"]
+material = SubResource("StandardMaterial3D_3c8my")
 size = Vector2(30, 11)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dbplf"]
+albedo_texture = ExtResource("13_pdj1a")
+backlight_enabled = true
+backlight = Color(1, 1, 1, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_3kbh8"]
+material = SubResource("StandardMaterial3D_dbplf")
 size = Vector3(0.5, 2.5, 4)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b5ia"]
+albedo_texture = ExtResource("14_623b0")
+backlight_enabled = true
+backlight = Color(1, 1, 1, 1)
+uv1_scale = Vector3(0.333, 0.333, 0.333)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_lwfgy"]
+material = SubResource("StandardMaterial3D_8b5ia")
 size = Vector2(11.1, 20)
 
 [node name="World" type="Node" unique_id=1730723652]
@@ -991,6 +1035,26 @@ transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 5
 mesh = SubResource("PlaneMesh_3d15q")
 skeleton = NodePath("../../Floor")
 
+[node name="Barrier5" type="MeshInstance3D" parent="Environment/Floor2" unique_id=1684967515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.25, 6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier6" type="MeshInstance3D" parent="Environment/Floor2" unique_id=2097425174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1.25, -6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier7" type="MeshInstance3D" parent="Environment/Floor2" unique_id=113022422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9.75, 6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier8" type="MeshInstance3D" parent="Environment/Floor2" unique_id=701830263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9.75, -6.5)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
 [node name="Floor3" type="MeshInstance3D" parent="Environment" unique_id=605144853]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 6, 45)
 mesh = SubResource("PlaneMesh_r1245")
@@ -1025,6 +1089,26 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 5
 mesh = SubResource("PlaneMesh_3d15q")
 skeleton = NodePath("../../Floor")
 
+[node name="Barrier9" type="MeshInstance3D" parent="Environment/Floor3" unique_id=430396942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 1.2420001, -7)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier10" type="MeshInstance3D" parent="Environment/Floor3" unique_id=420061956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 1.2420001, 7.000001)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier11" type="MeshInstance3D" parent="Environment/Floor3" unique_id=1576767440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 9.742001, -7)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier12" type="MeshInstance3D" parent="Environment/Floor3" unique_id=533154497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 9.742001, 7.000001)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
 [node name="Floor4" type="MeshInstance3D" parent="Environment" unique_id=409419354]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 6, -45)
 mesh = SubResource("PlaneMesh_r1245")
@@ -1057,6 +1141,26 @@ skeleton = NodePath("../../Floor")
 [node name="Wall11" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1225665386]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 5.5, 9.999996)
 mesh = SubResource("PlaneMesh_3d15q")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier13" type="MeshInstance3D" parent="Environment/Floor4" unique_id=441744061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 1.2420001, -7.000004)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier14" type="MeshInstance3D" parent="Environment/Floor4" unique_id=75140907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 1.2420001, 6.999997)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier15" type="MeshInstance3D" parent="Environment/Floor4" unique_id=870632351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 9.742001, -7.000004)
+mesh = SubResource("BoxMesh_3kbh8")
+skeleton = NodePath("../../Floor")
+
+[node name="Barrier16" type="MeshInstance3D" parent="Environment/Floor4" unique_id=1600591426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 9.742001, 6.999997)
+mesh = SubResource("BoxMesh_3kbh8")
 skeleton = NodePath("../../Floor")
 
 [node name="RedSpawnPoint" parent="." unique_id=969224642 instance=ExtResource("9_lwfgy")]
