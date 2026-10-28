@@ -50,9 +50,9 @@ func _apply_weapon_local(weapon_index: int) -> void:
 	if n == Pistol_node:
 		n.position = Vector3(0.5, -0.186, -0.5)
 	elif n == Gun2_node:
-		n.position = Vector3(0.393, -0.516, -0.136)
+		n.position = Vector3(0.607, -0.749, -0.098)
 	elif n == Doofenshotgun_node:
-		n.position = Vector3(0.516, -0.338, -0.295)
+		n.position = Vector3(0.479, -0.283, -0.531)
 	Global.currentWeapon = weapons[weapon_index]["name"]
 	print("Local weapon set to ", Global.currentWeapon)
 
