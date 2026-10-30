@@ -1085,7 +1085,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 6, 0)
 [node name="Environment" parent="." unique_id=332111882 instance=ExtResource("5_ftq4a")]
 
 [node name="Floor" type="MeshInstance3D" parent="Environment" unique_id=1761121788]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.01, 5.992, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.01, 6, 0)
 mesh = SubResource("PlaneMesh_r1245")
 
 [node name="Roof" type="MeshInstance3D" parent="Environment/Floor" unique_id=1017576895]
@@ -1223,7 +1223,7 @@ shape = SubResource("ConcavePolygonShape3D_leu0v")
 shape = SubResource("ConcavePolygonShape3D_cdpo3")
 
 [node name="Floor2" type="MeshInstance3D" parent="Environment" unique_id=1578679541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 5.992, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 6, 0)
 mesh = SubResource("PlaneMesh_r1245")
 
 [node name="Roof2" type="MeshInstance3D" parent="Environment/Floor2" unique_id=1994414094]
